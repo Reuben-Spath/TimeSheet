@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "641285682665",
+    "firebase_url": "https://timesheet-6bdd1.firebaseio.com",
+    "project_id": "timesheet-6bdd1",
+    "storage_bucket": "timesheet-6bdd1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641285682665:android:ff5b464a1519011f",
+        "android_client_info": {
+          "package_name": "com.example.timesheet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641285682665-fmg8ibrqh5f63cir4sucp5jqfem0ini3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.timesheet",
+            "certificate_hash": "68cb51b4e012251ebf1c6592ce76577268ef951a"
+          }
+        },
+        {
+          "client_id": "641285682665-s86ajqb0ar0pfkmlug66ostnso8sfiht.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgO4xPfjujgOJQEyZmTflnuMzhGSpovcg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641285682665-s86ajqb0ar0pfkmlug66ostnso8sfiht.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

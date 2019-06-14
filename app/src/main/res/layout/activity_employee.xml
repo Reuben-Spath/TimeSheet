@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Employee">
+
+    <ScrollView
+        android:id="@+id/ScrollView"
+        android:layout_width="357dp"
+        android:layout_height="370dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:scrollbars="horizontal"
+        android:background="@color/White"
+        app:layout_constraintBottom_toTopOf="@id/tvTotalHours1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvWeekEnding1"
+        app:layout_constraintVertical_bias="0.355">
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/Monday1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mon"
+                android:padding="10dp"
+                android:textColor="@color/Blue"/>
+
+            <TextView
+                android:id="@+id/Tuesday1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tues"
+                android:padding="10dp"
+                android:textColor="@color/Blue"/>
+
+            <TextView
+                android:id="@+id/Wednesday1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wed"
+                android:padding="10dp"
+                android:textColor="@color/Blue"/>
+
+            <TextView
+                android:id="@+id/Thursday1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thur"
+                android:padding="10dp"
+                android:textColor="@color/Blue"/>
+
+            <TextView
+                android:id="@+id/Friday1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fri"
+                android:padding="10dp"
+                android:textColor="@color/Blue"/>
+
+            <TextView
+                android:id="@+id/Saturday1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sat"
+                android:padding="10dp"
+                android:textColor="@color/Blue"/>
+
+            <TextView
+                android:id="@+id/Sunday1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sun"
+                android:padding="10dp"
+                android:textColor="@color/Blue"/>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/tvWeekEnding1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Week Ending"
+        android:textColor="@color/Blue_dark"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btBack1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/back"
+        android:background="@color/colorAccent"
+        android:textColor="#FFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalHours1" />
+
+    <TextView
+        android:id="@+id/tvTotalHours1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Total Hours"
+        app:layout_constraintBottom_toTopOf="@id/btBack1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ScrollView" />
+
+    <Button
+        android:id="@+id/btSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btBack1"
+        app:layout_constraintTop_toBottomOf="@+id/ScrollView" />
+
+</android.support.constraint.ConstraintLayout>
