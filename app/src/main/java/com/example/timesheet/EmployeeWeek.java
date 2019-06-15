@@ -76,6 +76,7 @@ public class EmployeeWeek extends FrontScreenEmployee {
         Friday.setOnClickListener(editing);
         Saturday.setOnClickListener(editing);
         Sunday.setOnClickListener(editing);
+//        info();
     }
 
     @Override
@@ -102,31 +103,7 @@ public class EmployeeWeek extends FrontScreenEmployee {
             String mUid = currentUser.getUid();
             setName(currentUser.getUid());
 
-            db.collection("Users").document(mUid).collection(weekEnding())
-                    .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
-                            if (e != null) {
-                                return;
-                            }
 
-                            float data = 0;
-                            float time;
-                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
-
-                                time = noteEmployee.getTimeInt();
-
-                                data += time;
-                                Log.d(TAG, "onEvent: " + data);
-
-                            }
-
-                            String finalTime = String.format(Locale.getDefault(), "%.2f hours", data);
-
-                            totalHours.setText(finalTime);
-                        }
-                    });
             db.collection("Users").document(mUid).collection(weekEnding())
                     .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
                         @Override
@@ -144,6 +121,7 @@ public class EmployeeWeek extends FrontScreenEmployee {
                                 String finish = noteEmployee.getSignOutN();
                                 String time = noteEmployee.getTimeStr();
                                 boolean lunch = noteEmployee.getIfLunch();
+
                                 String hadlunch = "No";
 
                                 if (lunch) {
@@ -192,7 +170,33 @@ public class EmployeeWeek extends FrontScreenEmployee {
                                     data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
                                     Sunday.setText(data);
                                 }
+
                             }
+                        }
+                    });
+            db.collection("Users").document(mUid).collection(weekEnding())
+                    .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+                            if (e != null) {
+                                return;
+                            }
+
+                            float data = 0;
+                            float time;
+                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
+
+                                time = noteEmployee.getTimeInt();
+
+                                data += time;
+                                Log.d(TAG, "onEvent: " + data);
+
+                            }
+
+                            String finalTime = String.format(Locale.getDefault(), "%.2f hours", data);
+
+                            totalHours.setText(finalTime);
                         }
                     });
         }

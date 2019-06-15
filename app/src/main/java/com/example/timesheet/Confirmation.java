@@ -80,12 +80,17 @@ public class Confirmation extends FrontScreenEmployee {
 
 
     public void checkbox() {
+
         setHadLunch(false);
         hours.setText(hours_worked_without_lunch());
         setPass(hours_worked_without_lunch());
         setLongpass(getTimeWorked());
         lunch = findViewById(R.id.cbLunch);
 
+        if(!isLess_5()){
+//            lunch.setTextIsSelectable();
+            lunch.setEnabled(false);
+        }
         lunch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

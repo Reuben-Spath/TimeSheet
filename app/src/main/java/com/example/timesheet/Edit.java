@@ -347,12 +347,78 @@ public class Edit extends AppCompatActivity {
         timePickerDialog.show();
     }
 
-    public String hours_worked_without_lunch() {
+//    public String hours_worked_without_lunch() {
+//
+//
+//        setHours4today(getFinishHr() - getStartHr());
+//        setMinutes4today(getFinishMin() - getStartMin());
+//
+//        if (getMinutes4today() < 0) {
+//            setHours4today(getHours4today() - 1);
+//            setMinutes4today(getMinutes4today() + 60);
+//        }
+//
+//        float minutes = (float) getMinutes4today() / 60;
+//        setTimeWorked(getHours4today() + minutes);
+//
+//        if (getMinutes4today() < 10 && getMinutes4today() > 0) {
+//            return getHours4today() + ".0" + getMinutes4today() + " hours";
+//
+//        } else if (getHours4today() < 1 && getMinutes4today() > 30) {
+//            return getHours4today() + "." + getMinutes4today() + " minutes";
+//
+//        } else {
+//            return getHours4today() + "." + getMinutes4today() + " hours";
+//
+//        }
+//
+//    }
+//
+//    public String hours_worked_with_lunch() {
+//
+//        setHours4today(getFinishHr() - getStartHr());
+//        setMinutes4today(getFinishMin() - getStartMin() - 30);
+//
+//        if (getHours4today() < 1) {
+//            return getHours4today() + "." + getMinutes4today() + " minutes";
+//        } else {
+//
+//            if (getMinutes4today() < 0) {
+//
+//                setHours4today(getHours4today() - 1);
+//                setMinutes4today(getMinutes4today() + 60);
+//            }
+//
+//            float minutes = (float) getMinutes4today() / 60;
+//            setTimeWorked(getHours4today() + minutes);
+//
+//            if (getMinutes4today() < 10 && getMinutes4today() > 0) {
+//                return getHours4today() + ".0" + getMinutes4today() + " hours";
+//
+//            } else {
+//                return getHours4today() + "." + getMinutes4today() + " hours";
+//
+//            }
+//
+//        }
+//    }
 
+    public String hours_worked_without_lunch() {
 
         setHours4today(getFinishHr() - getStartHr());
         setMinutes4today(getFinishMin() - getStartMin());
 
+        if(getHours4today()==0 && getMinutes4today()<0){
+            setHours4today(getHours4today()+24);
+
+        }
+        if(getHours4today()<0){
+            setHours4today(getHours4today()+24);
+        }
+        if(getMinutes4today()>60){
+            setHours4today(getHours4today()+1);
+            setMinutes4today(getMinutes4today()-60);
+        }
         if (getMinutes4today() < 0) {
             setHours4today(getHours4today() - 1);
             setMinutes4today(getMinutes4today() + 60);
@@ -361,15 +427,15 @@ public class Edit extends AppCompatActivity {
         float minutes = (float) getMinutes4today() / 60;
         setTimeWorked(getHours4today() + minutes);
 
+
         if (getMinutes4today() < 10 && getMinutes4today() > 0) {
-            return getHours4today() + ".0" + getMinutes4today() + " hours";
+            return getHours4today() + ":0" + getMinutes4today() + " hours";
 
         } else if (getHours4today() < 1 && getMinutes4today() > 30) {
-            return getHours4today() + "." + getMinutes4today() + " minutes";
+            return getHours4today() + ":" + getMinutes4today() + " minutes";
 
         } else {
-            return getHours4today() + "." + getMinutes4today() + " hours";
-
+            return getHours4today() + ":" + getMinutes4today() + " hours";
         }
 
     }
@@ -379,8 +445,29 @@ public class Edit extends AppCompatActivity {
         setHours4today(getFinishHr() - getStartHr());
         setMinutes4today(getFinishMin() - getStartMin() - 30);
 
+
+//        if(getHours4today()<5){
+//            setLess_5(true);
+//        }
+        if(getHours4today()==0 && getMinutes4today()<0){
+            setHours4today(getHours4today()+24);
+
+        }
+        if(getHours4today()<0){
+            setHours4today(getHours4today()+24);
+        }
+        if(getMinutes4today()>60){
+            setHours4today(getHours4today()+1);
+            setMinutes4today(getMinutes4today()-60);
+        }
+        if (getMinutes4today() < 0) {
+            setHours4today(getHours4today() - 1);
+            setMinutes4today(getMinutes4today() + 60);
+        }
+
+
         if (getHours4today() < 1) {
-            return getHours4today() + "." + getMinutes4today() + " minutes";
+            return getHours4today() + ":" + getMinutes4today() + " minutes";
         } else {
 
             if (getMinutes4today() < 0) {
@@ -393,16 +480,15 @@ public class Edit extends AppCompatActivity {
             setTimeWorked(getHours4today() + minutes);
 
             if (getMinutes4today() < 10 && getMinutes4today() > 0) {
-                return getHours4today() + ".0" + getMinutes4today() + " hours";
+                return getHours4today() + ":0" + getMinutes4today() + " hours";
 
             } else {
-                return getHours4today() + "." + getMinutes4today() + " hours";
+                return getHours4today() + ":" + getMinutes4today() + " hours";
 
             }
 
         }
     }
-
     public void fullTimeSave() {
 
         if (user != null) {

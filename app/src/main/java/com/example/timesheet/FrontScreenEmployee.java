@@ -57,7 +57,7 @@ public class FrontScreenEmployee extends AppCompatActivity {
 
     protected Chronometer chronometer;
 
-    protected boolean running;
+    protected static boolean less_5 = false;
     private boolean in = false;
     private boolean out = false;
 
@@ -99,6 +99,14 @@ public class FrontScreenEmployee extends AppCompatActivity {
     private static int minutes4today;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    public boolean isLess_5() {
+        return less_5;
+    }
+
+    public void setLess_5(boolean less_5) {
+        FrontScreenEmployee.less_5 = less_5;
+    }
 
     public int getStartMin() {
         return startMin;
@@ -431,57 +439,89 @@ public class FrontScreenEmployee extends AppCompatActivity {
         timePickerDialog.show();
     }
 
+    //100 minutes just needs to have a total of 60
+
     public String hours_worked_without_lunch() {
 
-        //Assigns the hour and minute vales
         setHours4today(getFinishHr() - getStartHr());
         setMinutes4today(getFinishMin() - getStartMin());
+
+        if(getHours4today()==0 && getMinutes4today()<0){
+            setHours4today(getHours4today()+24);
+
+        }
+        if(getHours4today()<0){
+            setHours4today(getHours4today()+24);
+        }
+        if(getMinutes4today()>60){
+            setHours4today(getHours4today()+1);
+            setMinutes4today(getMinutes4today()-60);
+        }
+        if (getMinutes4today() < 0) {
+            setHours4today(getHours4today() - 1);
+            setMinutes4today(getMinutes4today() + 60);
+        }
 
         float minutes = (float) getMinutes4today() / 60;
         setTimeWorked(getHours4today() + minutes);
 
-        //returns the correct english
-        if(getHours4today()>1&&getMinutes4today()>10) {
-            return getHours4today() + "." + getMinutes4today()+" hours";
+
+        if (getMinutes4today() < 10 && getMinutes4today() > 0) {
+            return getHours4today() + ":0" + getMinutes4today() + " hours";
+
+        } else if (getHours4today() < 1 && getMinutes4today() > 30) {
+            return getHours4today() + ":" + getMinutes4today() + " minutes";
+
+        } else {
+            return getHours4today() + ":" + getMinutes4today() + " hours";
         }
-        else if(getHours4today()>=1 && getMinutes4today()<10){
-            return getHours4today() + ".0" + getMinutes4today() + " hours";
-        }
-        else if(getHours4today()<1){
-            return getMinutes4today() + " minutes";
-        }
-        else{
-            return getHours4today() + "." + getMinutes4today() +" hours";
-        }
+
     }
 
     public String hours_worked_with_lunch() {
 
+        setHours4today(getFinishHr() - getStartHr());
+        setMinutes4today(getFinishMin() - getStartMin() - 30);
+
+
+        if(getHours4today()<5){
+            setLess_5(true);
+        }
+        if(getHours4today()==0 && getMinutes4today()<0){
+            setHours4today(getHours4today()+24);
+
+        }
+        if(getHours4today()<0){
+            setHours4today(getHours4today()+24);
+        }
+        if(getMinutes4today()>60){
+            setHours4today(getHours4today()+1);
+            setMinutes4today(getMinutes4today()-60);
+        }
+        if (getMinutes4today() < 0) {
+            setHours4today(getHours4today() - 1);
+            setMinutes4today(getMinutes4today() + 60);
+        }
+
+
         if (getHours4today() < 1) {
-
-            return getMinutes4today() + " minutes";
-
+            return getHours4today() + ":" + getMinutes4today() + " minutes";
         } else {
-            setHours4today(getFinishHr() - getStartHr());
-            setMinutes4today(getFinishMin() - getStartMin() - 30);
 
             if (getMinutes4today() < 0) {
 
                 setHours4today(getHours4today() - 1);
                 setMinutes4today(getMinutes4today() + 60);
             }
-            if (getHours4today() < 0) {
-                setHours4today(getHours4today() + 24);
-            }
 
             float minutes = (float) getMinutes4today() / 60;
             setTimeWorked(getHours4today() + minutes);
 
             if (getMinutes4today() < 10 && getMinutes4today() > 0) {
-                return getHours4today() + ".0" + getMinutes4today() + " hours";
+                return getHours4today() + ":0" + getMinutes4today() + " hours";
 
             } else {
-                return getHours4today() + "." + getMinutes4today() + " hours";
+                return getHours4today() + ":" + getMinutes4today() + " hours";
 
             }
 
