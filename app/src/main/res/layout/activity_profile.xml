@@ -22,7 +22,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:ems="10"
-        android:hint="Enter your Employers Code"
+        android:hint="@string/enter_your_employers_code"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +30,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvEmployerCodeTitle"
         app:layout_constraintVertical_bias="0.135"
-        tools:text="Enter your Employers Code" />
+        tools:text="Enter your Employers Code"
+        android:importantForAutofill="no"
+        tools:targetApi="o" />
 
     <Button
         android:id="@+id/btChange"
@@ -38,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Change"
+        android:text="@string/change"
         android:background="@color/colorAccent"
         android:textColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -54,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="8dp"
-        android:text="Back"
+        android:text="@string/back"
         android:background="@color/colorAccent"
         android:textColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -70,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Employer Code"
+        android:text="@string/employer_code"
         android:textColor="@color/Blue_dark"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"

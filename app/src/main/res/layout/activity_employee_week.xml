@@ -30,7 +30,7 @@
         <LinearLayout
             android:id="@+id/linearLayout1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -106,7 +106,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:layout_marginBottom="8dp"
-        android:hint="Week Ending"
+        android:hint="@string/week_ending"
         android:textColor="@color/Blue_dark"
         android:textSize="30sp"
 
@@ -126,15 +126,30 @@
         android:textColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/btSend"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalHours" />
+
+    <Button
+        android:id="@+id/btSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send"
+        android:background="@color/colorAccent"
+        android:textColor="#FFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btBackEdit"
         app:layout_constraintTop_toBottomOf="@id/tvTotalHours" />
 
     <TextView
         android:id="@+id/tvTotalHours"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Total Hours"
+        android:hint="@string/total_hours"
         app:layout_constraintBottom_toTopOf="@id/btBackEdit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

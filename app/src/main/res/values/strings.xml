@@ -124,5 +124,11 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+    <string name="enter_your_employers_code">Enter your Employers Code</string>
+    <string name="change">Change</string>
+    <string name="back">Back</string>
+    <string name="employer_code">Employer Code</string>
+    <string name="send">Send</string>
+    <string name="total_hours">Total Hours</string>
 </resources>
 
