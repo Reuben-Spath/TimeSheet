@@ -29,9 +29,7 @@
     <string name="company_email">Company Email Address</string>
     <string name="title_create_company">Company name</string>
 
-    <string name="total_hours">Total Hours</string>
     <string name="week_ending">Week ending</string>
-    <string name="back">Back</string>
     <string name="mon">Monday</string>
     <string name="tues">Tuesday</string>
     <string name="wed">Wednesday</string>
