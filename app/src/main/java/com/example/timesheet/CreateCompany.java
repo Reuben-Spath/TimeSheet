@@ -3,11 +3,10 @@ package com.example.timesheet;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,27 +19,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Nullable;
 
 public class CreateCompany extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = "CreateEmployee";
 
-    private Button btn_signup;
+    private Button btn_sign_up;
 
     private EditText txt_company_name;
     private EditText txt_emp_code;
-    private EditText txt_company_email_signup;
-    private EditText txt_password_signup;
+    private EditText txt_company_email_sign_up;
+    private EditText txt_password_sign_up;
     private EditText txt_passwordConfirm;
 
 
@@ -55,12 +43,12 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
 
 
         progressDialog = new ProgressDialog(this);
-        btn_signup = findViewById(R.id.uyeSignUp);
+        btn_sign_up = findViewById(R.id.uyeSignUp);
 
         txt_company_name = findViewById(R.id.uyeCompanyName);
         txt_emp_code = findViewById(R.id.uyeEmpCode);
-        txt_company_email_signup = findViewById(R.id.uyeEmail);
-        txt_password_signup = findViewById(R.id.uyePassword);
+        txt_company_email_sign_up = findViewById(R.id.uyeEmail);
+        txt_password_sign_up = findViewById(R.id.uyePassword);
         txt_passwordConfirm = findViewById(R.id.uyePasswordConfirm);
 
 
@@ -68,15 +56,15 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
         mAuth = FirebaseAuth.getInstance();
 
         //set the listener for the click event
-        btn_signup.setOnClickListener(this);
+        btn_sign_up.setOnClickListener(this);
     }
 
     private void registerUser() {
         //get user input
         String name = txt_company_name.getText().toString().trim();
         String empCode = txt_emp_code.getText().toString().trim();
-        String email = txt_company_email_signup.getText().toString().trim();
-        String password = txt_password_signup.getText().toString().trim();
+        String email = txt_company_email_sign_up.getText().toString().trim();
+        String password = txt_password_sign_up.getText().toString().trim();
         String confirm = txt_passwordConfirm.getText().toString().trim();
 
         if (TextUtils.isEmpty(name)) { //email is empty
@@ -142,7 +130,7 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String name = txt_company_name.getText().toString().trim();
         String empCode = txt_emp_code.getText().toString().trim();
-        String email = txt_company_email_signup.getText().toString().trim();
+        String email = txt_company_email_sign_up.getText().toString().trim();
 
         NoteCompany note = new NoteCompany(name,empCode,email,true);
 
@@ -166,32 +154,9 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
-//    public void search() {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//
-//        db.collection("Company")
-//                .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
-//                        if (e != null) {
-//                            return;
-//                        }
-//
-//                        long data = 0L;
-//
-//                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-//                            NoteEmployee note = documentSnapshot.toObject(NoteEmployee.class);
-//
-//                            Log.d(TAG, "onEvent: " + data);
-//                        }
-//                    }
-//                });
-//    }
-
     @Override
     public void onClick(View view) {
-        if (view == btn_signup) {
+        if (view == btn_sign_up) {
             registerUser();
         }
     }

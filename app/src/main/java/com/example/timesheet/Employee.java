@@ -2,7 +2,7 @@ package com.example.timesheet;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,15 +20,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
 public class Employee extends AppCompatActivity {
 
     Calendar calendar = Calendar.getInstance();
-
-//    private TextView tv;
 
     private static final String TAG = "Employee";
 

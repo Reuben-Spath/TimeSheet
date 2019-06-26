@@ -8,8 +8,8 @@ public class NoteEmployee {
     private String signInN;
     private String signOutN;
 
-    private String empCode;
-    private String name;
+//    private String empCode;
+//    private String name;
 
     private String timeStr;
     private float timeInt;
@@ -75,21 +75,21 @@ public class NoteEmployee {
         this.signOutN = signOutN;
     }
 
-    public String getEmpCode() {
-        return empCode;
-    }
+//    public String getEmpCode() {
+//        return empCode;
+//    }
+//
+//    void setEmpCode(String empCode) {
+//        this.empCode = empCode;
+//    }
 
-    void setEmpCode(String empCode) {
-        this.empCode = empCode;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
 
     long getStartH() {
         return startH;

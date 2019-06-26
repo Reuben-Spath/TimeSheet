@@ -2,7 +2,7 @@ package com.example.timesheet;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,7 +20,7 @@ public class Confirmation extends FrontScreenEmployee {
 
     private static final String TAG = "Confirmation";
     private String pass;
-    private float longpass;
+    private float long_pass;
 
     private Button cancel;
     private Button confirm;
@@ -51,12 +51,12 @@ public class Confirmation extends FrontScreenEmployee {
         this.hadLunch = hadLunch;
     }
 
-    public float getLongpass() {
-        return longpass;
+    public float getLong_pass() {
+        return long_pass;
     }
 
-    public void setLongpass(float longpass) {
-        this.longpass = longpass;
+    public void setLong_pass(float long_pass) {
+        this.long_pass = long_pass;
     }
 
     @Override
@@ -84,13 +84,13 @@ public class Confirmation extends FrontScreenEmployee {
         setHadLunch(false);
         hours.setText(hours_worked_without_lunch());
         setPass(hours_worked_without_lunch());
-        setLongpass(getTimeWorked());
-        lunch = findViewById(R.id.cbLunch);
 
-        if(!isLess_5()){
+        setLong_pass(getTimeWorked());
+        lunch = findViewById(R.id.cbLunch);
+//        if(isLess_5()){
 //            lunch.setTextIsSelectable();
-            lunch.setEnabled(false);
-        }
+//            lunch.setEnabled(false);
+//        }
         lunch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,14 +98,13 @@ public class Confirmation extends FrontScreenEmployee {
                     setHadLunch(true);
                     hours.setText(hours_worked_with_lunch());
                     setPass(hours_worked_with_lunch());
-                    setLongpass(getTimeWorkedWLunch());
+                    setLong_pass(getTimeWorkedWLunch());
 
                 } else {
                     setHadLunch(false);
                     hours.setText(hours_worked_without_lunch());
                     setPass(hours_worked_without_lunch());
-                    setLongpass(getTimeWorked());
-
+                    setLong_pass(getTimeWorked());
                 }
             }
         });
@@ -118,7 +117,7 @@ public class Confirmation extends FrontScreenEmployee {
 
             String mUid = mAuth.getCurrentUser().getUid();
 
-            NoteEmployee noteEmployee = new NoteEmployee(getPass(), getLongpass(),getHadLunch(), getSignedIn(),getSignedOff());
+            NoteEmployee noteEmployee = new NoteEmployee(getPass(), getLong_pass(),getHadLunch(), getSignedIn(),getSignedOff());
 
             noteEmployee.setStartH(getStartHr());
             noteEmployee.setStartM(getStartMin());

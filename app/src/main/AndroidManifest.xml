@@ -18,9 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ChatFragment"></activity>
-        <activity android:name=".MessageFragment" />
-        <activity android:name=".Tester" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -58,7 +55,7 @@
             android:name=".EmployeeWeek"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".EmployerCode"
+            android:name=".Profile"
             android:screenOrientation="portrait" />
         <activity android:name=".FrontScreenManager" />
         <activity

@@ -1,26 +1,19 @@
 package com.example.timesheet;
 
-import android.app.ActionBar;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,7 +27,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,14 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 
 
-//extends Fragment {
-//
-//@Nullable
-//@Override
-//public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        return inflater.inflate(R.layout.fragment_message, container, false);
-//        }
-public class FrontScreenEmployee extends AppCompatActivity {
+public class FrontScreenEmployee extends AppCompatActivity{
 
     private static final String TAG = "FrontScreenEmployee";
     Calendar calendar = Calendar.getInstance();
@@ -76,8 +61,8 @@ public class FrontScreenEmployee extends AppCompatActivity {
     private static String signedOff;
 
     //    private long pauseOffset = 0L;
-    private long startT;
-    private long finishT;
+//    private long startT;
+//    private long finishT;
 
     private static float timeWorkedWLunch;
     private static float timeWorked;
@@ -87,8 +72,8 @@ public class FrontScreenEmployee extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
 
-    private String time1;
-    private String time2;
+//    private String time1;
+//    private String time2;
 
     private static int startMin;
     private static int startHr;
@@ -100,9 +85,9 @@ public class FrontScreenEmployee extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public boolean isLess_5() {
-        return less_5;
-    }
+//    public boolean isLess_5() {
+//        return less_5;
+//    }
 
     public void setLess_5(boolean less_5) {
         FrontScreenEmployee.less_5 = less_5;
@@ -156,21 +141,21 @@ public class FrontScreenEmployee extends AppCompatActivity {
         FrontScreenEmployee.minutes4today = minutes4today;
     }
 
-    public long getStartT() {
-        return startT;
-    }
+//    public long getStartT() {
+//        return startT;
+//    }
 
-    public void setStartT(long startT) {
-        this.startT = startT;
-    }
+//    public void setStartT(long startT) {
+//        this.startT = startT;
+//    }
 
-    public long getFinishT() {
-        return finishT;
-    }
+//    public long getFinishT() {
+//        return finishT;
+//    }
 
-    public void setFinishT(long finishT) {
-        this.finishT = finishT;
-    }
+//    public void setFinishT(long finishT) {
+//        this.finishT = finishT;
+//    }
 
     public String getSignedIn() {
         return signedIn;
@@ -197,13 +182,14 @@ public class FrontScreenEmployee extends AppCompatActivity {
         return timeWorked;
     }
 
-    public void setTimeWorkedWLunch(float timeWorkedWLunch) {
-        FrontScreenEmployee.timeWorkedWLunch = timeWorkedWLunch;
-    }
+//    public void setTimeWorkedWLunch(float timeWorkedWLunch) {
+//        FrontScreenEmployee.timeWorkedWLunch = timeWorkedWLunch;
+//    }
 
     public float getTimeWorkedWLunch() {
         return timeWorkedWLunch;
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,8 +215,8 @@ public class FrontScreenEmployee extends AppCompatActivity {
         timeSignedOff = findViewById(R.id.tvTimeSignedOff);
 
         create();
-    }
 
+    }
 
     @Override
     public void onStart() {
@@ -241,10 +227,10 @@ public class FrontScreenEmployee extends AppCompatActivity {
         employer_code.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent special_code_pass = new Intent(FrontScreenEmployee.this, EmployerCode.class);
-//                startActivity(special_code_pass);
-                Intent special_code_pass = new Intent(FrontScreenEmployee.this, Tester.class);
+                Intent special_code_pass = new Intent(FrontScreenEmployee.this, Profile.class);
                 startActivity(special_code_pass);
+//                Intent special_code_pass = new Intent(FrontScreenEmployee.this, Tester.class);
+//                startActivity(special_code_pass);
             }
         });
         week.setOnClickListener(new View.OnClickListener() {
@@ -261,6 +247,20 @@ public class FrontScreenEmployee extends AppCompatActivity {
             }
         });
         sign_off.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signOffCustomPicker();
+            }
+
+        });
+
+        timeSignedIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signInCustomPicker();
+            }
+        });
+        timeSignedOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signOffCustomPicker();
@@ -445,6 +445,10 @@ public class FrontScreenEmployee extends AppCompatActivity {
 
         setHours4today(getFinishHr() - getStartHr());
         setMinutes4today(getFinishMin() - getStartMin());
+
+        if(getHours4today()<5){
+            setLess_5(true);
+        }
 
         if(getHours4today()==0 && getMinutes4today()<0){
             setHours4today(getHours4today()+24);

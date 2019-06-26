@@ -76,7 +76,6 @@ public class EmployeeWeek extends FrontScreenEmployee {
         Friday.setOnClickListener(editing);
         Saturday.setOnClickListener(editing);
         Sunday.setOnClickListener(editing);
-//        info();
     }
 
     @Override

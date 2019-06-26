@@ -3,8 +3,8 @@ package com.example.timesheet;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -110,9 +110,10 @@ public class CreateEmployee extends AppCompatActivity implements View.OnClickLis
                     Toast.makeText(CreateEmployee.this, "Account Created", Toast.LENGTH_LONG).show();
 
                     if (user != null) {
-                        NoteEmployee noteEmployee = new NoteEmployee();
-                        noteEmployee.setName(name);
-                        noteEmployee.setEmpCode(empCode);
+                        EmpDoc empDoc = new EmpDoc(name, empCode);
+//                        NoteEmployee noteEmployee = new NoteEmployee();
+//                        noteEmployee.setName(name);
+//                        noteEmployee.setEmpCode(empCode);
                         // user registered, start profile activity
                         newUser();
                         finish();
