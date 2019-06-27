@@ -128,5 +128,6 @@
     <string name="employer_code">Employer Code</string>
     <string name="send">Send</string>
     <string name="total_hours">Total Hours</string>
+    <string name="employee_code">Employee code</string>
 </resources>
 

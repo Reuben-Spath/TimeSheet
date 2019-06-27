@@ -14,28 +14,30 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="Hours"
-        android:textColor="@android:color/black"
+        android:textColor="#9C27B0"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.297" />
+        app:layout_constraintVertical_bias=".3" />
 
     <TextView
         android:id="@+id/tvSignInTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text="Sign in time"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cbLunch"
-        app:layout_constraintVertical_bias="0.167" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvSignOffTime"
@@ -43,7 +45,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
@@ -51,9 +52,9 @@
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSignInTime"
-        app:layout_constraintVertical_bias="0.007" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
         android:id="@+id/cbLunch"
@@ -64,12 +65,13 @@
         android:checked="false"
         android:clickable="true"
         android:text="Lunch"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvHours"
-        app:layout_constraintVertical_bias="0.043" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".4" />
 
     <Button
         android:id="@+id/btConfirm"
@@ -78,12 +80,13 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="Confirm"
+        android:textColor="#9C27B0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSignOffTime"
-        app:layout_constraintVertical_bias="0.121" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".8" />
 
     <Button
         android:id="@+id/btCancel"
@@ -92,11 +95,12 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="Cancel"
+        android:textColor="#9C27B0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btConfirm"
-        app:layout_constraintVertical_bias="0.142" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".9" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

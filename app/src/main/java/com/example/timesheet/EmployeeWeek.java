@@ -9,8 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -22,6 +26,8 @@ import java.util.Locale;
 public class EmployeeWeek extends FrontScreenEmployee {
 
     private Button back;
+
+    private TextView EmpCode;
 
     private TextView Monday;
     private TextView Tuesday;
@@ -54,6 +60,8 @@ public class EmployeeWeek extends FrontScreenEmployee {
         setContentView(R.layout.activity_employee_week);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        EmpCode = findViewById(R.id.tvEmpCode);
+
         back = findViewById(R.id.btBackEdit);
         weekEnding = findViewById(R.id.tvWeekEnding);
 
@@ -82,6 +90,7 @@ public class EmployeeWeek extends FrontScreenEmployee {
     public void onStart() {
         super.onStart();
 
+        empListner();
         info();
         weekEnding.setText(weekEnding());
 
@@ -91,6 +100,32 @@ public class EmployeeWeek extends FrontScreenEmployee {
                 finish();
             }
         });
+    }
+
+    public void empListner() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            final DocumentReference docRef = db.collection("Users").document(user.getUid());
+            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                    @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+
+                    if (snapshot != null && snapshot.exists()) {
+                        Log.d(TAG, "Current data: " + snapshot.getData());
+                        EmpCode.setText(snapshot.getString("Employer Code"));
+                    } else {
+                        Log.d(TAG, "Current data: null");
+                    }
+                }
+            });
+        }
     }
 
     public void info(){

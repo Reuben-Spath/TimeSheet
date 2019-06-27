@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -46,14 +47,16 @@ public class FrontScreenEmployee extends AppCompatActivity{
     private boolean in = false;
     private boolean out = false;
 
+    private ImageView profile;
+
     protected TextView timeSignedIn;
     protected TextView timeSignedOff;
-    private TextView EmpCode;
+//    private TextView EmpCode;
     private TextView date;
 
     private Button sign_in;
     private Button sign_off;
-    private Button employer_code;
+//    private Button employer_code;
     private Button week;
     private Button confirm;
 
@@ -206,10 +209,12 @@ public class FrontScreenEmployee extends AppCompatActivity{
         sign_off = findViewById(R.id.btSignOff);
         confirm = findViewById(R.id.btConfirm);
 
-        employer_code = findViewById(R.id.btEmployerCodeMgScreen);
-        week = findViewById(R.id.btWeek);
+        profile = findViewById(R.id.draw_profile);
 
-        EmpCode = findViewById(R.id.tvEmpCode);
+//        employer_code = findViewById(R.id.btEmployerCodeMgScreen);
+//        week = findViewById(R.id.btWeek);
+
+//        EmpCode = findViewById(R.id.tvEmpCode);
         date = findViewById(R.id.tvWEnd);
         timeSignedIn = findViewById(R.id.tvTimeSignedIn);
         timeSignedOff = findViewById(R.id.tvTimeSignedOff);
@@ -224,20 +229,20 @@ public class FrontScreenEmployee extends AppCompatActivity{
 
         date.setText(getCurrentDate());
 
-        employer_code.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent special_code_pass = new Intent(FrontScreenEmployee.this, Profile.class);
-                startActivity(special_code_pass);
-//                Intent special_code_pass = new Intent(FrontScreenEmployee.this, Tester.class);
+//        employer_code.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent special_code_pass = new Intent(FrontScreenEmployee.this, Profile.class);
 //                startActivity(special_code_pass);
-            }
-        });
-        week.setOnClickListener(new View.OnClickListener() {
+////                Intent special_code_pass = new Intent(FrontScreenEmployee.this, Tester.class);
+////                startActivity(special_code_pass);
+//            }
+//        });
+        profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent week_pass = new Intent(FrontScreenEmployee.this, EmployeeWeek.class);
-                startActivity(week_pass);
+                Intent profile_pass = new Intent(FrontScreenEmployee.this, EmployeeWeek.class);
+                startActivity(profile_pass);
             }
         });
         sign_in.setOnClickListener(new View.OnClickListener() {
@@ -278,7 +283,7 @@ public class FrontScreenEmployee extends AppCompatActivity{
                 }
             }
         });
-        empListner();
+//        empListner();
     }
 
     @Override
@@ -318,31 +323,31 @@ public class FrontScreenEmployee extends AppCompatActivity{
         return dateFormat.format(now);
     }
 
-    public void empListner() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-            final DocumentReference docRef = db.collection("Users").document(user.getUid());
-            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                    @Nullable FirebaseFirestoreException e) {
-                    if (e != null) {
-                        Log.w(TAG, "Listen failed.", e);
-                        return;
-                    }
-
-                    if (snapshot != null && snapshot.exists()) {
-                        Log.d(TAG, "Current data: " + snapshot.getData());
-                        EmpCode.setText(snapshot.getString("Employer Code"));
-                    } else {
-                        Log.d(TAG, "Current data: null");
-                    }
-                }
-            });
-        }
-    }
+//    public void empListner() {
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        if (user != null) {
+//            FirebaseFirestore db = FirebaseFirestore.getInstance();
+//
+//            final DocumentReference docRef = db.collection("Users").document(user.getUid());
+//            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//                @Override
+//                public void onEvent(@Nullable DocumentSnapshot snapshot,
+//                                    @Nullable FirebaseFirestoreException e) {
+//                    if (e != null) {
+//                        Log.w(TAG, "Listen failed.", e);
+//                        return;
+//                    }
+//
+//                    if (snapshot != null && snapshot.exists()) {
+//                        Log.d(TAG, "Current data: " + snapshot.getData());
+//                        EmpCode.setText(snapshot.getString("Employer Code"));
+//                    } else {
+//                        Log.d(TAG, "Current data: null");
+//                    }
+//                }
+//            });
+//        }
+//    }
 
     public void create() {
         FirebaseUser currentUser = mAuth.getCurrentUser();

@@ -18,19 +18,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cbLunchEdit"
-        app:layout_constraintVertical_bias="0.734" />
+        app:layout_constraintVertical_bias=".5" />
 
     <Button
         android:id="@+id/btConfirmEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:background="#9C27B0"
         android:text="@string/Confirm"
-        android:background="@color/colorAccent"
         android:textColor="#FFFF"
         app:layout_constraintBottom_toTopOf="@+id/btBackEdit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTotalTime" />
 
@@ -42,23 +42,21 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginBottom="88dp"
+        android:background="#9C27B0"
         android:text="@string/back"
-        android:background="@color/colorAccent"
         android:textColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btConfirmEdit"
-        app:layout_constraintVertical_bias="0.699" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <CheckBox
         android:id="@+id/cbLunchEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="36dp"
         android:text="@string/lunch"
-        app:layout_constraintBottom_toTopOf="@id/tvTotalTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTimeOut" />
@@ -67,42 +65,33 @@
         android:id="@+id/tvTimeIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:text="@string/signed_in"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/tvTimeOut"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias=".2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDayOfWeek" />
+        tools:layout_editor_absoluteY="244dp" />
 
     <TextView
         android:id="@+id/tvTimeOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:text="@string/signed_out"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@id/cbLunchEdit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias=".8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTimeIn" />
+        tools:layout_editor_absoluteY="244dp" />
 
     <TextView
         android:id="@+id/tvDayOfWeek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:text="TextView"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@id/tvTimeIn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias=".5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.091" />
+        tools:layout_editor_absoluteY="102dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

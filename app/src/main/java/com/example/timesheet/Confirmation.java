@@ -87,10 +87,10 @@ public class Confirmation extends FrontScreenEmployee {
 
         setLong_pass(getTimeWorked());
         lunch = findViewById(R.id.cbLunch);
-//        if(isLess_5()){
-//            lunch.setTextIsSelectable();
-//            lunch.setEnabled(false);
-//        }
+        if(getTimeWorked()<1){
+//            lunch.setTextIsSelectable(false);
+            lunch.setEnabled(false);
+        }
         lunch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

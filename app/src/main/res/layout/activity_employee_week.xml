@@ -19,8 +19,8 @@
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:layout_marginBottom="8dp"
-        android:scrollbars="horizontal"
         android:background="@color/White"
+        android:scrollbars="horizontal"
         app:layout_constraintBottom_toTopOf="@id/tvTotalHours"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,67 +38,81 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/mon"
-                android:text=""
                 android:padding="10dp"
-                android:textColor="@color/Blue"/>
+                android:text=""
+                android:textColor="@color/Blue" />
 
             <TextView
                 android:id="@+id/Tuesday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/tues"
-                android:text=""
                 android:padding="10dp"
-                android:textColor="@color/Blue"/>
+                android:text=""
+                android:textColor="@color/Blue" />
 
             <TextView
                 android:id="@+id/Wednesday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/wed"
-                android:text=""
                 android:padding="10dp"
-                android:textColor="@color/Blue"/>
+                android:text=""
+                android:textColor="#2196F3" />
 
             <TextView
                 android:id="@+id/Thursday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/thur"
-                android:text=""
                 android:padding="10dp"
-                android:textColor="@color/Blue"/>
+                android:text=""
+                android:textColor="#000000" />
 
             <TextView
                 android:id="@+id/Friday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/fri"
-                android:text=""
                 android:padding="10dp"
-                android:textColor="@color/Blue"/>
+                android:text=""
+                android:textColor="@color/Blue" />
 
             <TextView
                 android:id="@+id/Saturday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/sat"
-                android:text=""
                 android:padding="10dp"
-                android:textColor="@color/Blue"/>
+                android:text=""
+                android:textColor="@color/Blue" />
 
             <TextView
                 android:id="@+id/Sunday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/sun"
-                android:text=""
                 android:padding="10dp"
-                android:textColor="@color/Blue"/>
+                android:text=""
+                android:textColor="@color/Blue" />
 
 
         </LinearLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/tvEmpCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textColor="#9C27B0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15"
+        tools:text="@string/EmpCode" />
 
     <TextView
         android:id="@+id/tvWeekEnding"
@@ -107,7 +121,7 @@
         android:layout_marginTop="48dp"
         android:layout_marginBottom="8dp"
         android:hint="@string/week_ending"
-        android:textColor="@color/Blue_dark"
+        android:textColor="#9C27B0"
         android:textSize="30sp"
 
         app:layout_constraintBottom_toBottomOf="parent"
@@ -121,28 +135,28 @@
         android:id="@+id/btBackEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#9C27B0"
         android:text="@string/back"
-        android:background="@color/colorAccent"
         android:textColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.25"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintLeft_toRightOf="@id/btSend"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTotalHours" />
 
     <Button
         android:id="@+id/btSend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#9C27B0"
         android:text="@string/send"
-        android:background="@color/colorAccent"
         android:textColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.75"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintRight_toLeftOf="@id/btBackEdit"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTotalHours" />
 
     <TextView
@@ -154,6 +168,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ScrollView" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

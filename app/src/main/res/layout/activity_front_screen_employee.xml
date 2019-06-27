@@ -7,46 +7,22 @@
     android:screenOrientation="portrait"
     tools:context=".FrontScreenEmployee">
 
-
-    <Button
-        android:id="@+id/btEmployerCodeMgScreen"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
+    <ImageView
+        android:id="@+id/draw_profile"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Employer Code"
-        android:background="@color/colorAccent"
-        android:textColor="#FFFF"
+        android:src="@drawable/profile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.068"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.035" />
-
-    <Button
-        android:id="@+id/btWeek"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Week"
-        android:background="@color/colorAccent"
-        android:textColor="#FFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.889"
-        app:layout_constraintStart_toEndOf="@+id/btEmployerCodeMgScreen"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.034" />
+        app:layout_constraintVertical_bias="0.05" />
 
     <TextView
         android:id="@+id/tvWEnd"
@@ -55,14 +31,14 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/date"
-        android:textColor="@color/Blue"
+        android:textColor="#9C27B0"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25"
+        app:layout_constraintVertical_bias="0.2"
         tools:text="Date" />
 
     <Button
@@ -71,15 +47,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Sign In"
-        android:background="@color/colorAccent"
+        android:background="#9C27B0"
+        android:text="Start"
         android:textColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTimeSignedOff"
-        app:layout_constraintVertical_bias="0.16000003" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".45" />
 
     <Button
         android:id="@+id/btSignOff"
@@ -87,72 +63,60 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Sign Off"
-        android:background="@color/colorAccent"
+        android:background="#9C27B0"
+        android:text="Finish"
         android:textColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.752"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btSignIn"
-        app:layout_constraintVertical_bias="0.16000003" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".45" />
 
     <TextView
         android:id="@+id/tvTimeSignedIn"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:textColor="@color/Blue_text"
+        android:textColor="#9C27B0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEmpCode"
-        app:layout_constraintVertical_bias="0.058"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".55"
         tools:text="TIme Signed @string/app_name" />
 
-    <TextView
-        android:id="@+id/tvEmpCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:textColor="@color/Blue_text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvWEnd"
-        app:layout_constraintVertical_bias="0.063"
-        tools:text="@string/EmpCode" />
 
     <TextView
         android:id="@+id/tvTimeSignedOff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/Blue_text"
+        android:layout_marginBottom="8dp"
+        android:textColor="#9C27B0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTimeSignedIn"
-        app:layout_constraintVertical_bias="0.06999999"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".55"
         tools:text="TIme Signed @string/app_name" />
 
     <Button
         android:id="@+id/btConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:background="#9C27B0"
         android:text="@string/Confirm"
-        android:background="@color/colorAccent"
         android:textColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btSignOff"
-        app:layout_constraintVertical_bias="0.425" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".85" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
