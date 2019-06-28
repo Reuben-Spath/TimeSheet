@@ -103,6 +103,23 @@
         tools:text="TIme Signed @string/app_name" />
 
     <Button
+        android:id="@+id/btEmpCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="#9C27B0"
+        android:text="@string/employee_code"
+        android:textColor="#FFFF"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.704" />
+
+    <Button
         android:id="@+id/btConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

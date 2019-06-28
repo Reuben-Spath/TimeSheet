@@ -56,7 +56,7 @@ public class FrontScreenEmployee extends AppCompatActivity{
 
     private Button sign_in;
     private Button sign_off;
-//    private Button employer_code;
+    private Button employer_code;
     private Button week;
     private Button confirm;
 
@@ -211,7 +211,7 @@ public class FrontScreenEmployee extends AppCompatActivity{
 
         profile = findViewById(R.id.draw_profile);
 
-//        employer_code = findViewById(R.id.btEmployerCodeMgScreen);
+        employer_code = findViewById(R.id.btEmpCode);
 //        week = findViewById(R.id.btWeek);
 
 //        EmpCode = findViewById(R.id.tvEmpCode);
@@ -229,15 +229,15 @@ public class FrontScreenEmployee extends AppCompatActivity{
 
         date.setText(getCurrentDate());
 
-//        employer_code.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent special_code_pass = new Intent(FrontScreenEmployee.this, Profile.class);
+        employer_code.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent special_code_pass = new Intent(FrontScreenEmployee.this, Profile.class);
+                startActivity(special_code_pass);
+//                Intent special_code_pass = new Intent(FrontScreenEmployee.this, Tester.class);
 //                startActivity(special_code_pass);
-////                Intent special_code_pass = new Intent(FrontScreenEmployee.this, Tester.class);
-////                startActivity(special_code_pass);
-//            }
-//        });
+            }
+        });
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

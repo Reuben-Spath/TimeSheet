@@ -129,5 +129,7 @@
     <string name="send">Send</string>
     <string name="total_hours">Total Hours</string>
     <string name="employee_code">Employee code</string>
+    <string name="code">Code</string>
+    <string name="save">Save</string>
 </resources>
 

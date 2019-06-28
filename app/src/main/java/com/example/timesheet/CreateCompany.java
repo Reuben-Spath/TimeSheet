@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,8 +21,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Objects;
 
 public class CreateCompany extends AppCompatActivity implements View.OnClickListener {
+
+    private static final String TAG = "CreateCompany";
 
     private Button btn_sign_up;
 
@@ -31,9 +38,18 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
     private EditText txt_password_sign_up;
     private EditText txt_passwordConfirm;
 
-
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
+
+    boolean indi_code = true;
+
+    public boolean isIndi_code() {
+        return indi_code;
+    }
+
+    public void setIndi_code(boolean indi_code) {
+        this.indi_code = indi_code;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +67,39 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
         txt_password_sign_up = findViewById(R.id.uyePassword);
         txt_passwordConfirm = findViewById(R.id.uyePasswordConfirm);
 
-
         //assign database instances
         mAuth = FirebaseAuth.getInstance();
 
         //set the listener for the click event
         btn_sign_up.setOnClickListener(this);
+    }
+
+    private boolean indi(final String empCode) {
+        isIndi_code();
+        final FirebaseFirestore db1 = FirebaseFirestore.getInstance();
+        db1.collection("Company")
+                .whereEqualTo("empCode", empCode)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                String temp_code = document.getString("empCode");
+                                if(empCode.equalsIgnoreCase(temp_code)){
+                                    setIndi_code(false);
+                                    break;
+                                }
+                            }
+                        } else {
+                            setIndi_code(false);
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        return isIndi_code();
+
     }
 
     private void registerUser() {
@@ -67,6 +110,11 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
         String password = txt_password_sign_up.getText().toString().trim();
         String confirm = txt_passwordConfirm.getText().toString().trim();
 
+        if(!indi(empCode)){
+            Toast.makeText(this, "This is already and Employer code", Toast.LENGTH_SHORT).show();
+            return;
+
+        }
         if (TextUtils.isEmpty(name)) { //email is empty
             Toast.makeText(this, "Please enter your company name", Toast.LENGTH_SHORT).show();
             //stop further execution
