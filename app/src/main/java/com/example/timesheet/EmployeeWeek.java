@@ -22,6 +22,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Locale;
+
 //information and total time need to be added together
 public class EmployeeWeek extends FrontScreenEmployee {
 
@@ -128,7 +129,7 @@ public class EmployeeWeek extends FrontScreenEmployee {
         }
     }
 
-    public void info(){
+    public void info() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -154,6 +155,8 @@ public class EmployeeWeek extends FrontScreenEmployee {
                                 String start = noteEmployee.getSignInN();
                                 String finish = noteEmployee.getSignOutN();
                                 String time = noteEmployee.getTimeStr();
+                                boolean holiday = noteEmployee.isIfHoliday();
+                                boolean sick = noteEmployee.isIfSick();
                                 boolean lunch = noteEmployee.getIfLunch();
 
                                 String hadlunch = "No";
@@ -162,47 +165,132 @@ public class EmployeeWeek extends FrontScreenEmployee {
                                     hadlunch = "Yes";
                                 }
                                 if (start == null) {
-                                    start = "Invalid";
+//                                    start = "Invalid";
                                 }
                                 if (finish == null) {
-                                    finish = "Invalid";
+//                                    finish = "Invalid";
                                 }
                                 if (time == null) {
-                                    time = "Invalid";
+//                                    time = "Invalid";
                                 }
                                 if (!time.contains("hours") && !time.equalsIgnoreCase("Invalid")) {
                                     time = time + " hours";
                                 }
 
+
                                 Log.d(TAG, "onEvent: " + data);
 
                                 if (documentId.equals("Monday")) {
-                                    data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                    Monday.setText(data);
+                                    if (holiday) {
+                                        data = documentId + "\n Holiday";
+                                        Monday.setText(data);
+                                    } else {
+                                        data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Monday.setText(data);
+                                    }
+                                    if (sick) {
+                                        data = documentId + "\n Sick";
+                                        Monday.setText(data);
+                                    } else {
+                                        data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Monday.setText(data);
+                                    }
                                 }
                                 if (documentId.equals("Tuesday")) {
-                                    data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                    Tuesday.setText(data);
+                                    if (holiday) {
+                                        data = documentId + "\n Holiday";
+                                        Tuesday.setText(data);
+                                    } else {
+                                        data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Tuesday.setText(data);
+                                    }
+                                    if (sick) {
+                                        data = documentId + "\n Sick";
+                                        Tuesday.setText(data);
+                                    } else {
+                                        data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Tuesday.setText(data);
+                                    }
                                 }
                                 if (documentId.equals("Wednesday")) {
-                                    data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                    Wednesday.setText(data);
+                                    if (holiday) {
+                                        data = documentId + "\n Holiday";
+                                        Wednesday.setText(data);
+                                    } else {
+                                        data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Wednesday.setText(data);
+                                    }
+                                    if (sick) {
+                                        data = documentId + "\n Sick";
+                                        Wednesday.setText(data);
+                                    } else {
+                                        data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Wednesday.setText(data);
+                                    }
                                 }
                                 if (documentId.equals("Thursday")) {
-                                    data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                    Thursday.setText(data);
+                                    if (holiday) {
+                                        data = documentId + "\n Holiday";
+                                        Thursday.setText(data);
+                                    } else {
+                                        data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Thursday.setText(data);
+                                    }
+                                    if (sick) {
+                                        data = documentId + "\n Sick";
+                                        Thursday.setText(data);
+                                    } else {
+                                        data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Thursday.setText(data);
+                                    }
                                 }
                                 if (documentId.equals("Friday")) {
-                                    data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                    Friday.setText(data);
+                                    if (holiday) {
+                                        data = documentId + "\n Holiday";
+                                        Friday.setText(data);
+                                    } else {
+                                        data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Friday.setText(data);
+                                    }
+                                    if (sick) {
+                                        data = documentId + "\n Sick";
+                                        Friday.setText(data);
+                                    } else {
+                                        data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Friday.setText(data);
+                                    }
                                 }
                                 if (documentId.equals("Saturday")) {
-                                    data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                    Saturday.setText(data);
+                                    if (holiday) {
+                                        data = documentId + "\n Holiday";
+                                        Saturday.setText(data);
+                                    } else {
+                                        data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Saturday.setText(data);
+                                    }
+                                    if (sick) {
+                                        data = documentId + "\n Sick";
+                                        Saturday.setText(data);
+                                    } else {
+                                        data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Saturday.setText(data);
+                                    }
                                 }
                                 if (documentId.equals("Sunday")) {
-                                    data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                    Sunday.setText(data);
+                                    if (holiday) {
+                                        data = documentId + "\n Holiday";
+                                        Sunday.setText(data);
+                                    } else {
+                                        data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Sunday.setText(data);
+                                    }
+                                    if (sick) {
+                                        data = documentId + "\n Sick";
+                                        Sunday.setText(data);
+                                    } else {
+                                        data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Sunday.setText(data);
+                                    }
                                 }
 
                             }

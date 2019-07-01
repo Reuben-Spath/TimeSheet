@@ -2,11 +2,6 @@ package com.example.timesheet;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -15,6 +10,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,6 +44,8 @@ public class Edit extends AppCompatActivity {
     private Button back;
 
     private CheckBox lunch1;
+    private CheckBox cbHoliday;
+    private CheckBox cbSick;
 
     private TextView signedIn;
     private TextView signedOut;
@@ -57,6 +58,8 @@ public class Edit extends AppCompatActivity {
     private float longpass;
 
     private boolean hadLunch;
+    private boolean sick;
+    private boolean holiday;
 
     private static String signedInS;
     private static String signedOff;
@@ -363,6 +366,39 @@ public class Edit extends AppCompatActivity {
         });
     }
 
+    public void checkbox_holiday() {
+
+        cbHoliday = findViewById(R.id.cbHoliday);
+
+        cbHoliday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cbHoliday.isChecked()) {
+                    setHoliday(true);
+                } else {
+                    setHoliday(false);
+                }
+            }
+        });
+    }
+
+    public void checkbox_sick() {
+
+        cbSick = findViewById(R.id.cbSick);
+
+        cbSick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cbSick.isChecked()) {
+                    setSick(true);
+                } else {
+                    setSick(false);
+                }
+            }
+        });
+    }
+
+
     public String weekEnding() {
         int weekday = calendar.get(Calendar.DAY_OF_WEEK);
         int days = Calendar.SUNDAY - weekday;
@@ -557,6 +593,10 @@ public class Edit extends AppCompatActivity {
 
             noteEmployee.setIfLunch(getHadLunch());
 
+            noteEmployee.setIfHoliday(isHoliday());
+
+            noteEmployee.setIfSick(isSick());
+
             db.collection("Users").document(getUser()).collection(weekEnding()).document(getDay())
                     .set(noteEmployee, SetOptions.merge())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -572,5 +612,21 @@ public class Edit extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    public boolean isSick() {
+        return sick;
+    }
+
+    public void setSick(boolean sick) {
+        this.sick = sick;
+    }
+
+    public boolean isHoliday() {
+        return holiday;
+    }
+
+    public void setHoliday(boolean holiday) {
+        this.holiday = holiday;
     }
 }

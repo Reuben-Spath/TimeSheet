@@ -109,7 +109,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="#9C27B0"
-        android:text="@string/employee_code"
+        android:text="@string/employer_code"
         android:textColor="#FFFF"
         android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"

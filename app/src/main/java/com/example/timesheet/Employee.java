@@ -2,13 +2,14 @@ package com.example.timesheet;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -162,43 +163,43 @@ public class Employee extends AppCompatActivity {
                                 Log.d(TAG, "onEvent: " + data);
 
                                 if (documentId.equals("Monday")) {
-                                    data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                    data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
                                     Monday.setTextColor(getResources().getColor(R.color.Blue));
                                     Monday.setText(data);
                                     setMon(data);
                                 }
                                 if (documentId.equals("Tuesday")) {
-                                    data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                    data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
                                     Tuesday.setTextColor(getResources().getColor(R.color.Blue));
                                     Tuesday.setText(data);
                                     setTues(data);
                                 }
                                 if (documentId.equals("Wednesday")) {
-                                    data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                    data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
                                     Wednesday.setTextColor(getResources().getColor(R.color.Blue));
                                     Wednesday.setText(data);
                                     setWed(data);
                                 }
                                 if (documentId.equals("Thursday")) {
-                                    data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                    data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
                                     Thursday.setTextColor(getResources().getColor(R.color.Blue));
                                     Thursday.setText(data);
                                     setThurs(data);
                                 }
                                 if (documentId.equals("Friday")) {
-                                    data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                    data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
                                     Friday.setTextColor(getResources().getColor(R.color.Blue));
                                     Friday.setText(data);
                                     setFri(data);
                                 }
                                 if (documentId.equals("Saturday")) {
-                                    data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                    data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
                                     Saturday.setTextColor(getResources().getColor(R.color.Blue));
                                     Saturday.setText(data);
                                     setSat(data);
                                 }
                                 if (documentId.equals("Sunday")) {
-                                    data = "ID: " + documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                    data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
                                     Sunday.setTextColor(getResources().getColor(R.color.Blue));
                                     Sunday.setText(data);
                                     setSun(data);

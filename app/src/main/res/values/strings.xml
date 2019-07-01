@@ -107,14 +107,14 @@
     <string name="status_email_sent">Link sent, check your email to continue.</string>
     <string name="status_link_found">Link received, enter email to sign in.</string>
 
-    <string name="id_fmt">User ID: %s</string>
-    <string name="email_fmt">Email: %s</string>
-    <string name="title_activity_map">Map</string>
-    <string name="title_activity_nav_drawer">nav_drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <!--<string name="id_fmt">User ID: %s</string>-->
+    <!--<string name="email_fmt">Email: %s</string>-->
+    <!--<string name="title_activity_map">Map</string>-->
+    <!--<string name="title_activity_nav_drawer">nav_drawer</string>-->
+    <!--<string name="navigation_drawer_close">Close navigation drawer</string>-->
+    <!--<string name="nav_header_title">Android Studio</string>-->
+    <!--<string name="nav_header_subtitle">android.studio@android.com</string>-->
+    <!--<string name="nav_header_desc">Navigation header</string>-->
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
@@ -127,9 +127,10 @@
     <string name="back">Back</string>
     <string name="employer_code">Employer Code</string>
     <string name="send">Send</string>
-    <string name="total_hours">Total Hours</string>
     <string name="employee_code">Employee code</string>
     <string name="code">Code</string>
-    <string name="save">Save</string>
+    <string name="total_hours">Total Hours</string>
+    <string name="holiday">Holiday</string>
+    <string name="sick">Sick</string>
 </resources>
 

@@ -14,6 +14,8 @@ public class NoteEmployee {
     private String timeStr;
     private float timeInt;
     private boolean ifLunch;
+    private boolean ifHoliday;
+    private boolean ifSick;
 
     private long startH;
     private long startM;
@@ -137,5 +139,21 @@ public class NoteEmployee {
 
     void setM4t(long m4t) {
         this.m4t = m4t;
+    }
+
+    public boolean isIfSick() {
+        return ifSick;
+    }
+
+    public void setIfSick(boolean ifSick) {
+        this.ifSick = ifSick;
+    }
+
+    public boolean isIfHoliday() {
+        return ifHoliday;
+    }
+
+    public void setIfHoliday(boolean ifHoliday) {
+        this.ifHoliday = ifHoliday;
     }
 }
