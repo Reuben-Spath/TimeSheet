@@ -219,7 +219,8 @@ public class Edit extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         create();
         checkbox();
-
+        checkbox_holiday();
+        checkbox_sick();
 
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -308,6 +309,22 @@ public class Edit extends AppCompatActivity {
                                         lunch1.setChecked(false);
                                     }
                                 }
+                                if (snapshot.getBoolean("ifSick") != null) {
+                                    if (snapshot.getBoolean("ifSick")) {
+                                        cbSick.setChecked(true);
+                                        cbHoliday.setEnabled(false);
+                                    } else {
+                                        cbSick.setChecked(false);
+                                    }
+                                }
+                                if (snapshot.getBoolean("ifHoliday") != null) {
+                                    if (snapshot.getBoolean("ifHoliday")) {
+                                        cbHoliday.setChecked(true);
+                                        cbSick.setEnabled(false);
+                                    } else {
+                                        cbHoliday.setChecked(false);
+                                    }
+                                }
                             } else {
                                 Log.d(TAG, "Current data: null");
                             }
@@ -367,15 +384,20 @@ public class Edit extends AppCompatActivity {
     }
 
     public void checkbox_holiday() {
-
+        setHoliday(false);
         cbHoliday = findViewById(R.id.cbHoliday);
 
+        if (isSick()) {
+            cbSick.setEnabled(true);
+        }
         cbHoliday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (cbHoliday.isChecked()) {
+                    cbSick.setEnabled(false);
                     setHoliday(true);
                 } else {
+                    cbSick.setEnabled(true);
                     setHoliday(false);
                 }
             }
@@ -383,21 +405,25 @@ public class Edit extends AppCompatActivity {
     }
 
     public void checkbox_sick() {
-
+        setSick(false);
         cbSick = findViewById(R.id.cbSick);
 
+        if (isHoliday()) {
+            cbSick.setEnabled(true);
+        }
         cbSick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (cbSick.isChecked()) {
+                    cbHoliday.setEnabled(false);
                     setSick(true);
                 } else {
+                    cbHoliday.setEnabled(true);
                     setSick(false);
                 }
             }
         });
     }
-
 
     public String weekEnding() {
         int weekday = calendar.get(Calendar.DAY_OF_WEEK);

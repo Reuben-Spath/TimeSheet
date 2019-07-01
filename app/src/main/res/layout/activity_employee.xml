@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/mon"
                 android:padding="10dp"
-                android:textColor="@color/Blue"/>
+                android:textColor="@color/Blue_text" />
 
             <TextView
                 android:id="@+id/Tuesday1"
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/tues"
                 android:padding="10dp"
-                android:textColor="@color/Blue"/>
+                android:textColor="@color/Blue_text" />
 
             <TextView
                 android:id="@+id/Wednesday1"
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/wed"
                 android:padding="10dp"
-                android:textColor="@color/Blue"/>
+                android:textColor="@color/Blue_text" />
 
             <TextView
                 android:id="@+id/Thursday1"
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/thur"
                 android:padding="10dp"
-                android:textColor="@color/Blue"/>
+                android:textColor="@color/Blue_text" />
 
             <TextView
                 android:id="@+id/Friday1"
@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/fri"
                 android:padding="10dp"
-                android:textColor="@color/Blue"/>
+                android:textColor="@color/Blue_text" />
 
             <TextView
                 android:id="@+id/Saturday1"
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/sat"
                 android:padding="10dp"
-                android:textColor="@color/Blue"/>
+                android:textColor="@color/Blue_text" />
 
             <TextView
                 android:id="@+id/Sunday1"
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/sun"
                 android:padding="10dp"
-                android:textColor="@color/Blue"/>
+                android:textColor="@color/Blue_text" />
 
 
         </LinearLayout>

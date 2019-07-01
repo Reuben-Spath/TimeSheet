@@ -139,6 +139,8 @@ public class Employee extends AppCompatActivity {
                                 String finish = noteEmployee.getSignOutN();
                                 String time = noteEmployee.getTimeStr();
                                 tot_time = noteEmployee.getTimeInt();
+                                boolean holiday = noteEmployee.isIfHoliday();
+                                boolean sick = noteEmployee.isIfSick();
                                 boolean lunch = noteEmployee.getIfLunch();
                                 String hadlunch = "No";
 
@@ -162,50 +164,115 @@ public class Employee extends AppCompatActivity {
 
                                 Log.d(TAG, "onEvent: " + data);
 
+
                                 if (documentId.equals("Monday")) {
-                                    data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                    Monday.setTextColor(getResources().getColor(R.color.Blue));
-                                    Monday.setText(data);
-                                    setMon(data);
+                                    if (holiday) {
+                                        data = documentId + ":\nHoliday\n";
+                                        Monday.setText(data);
+                                        setMon(data);
+                                    } else if (sick) {
+
+                                        data = documentId + ":\nSick\n";
+                                        Monday.setText(data);
+                                        setMon(data);
+                                    } else {
+                                        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Monday.setText(data);
+                                        setMon(data);
+                                    }
                                 }
                                 if (documentId.equals("Tuesday")) {
-                                    data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                    Tuesday.setTextColor(getResources().getColor(R.color.Blue));
-                                    Tuesday.setText(data);
-                                    setTues(data);
+                                    if (holiday) {
+                                        data = documentId + ":\nHoliday\n";
+                                        Tuesday.setText(data);
+                                        setTues(data);
+                                    } else if (sick) {
+                                        data = documentId + ":\nSick\n";
+                                        Tuesday.setText(data);
+                                        setTues(data);
+                                    } else {
+                                        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Tuesday.setText(data);
+                                        setTues(data);
+                                    }
                                 }
                                 if (documentId.equals("Wednesday")) {
-                                    data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                    Wednesday.setTextColor(getResources().getColor(R.color.Blue));
-                                    Wednesday.setText(data);
-                                    setWed(data);
+                                    if (holiday) {
+                                        data = documentId + ":\nHoliday\n";
+                                        Wednesday.setText(data);
+                                        setWed(data);
+                                    } else if (sick) {
+                                        data = documentId + ":\nSick\n";
+                                        Wednesday.setText(data);
+                                        setWed(data);
+                                    } else {
+                                        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Wednesday.setText(data);
+                                        setWed(data);
+                                    }
                                 }
                                 if (documentId.equals("Thursday")) {
-                                    data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                    Thursday.setTextColor(getResources().getColor(R.color.Blue));
-                                    Thursday.setText(data);
-                                    setThurs(data);
+                                    if (holiday) {
+                                        data = documentId + ":\nHoliday\n";
+                                        Thursday.setText(data);
+                                        setThurs(data);
+                                    } else if (sick) {
+                                        data = documentId + ":\nSick\n";
+                                        Thursday.setText(data);
+                                        setThurs(data);
+                                    } else {
+                                        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Thursday.setText(data);
+                                        setThurs(data);
+                                    }
                                 }
                                 if (documentId.equals("Friday")) {
-                                    data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                    Friday.setTextColor(getResources().getColor(R.color.Blue));
-                                    Friday.setText(data);
-                                    setFri(data);
+                                    if (holiday) {
+                                        data = documentId + ":\nHoliday\n";
+                                        Friday.setText(data);
+                                        setFri(data);
+                                    } else if (sick) {
+                                        data = documentId + ":\nSick\n";
+                                        Friday.setText(data);
+                                        setFri(data);
+                                    } else {
+                                        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Friday.setText(data);
+                                        setFri(data);
+                                    }
                                 }
                                 if (documentId.equals("Saturday")) {
-                                    data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                    Saturday.setTextColor(getResources().getColor(R.color.Blue));
-                                    Saturday.setText(data);
-                                    setSat(data);
+                                    if (holiday) {
+                                        data = documentId + ":\nHoliday\n";
+                                        Saturday.setText(data);
+                                        setSat(data);
+                                    } else if (sick) {
+                                        data = documentId + ":\nSick\n";
+                                        Saturday.setText(data);
+                                        setSat(data);
+                                    } else {
+                                        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Saturday.setText(data);
+                                        setSat(data);
+                                    }
                                 }
                                 if (documentId.equals("Sunday")) {
-                                    data = documentId + "\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                    Sunday.setTextColor(getResources().getColor(R.color.Blue));
-                                    Sunday.setText(data);
-                                    setSun(data);
+                                    if (holiday) {
+                                        data = documentId + ":\nHoliday\n";
+                                        Sunday.setText(data);
+                                        setSun(data);
+                                    } else if (sick) {
+                                        data = documentId + ":\nSick\n";
+                                        Sunday.setText(data);
+                                        setSun(data);
+                                    } else {
+                                        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
+                                        Sunday.setText(data);
+                                        setSun(data);
+                                    }
                                 }
                             }
-                            String finalTime = String.format(Locale.getDefault(), "%.2f hours", tot_count);
+                            String finalTime = String.format(Locale.getDefault(), "Total Hours:\n%.2f hours", tot_count);
 
                             setTotal(finalTime);
                             totalHours.setText(finalTime);
@@ -262,7 +329,7 @@ public class Employee extends AppCompatActivity {
 
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "The total hours are: " + getTotal() + "\n" + getMon() + "\n" + getTues() + "\n" + getWed() + "\n" + getThurs() + "\n" + getFri() + "\n" + getSat() + "\n" + getSun());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "The total hours are: " + getTotal() + "\n\n" + getMon() + "\n" + getTues() + "\n" + getWed() + "\n" + getThurs() + "\n" + getFri() + "\n" + getSat() + "\n" + getSun());
         shareIntent.setType("text/*");
         startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
     }

@@ -45,12 +45,11 @@ public class FrontScreenManager extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_front_screen_manager);
 
+
         mAuth = FirebaseAuth.getInstance();
 
-
-        send = findViewById(R.id.btMngSend);
-
         employerCounter();
+        send = findViewById(R.id.btMngSend);
 
         week_ending = findViewById(R.id.tvWeekEnding);
         mng_code = findViewById(R.id.tvmgCode);
@@ -58,17 +57,10 @@ public class FrontScreenManager extends AppCompatActivity {
         week_ending.setText("Week Ending: " + weekEnding());
         empListner();
     }
-//
-//    public void openDialog() {
-//        DialogOption dialogOption = new DialogOption();
-//        dialogOption.show(getSupportFragmentManager(), "new Dialog");
-//    }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
 
     public void empListner() {
@@ -200,24 +192,14 @@ public class FrontScreenManager extends AppCompatActivity {
                                                     counter++;
 
                                                     // Prepare textview object programmatically
-                                                    LinearLayout ll = new LinearLayout(getApplicationContext());
                                                     TextView tv = new TextView(getApplicationContext());
-//                                                    CheckBox cb = new CheckBox(getApplicationContext());
+
                                                     tv.setText(name);
                                                     tv.setId(counter);
                                                     tv.setTextSize(24);
                                                     tv.setTextColor(getResources().getColor(R.color.Blue_dark));
                                                     tv.setPadding(10, 15, 10, 15);
-//                                                    cb.setId(counter);
-//                                                    cb.setTextColor(getResources().getColor(R.color.Blue));
-//                                                    lLayout.addView(ll);
-//                                                    ll.setBackgroundColor(Color.parseColor("#135517"));
-//                                                    ll.addView(cb);
-//                                                    ll.addView(tv);
-//                                                    lLayout.setOrientation(LinearLayout.VERTICAL);
-//                                                    layout.addView(cb);
-//                                                    layout.addView(tv);
-//                                                    lLayout.addView(cb);
+
                                                     lLayout.addView(tv);
 
                                                     tv.setOnClickListener(new View.OnClickListener() {

@@ -3,9 +3,6 @@ package com.example.timesheet;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,15 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 
 import java.text.DateFormat;
@@ -297,9 +293,10 @@ public class FrontScreenEmployee extends AppCompatActivity{
         return super.onKeyDown(keyCode, event);
     }
 
+    //Changed "dd-MMM"
     public String getCurrentDate() {
         final Calendar myCalender1 = Calendar.getInstance();
-        DateFormat df = new SimpleDateFormat("EEEE", Locale.getDefault());
+        DateFormat df = new SimpleDateFormat("EEEE \ndd-MMM", Locale.getDefault());
         return df.format(myCalender1.getTime());
     }
 

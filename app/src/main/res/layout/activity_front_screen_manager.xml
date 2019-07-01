@@ -28,7 +28,7 @@
         android:layout_marginBottom="16dp"
         android:text="@string/employer_code"
         android:textColor="@color/Blue_dark"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
