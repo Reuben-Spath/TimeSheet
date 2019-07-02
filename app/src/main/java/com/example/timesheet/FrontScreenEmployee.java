@@ -44,6 +44,7 @@ public class FrontScreenEmployee extends AppCompatActivity{
     private boolean out = false;
 
     private ImageView profile;
+    private ImageView logo;
 
     protected TextView timeSignedIn;
     protected TextView timeSignedOff;
@@ -207,7 +208,7 @@ public class FrontScreenEmployee extends AppCompatActivity{
 
         profile = findViewById(R.id.draw_profile);
 
-        employer_code = findViewById(R.id.btEmpCode);
+        logo = findViewById(R.id.logo);
 //        week = findViewById(R.id.btWeek);
 
 //        EmpCode = findViewById(R.id.tvEmpCode);
@@ -225,13 +226,11 @@ public class FrontScreenEmployee extends AppCompatActivity{
 
         date.setText(getCurrentDate());
 
-        employer_code.setOnClickListener(new View.OnClickListener() {
+        logo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent special_code_pass = new Intent(FrontScreenEmployee.this, Profile.class);
                 startActivity(special_code_pass);
-//                Intent special_code_pass = new Intent(FrontScreenEmployee.this, Tester.class);
-//                startActivity(special_code_pass);
             }
         });
         profile.setOnClickListener(new View.OnClickListener() {
@@ -275,11 +274,9 @@ public class FrontScreenEmployee extends AppCompatActivity{
                 if (in && out) {
                     Intent i = new Intent(FrontScreenEmployee.this, Confirmation.class);
                     startActivity(i);
-
                 }
             }
         });
-//        empListner();
     }
 
     @Override
@@ -296,7 +293,7 @@ public class FrontScreenEmployee extends AppCompatActivity{
     //Changed "dd-MMM"
     public String getCurrentDate() {
         final Calendar myCalender1 = Calendar.getInstance();
-        DateFormat df = new SimpleDateFormat("EEEE \ndd-MMM", Locale.getDefault());
+        DateFormat df = new SimpleDateFormat("EEEE\ndd-MMMM", Locale.getDefault());
         return df.format(myCalender1.getTime());
     }
 
@@ -319,32 +316,6 @@ public class FrontScreenEmployee extends AppCompatActivity{
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
         return dateFormat.format(now);
     }
-
-//    public void empListner() {
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        if (user != null) {
-//            FirebaseFirestore db = FirebaseFirestore.getInstance();
-//
-//            final DocumentReference docRef = db.collection("Users").document(user.getUid());
-//            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//                @Override
-//                public void onEvent(@Nullable DocumentSnapshot snapshot,
-//                                    @Nullable FirebaseFirestoreException e) {
-//                    if (e != null) {
-//                        Log.w(TAG, "Listen failed.", e);
-//                        return;
-//                    }
-//
-//                    if (snapshot != null && snapshot.exists()) {
-//                        Log.d(TAG, "Current data: " + snapshot.getData());
-//                        EmpCode.setText(snapshot.getString("Employer Code"));
-//                    } else {
-//                        Log.d(TAG, "Current data: null");
-//                    }
-//                }
-//            });
-//        }
-//    }
 
     public void create() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -374,8 +345,6 @@ public class FrontScreenEmployee extends AppCompatActivity{
         final Calendar myCalender = Calendar.getInstance();
         int hour = myCalender.get(Calendar.HOUR_OF_DAY);
         int minute = myCalender.get(Calendar.MINUTE);
-
-//        time1 = String.format(String.valueOf(Calendar.getInstance().getTime()));
 
         timePickerDialog = new TimePickerDialog(FrontScreenEmployee.this, R.style.HoloDialog, new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -410,8 +379,6 @@ public class FrontScreenEmployee extends AppCompatActivity{
         int hour = myCalender.get(Calendar.HOUR_OF_DAY);
         int minute = myCalender.get(Calendar.MINUTE);
 
-//        time2 = String.format(String.valueOf(Calendar.getInstance().getTime()));
-
         timePickerDialog = new TimePickerDialog(FrontScreenEmployee.this, R.style.HoloDialog, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
@@ -440,8 +407,6 @@ public class FrontScreenEmployee extends AppCompatActivity{
         timePickerDialog.setTitle("Sign Off Time:");
         timePickerDialog.show();
     }
-
-    //100 minutes just needs to have a total of 60
 
     public String hours_worked_without_lunch() {
 

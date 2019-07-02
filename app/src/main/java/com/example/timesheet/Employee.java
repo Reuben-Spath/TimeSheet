@@ -296,6 +296,7 @@ public class Employee extends AppCompatActivity {
 
     public void send() {
 
+        String info_subject = weekEnding() + " " + getUserId();
         if (getMon() == null) {
             setMon("Did not work on Monday");
         }
@@ -318,18 +319,10 @@ public class Employee extends AppCompatActivity {
             setSun("Did not work on Sunday");
         }
 
-//        testString.add(getMon());
-//        testString.add(getTues());
-//        testString.add(getWed());
-//        testString.add(getThurs());
-//        testString.add(getFri());
-//        testString.add(getSat());
-//        testString.add(getSun());
-//        testString.add(getTotal());
-
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "The total hours are: " + getTotal() + "\n\n" + getMon() + "\n" + getTues() + "\n" + getWed() + "\n" + getThurs() + "\n" + getFri() + "\n" + getSat() + "\n" + getSun());
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, info_subject);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, getTotal() + "\n\n" + getMon() + "\n" + getTues() + "\n" + getWed() + "\n" + getThurs() + "\n" + getFri() + "\n" + getSat() + "\n" + getSun());
         shareIntent.setType("text/*");
         startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
     }

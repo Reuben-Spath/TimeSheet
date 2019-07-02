@@ -132,5 +132,14 @@
     <string name="total_hours">Total Hours</string>
     <string name="holiday">Holiday</string>
     <string name="sick">Sick</string>
+    <string name="profile">Profile</string>
+    <string name="start">Start</string>
+    <string name="finish">Finish</string>
+    <string name="company">Company</string>
+    <string name="individual">Individual</string>
+    <string name="or">Or</string>
+    <string name="sign_in_time">Sign in time</string>
+    <string name="sign_off_time">Sign off time</string>
+    <string name="cancel">Cancel</string>
 </resources>
 

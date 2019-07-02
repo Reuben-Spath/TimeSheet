@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -29,6 +28,8 @@ public class EmployeeWeek extends FrontScreenEmployee {
 
     private Button back;
 
+    private String dialogDate;
+
     private TextView EmpCode;
 
     private TextView Monday;
@@ -43,8 +44,6 @@ public class EmployeeWeek extends FrontScreenEmployee {
 
     private String name;
     private String week_header;
-
-    private ImageView week;
 
     private FirebaseAuth mAuth;
 
@@ -65,8 +64,6 @@ public class EmployeeWeek extends FrontScreenEmployee {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         EmpCode = findViewById(R.id.tvEmpCode);
-
-        week = findViewById(R.id.ivWeek);
 
         week_header = "Week Ending:\n" + weekEnding();
 
@@ -92,12 +89,10 @@ public class EmployeeWeek extends FrontScreenEmployee {
         Friday.setOnClickListener(editing);
         Saturday.setOnClickListener(editing);
         Sunday.setOnClickListener(editing);
+
     }
 
-    public void openDialog() {
-        DialogOption dialogOption = new DialogOption();
-        dialogOption.show(getSupportFragmentManager(), "new Dialog");
-    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -105,7 +100,6 @@ public class EmployeeWeek extends FrontScreenEmployee {
         empListner();
         info();
 
-//        weekEnding.setText(weekEnding());
         weekEnding.setText(week_header);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -394,6 +388,4 @@ public class EmployeeWeek extends FrontScreenEmployee {
         }
         return super.onKeyDown(keyCode, event);
     }
-
-
 }
