@@ -50,6 +50,10 @@ public class NoteEmployee {
         return timeStr;
     }
 
+    void setTimeStr(String timeStr) {
+        this.timeStr = timeStr;
+    }
+
     boolean getIfLunch() {
         return ifLunch;
     }

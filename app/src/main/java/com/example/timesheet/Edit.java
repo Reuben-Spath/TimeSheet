@@ -14,6 +14,7 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,7 +33,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class Edit extends AppCompatActivity {
+public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
 
     Calendar calendar = Calendar.getInstance();
 
@@ -75,6 +76,10 @@ public class Edit extends AppCompatActivity {
 
     private static long hours4today;
     private static long minutes4today;
+
+    public static final int FLAG_START_TIME = 0;
+    public static final int FLAG_END_TIME = 1;
+    private int flag = 0;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -222,6 +227,7 @@ public class Edit extends AppCompatActivity {
         checkbox_holiday();
         checkbox_sick();
 
+
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -237,6 +243,53 @@ public class Edit extends AppCompatActivity {
         });
     }
 
+    public void setFlag(int i) {
+        flag = i;
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        if (flag == FLAG_START_TIME) {
+            setStartHr(hourOfDay);
+            setStartMin(minute);
+
+            if (hourOfDay > 12) {
+                amPm = "PM";
+                hourOfDay = hourOfDay - 12;
+            } else {
+                amPm = "AM";
+            }
+            signedIn.setText(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minute, amPm));
+            setSignedIn(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minute, amPm));
+
+            if (lunch1.isChecked()) {
+                totalHours.setText(hours_worked_with_lunch());
+            } else {
+                totalHours.setText(hours_worked_without_lunch());
+            }
+
+        } else if (flag == FLAG_END_TIME) {
+
+            setFinishHr(hourOfDay);
+            setFinishMin(minute);
+
+            if (hourOfDay > 12) {
+                amPm = "PM";
+                hourOfDay = hourOfDay - 12;
+            } else {
+                amPm = "AM";
+            }
+            signedOut.setText(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minute, amPm));
+            setSignedOff(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minute, amPm));
+
+            if (lunch1.isChecked()) {
+                totalHours.setText(hours_worked_with_lunch());
+            } else {
+                totalHours.setText(hours_worked_without_lunch());
+            }
+
+        }
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -244,13 +297,19 @@ public class Edit extends AppCompatActivity {
         signedIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signInCustomPicker();
+//                signInCustomPicker();
+                setFlag(FLAG_START_TIME);
+                DialogFragment timePicker = new TimePickerFragment();
+                timePicker.show(getSupportFragmentManager(), "time picker");
             }
         });
         signedOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signOffCustomPicker();
+//                signOffCustomPicker();
+                setFlag(FLAG_END_TIME);
+                DialogFragment timePicker = new TimePickerFragment();
+                timePicker.show(getSupportFragmentManager(), "time picker");
             }
 
         });
@@ -279,10 +338,13 @@ public class Edit extends AppCompatActivity {
                             if (snapshot.toObject(NoteEmployee.class) != null) {
                                 NoteEmployee noteEmployee = snapshot.toObject(NoteEmployee.class);
 
+                                setPass(noteEmployee.getTimeStr());
                                 setStartHr(noteEmployee.getStartH());
                                 setStartMin(noteEmployee.getStartM());
                                 setFinishHr(noteEmployee.getFinishH());
                                 setFinishMin(noteEmployee.getFinishM());
+                                setSignedOff(noteEmployee.getSignOutN());
+                                setSignedIn(noteEmployee.getSignInN());
                                 setMinutes4today(noteEmployee.getM4t());
                                 setHours4today(noteEmployee.getH4t());
                                 setHadLunch(noteEmployee.getIfLunch());
@@ -614,6 +676,9 @@ public class Edit extends AppCompatActivity {
             noteEmployee.setFinishH(getFinishHr());
             noteEmployee.setFinishM(getFinishMin());
 
+            if (getStartHr() == 0 && getStartMin() == 0 && getFinishHr() == 0 && getFinishMin() == 0) {
+                noteEmployee.setTimeStr("");
+            }
             noteEmployee.setH4t(getHours4today());
             noteEmployee.setM4t(getMinutes4today());
 

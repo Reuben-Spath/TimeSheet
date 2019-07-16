@@ -1,17 +1,23 @@
 package com.example.timesheet;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,11 +33,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class FrontScreenManager extends AppCompatActivity {
+public class FrontScreenManager extends FragmentActivity {
 
     private static final String TAG = "FrontScreenManager";
 
@@ -43,6 +52,11 @@ public class FrontScreenManager extends AppCompatActivity {
     private ImageView logoM;
 
     private String letter;
+    ArrayList<String> names = new ArrayList<String>();
+    ArrayList<String> username = new ArrayList<String>();
+    private String onetwothree;
+    private Planet[] planets;
+    private ArrayAdapter<Planet> listAdapter;
 
 //    private String trial;
 
@@ -64,8 +78,9 @@ public class FrontScreenManager extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        employerCounter();
-//        send = findViewById(R.id.btMngSend);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
         logoM = findViewById(R.id.logoM);
         week_ending = findViewById(R.id.tvWeekEnding);
         mng_code = findViewById(R.id.tvmgCode);
@@ -73,19 +88,63 @@ public class FrontScreenManager extends AppCompatActivity {
 
         String week_end = "Week Ending: " + weekEnding();
         week_ending.setText(week_end);
+        employerCounter();
         empListner();
+
+//
+//        ListView mainListView = (ListView) findViewById(R.id.mainListView);
+//
+//        // When item is tapped, toggle checked properties of CheckBox and Planet.
+//        mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View item,
+//                                    int position, long id) {
+//                Planet planet = listAdapter.getItem(position);
+//                planet.toggleChecked();
+//                PlanetViewHolder viewHolder = (PlanetViewHolder) item.getTag();
+//                viewHolder.getCheckBox().setChecked(planet.isChecked());
+//            }
+//        });
+//
+////        I need an array from the employees with the same employer code
+////        I could read from the users list and then collect the list
+//
+//
+//        // Create and populate planets.
+//        planets = (Planet[]) getLastCustomNonConfigurationInstance();
+//
+//        if (planets == null) {
+//            planets = new Planet[]{
+//                    new Planet("Mercury"), new Planet("Venus"), new Planet("Earth"),
+//                    new Planet("Mars"), new Planet("Jupiter"), new Planet("Saturn"),
+//                    new Planet("Uranus"), new Planet("Neptune"), new Planet("Ceres"),
+//                    new Planet("Pluto"), new Planet("Haumea"), new Planet("Makemake"),
+//                    new Planet("Eris"), new Planet("Epsilon Eridani"), new Planet("Gliese 876 b"),
+//                    new Planet("HD 209458 b")
+//            };
+//        }
+//        ArrayList<Planet> planetList = new ArrayList<Planet>();
+//
+//
+//        planetList.addAll(Arrays.asList(planets));
+//
+//        // Set our custom array adapter as the ListView's adapter.
+//        listAdapter = new PlanetArrayAdapter(this, planetList);
+//        mainListView.setAdapter(listAdapter);
+//        tester();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        logoM.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(FrontScreenManager.this, Profile.class);
-                startActivity(i);
-            }
-        });
+//        employerCounter();
+//        logoM.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(FrontScreenManager.this, Profile.class);
+//                startActivity(i);
+//            }
+//        });
     }
 
     public void empListner() {
@@ -128,9 +187,54 @@ public class FrontScreenManager extends AppCompatActivity {
         return df.format(calendar.getTime());
     }
 
+    public void tester() {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String mUid = currentUser.getUid();
+
+            db.collection("Company").document(mUid)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                            setLetter(documentSnapshot.getString("empCode"));
+
+                            FirebaseFirestore db1 = FirebaseFirestore.getInstance();
+
+                            db1.collection("Users")
+                                    .whereEqualTo("Employer Code", getLetter())// <-- This line
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                int counter = 0;
+
+                                                for (final DocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                                    Log.d(TAG, "onComplete: " + document.getString("name"));
+
+                                                    String name = document.getString("name");
+
+                                                    names.add(name);
+                                                }
+                                            } else {
+                                                Log.d(TAG, "Error getting documents: ", task.getException());
+                                            }
+                                        }
+                                    });
+                        }
+                    });
+        }
+    }
+
     public void employerCounter() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        final ArrayList<String> names = new ArrayList<String>();
         if (currentUser != null) {
             String mUid = currentUser.getUid();
 
@@ -146,49 +250,59 @@ public class FrontScreenManager extends AppCompatActivity {
                             FirebaseFirestore db1 = FirebaseFirestore.getInstance();
 
                             db1.collection("Users")
-                                    .whereEqualTo("Employer Code", getLetter()) // <-- This line
+                                    .whereEqualTo("Employer Code", getLetter())// <-- This line
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if (task.isSuccessful()) {
-                                                int counter = 0;
-                                                LinearLayout lLayout = findViewById(R.id.llLayout); // Root ViewGroup in which you want to add textviews
 
                                                 for (final DocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-
                                                     Log.d(TAG, document.getId() + " => " + document.getData());
                                                     Log.d(TAG, "onComplete: " + document.getString("name"));
 
                                                     String name = document.getString("name");
+                                                    String id = document.getId();
 
-                                                    counter++;
-
-                                                    // Prepare textview object programmatically
-                                                    TextView tv = new TextView(getApplicationContext());
-
-                                                    tv.setText(name);
-                                                    tv.setId(counter);
-                                                    tv.setTextSize(24);
-                                                    tv.setTextColor(getResources().getColor(R.color.Blue_dark));
-                                                    tv.setPadding(10, 15, 10, 15);
-
-                                                    lLayout.addView(tv);
-
-                                                    tv.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
-                                                            String id = document.getId();
-                                                            String userName = document.getString("name");
-
-                                                            Intent i = new Intent(FrontScreenManager.this, Employee.class);
-
-                                                            i.putExtra("name", userName);
-                                                            i.putExtra("id", id);
-                                                            startActivity(i);
-                                                        }
-                                                    });
+                                                    names.add(name);
+                                                    username.add(id);
                                                 }
+                                                ListView mainListView = findViewById(R.id.mainListView);
+
+                                                // When item is tapped, toggle checked properties of CheckBox and Planet.
+                                                mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                    @Override
+                                                    public void onItemClick(AdapterView<?> parent, View item,
+                                                                            int position, long id) {
+                                                        Planet planet = listAdapter.getItem(position);
+                                                        planet.toggleChecked();
+                                                        PlanetViewHolder viewHolder = (PlanetViewHolder) item.getTag();
+
+                                                        Intent i = new Intent(FrontScreenManager.this, Employee.class);
+
+                                                        String foundername = username.get(position);
+
+                                                        i.putExtra("name", planet.getName());
+                                                        i.putExtra("id", foundername);
+                                                        startActivity(i);
+                                                    }
+                                                });
+
+                                                planets = (Planet[]) getLastCustomNonConfigurationInstance();
+
+                                                Planet[] planets = new Planet[names.size()];
+                                                for (int i = 0; i < names.size(); i++) {
+                                                    planets[i] = new Planet(names.get(i));
+                                                }
+
+                                                ArrayList<Planet> planetList = new ArrayList<Planet>();
+
+                                                planetList.addAll(Arrays.asList(planets));
+
+                                                // Set our custom array adapter as the ListView's adapter.
+                                                listAdapter = new PlanetArrayAdapter(getApplicationContext(), planetList);
+                                                mainListView.setAdapter(listAdapter);
+
                                             } else {
                                                 Log.d(TAG, "Error getting documents: ", task.getException());
                                             }
@@ -198,6 +312,162 @@ public class FrontScreenManager extends AppCompatActivity {
                     });
         }
     }
+
+    public String getLetter() {
+        return letter;
+    }
+
+    public void setLetter(String letter) {
+        this.letter = letter;
+    }
+
+    public Object onRetainCustomNonConfigurationInstance() {
+        return planets;
+    }
+
+    /**
+     * Holds planet data.
+     */
+    private static class Planet {
+        private String name = "";
+        private String id = "";
+        private boolean checked = false;
+
+        public Planet() {
+        }
+
+        public Planet(String name) {
+            this.name = name;
+        }
+
+        public Planet(String name, boolean checked) {
+            this.name = name;
+            this.checked = checked;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public boolean isChecked() {
+            return checked;
+        }
+
+        public void setChecked(boolean checked) {
+            this.checked = checked;
+        }
+
+        public String toString() {
+            return name;
+        }
+
+        public void toggleChecked() {
+            checked = !checked;
+        }
+    }
+
+    /**
+     * Holds child views for one row.
+     */
+    private static class PlanetViewHolder {
+        private CheckBox checkBox;
+        private TextView textView;
+
+        public PlanetViewHolder() {
+        }
+
+        public PlanetViewHolder(TextView textView, CheckBox checkBox) {
+            this.checkBox = checkBox;
+            this.textView = textView;
+        }
+
+        public CheckBox getCheckBox() {
+            return checkBox;
+        }
+
+        public void setCheckBox(CheckBox checkBox) {
+            this.checkBox = checkBox;
+        }
+
+        public TextView getTextView() {
+            return textView;
+        }
+
+        public void setTextView(TextView textView) {
+            this.textView = textView;
+        }
+    }
+
+    /**
+     * Custom adapter for displaying an array of Planet objects.
+     */
+    private static class PlanetArrayAdapter extends ArrayAdapter<Planet> {
+
+        private LayoutInflater inflater;
+
+        public PlanetArrayAdapter(Context context, List<Planet> planetList) {
+            super(context, R.layout.simplerow, R.id.rowTextView, planetList);
+            // Cache the LayoutInflate to avoid asking for a new one each time.
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // Planet to display
+            Planet planet = this.getItem(position);
+
+            // The child views in each row.
+            CheckBox checkBox;
+            TextView textView;
+
+            // Create a new row view
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.simplerow, null);
+
+                // Find the child views.
+                textView = convertView.findViewById(R.id.rowTextView);
+                checkBox = convertView.findViewById(R.id.CheckBox01);
+
+                // Optimization: Tag the row with it's child views, so we don't have to
+                // call findViewById() later when we reuse the row.
+                convertView.setTag(new PlanetViewHolder(textView, checkBox));
+
+                // If CheckBox is toggled, update the planet it is tagged with.
+                checkBox.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        CheckBox cb = (CheckBox) v;
+                        Planet planet = (Planet) cb.getTag();
+                        planet.setChecked(cb.isChecked());
+                    }
+                });
+            }
+            // Reuse existing row view
+            else {
+                // Because we use a ViewHolder, we avoid having to call findViewById().
+                PlanetViewHolder viewHolder = (PlanetViewHolder) convertView.getTag();
+                checkBox = viewHolder.getCheckBox();
+                textView = viewHolder.getTextView();
+            }
+
+            // Tag the CheckBox with the Planet it is displaying, so that we can
+            // access the planet in onClick() when the CheckBox is toggled.
+            checkBox.setTag(planet);
+
+            // Display planet data
+            checkBox.setChecked(planet.isChecked());
+            textView.setText(planet.getName());
+
+            return convertView;
+        }
+
+    }
+}
+
+
 //    public void info(String empName){
 //        FirebaseUser currentUser = mAuth.getCurrentUser();
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -447,12 +717,3 @@ public class FrontScreenManager extends AppCompatActivity {
 //                    });
 //}
 //        }
-
-    public String getLetter() {
-        return letter;
-    }
-
-    public void setLetter(String letter) {
-        this.letter = letter;
-    }
-}

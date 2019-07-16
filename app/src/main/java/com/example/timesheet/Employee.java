@@ -57,6 +57,30 @@ public class Employee extends AppCompatActivity {
     private String sun;
     private String total;
 
+    private TextView monst;
+    private TextView tuesst;
+    private TextView wedst;
+    private TextView thursst;
+    private TextView frist;
+    private TextView satst;
+    private TextView sunst;
+
+    private TextView monfn;
+    private TextView tuesfn;
+    private TextView wedfn;
+    private TextView thursfn;
+    private TextView frifn;
+    private TextView satfn;
+    private TextView sunfn;
+
+    private TextView montot;
+    private TextView tuestot;
+    private TextView wedtot;
+    private TextView thurstot;
+    private TextView fritot;
+    private TextView sattot;
+    private TextView suntot;
+
     public String getUserId() {
         return userId;
     }
@@ -72,6 +96,73 @@ public class Employee extends AppCompatActivity {
     public void setName(String name) {
         this.nameId = name;
     }
+
+    private View.OnClickListener editing = new View.OnClickListener() {
+        public void onClick(View v) {
+            Intent i = new Intent(Employee.this, Edit.class);
+            String id;
+            switch (v.getId() /*to get clicked view id**/) {
+                case R.id.Monday:
+
+                    id = "Monday";
+                    i.putExtra("name", getName());
+                    i.putExtra("id", id);
+                    startActivity(i);
+
+                    break;
+                case R.id.Tuesday:
+
+                    id = "Tuesday";
+                    i.putExtra("name", getName());
+                    i.putExtra("id", id);
+                    startActivity(i);
+
+                    break;
+                case R.id.Wednesday:
+
+                    id = "Wednesday";
+                    i.putExtra("name", getName());
+                    i.putExtra("id", id);
+                    startActivity(i);
+
+                    break;
+                case R.id.Thursday:
+
+                    id = "Thursday";
+                    i.putExtra("name", getName());
+                    i.putExtra("id", id);
+                    startActivity(i);
+
+                    break;
+                case R.id.Friday:
+
+                    id = "Friday";
+                    i.putExtra("name", getName());
+                    i.putExtra("id", id);
+                    startActivity(i);
+
+                    break;
+                case R.id.Saturday:
+
+                    id = "Saturday";
+                    i.putExtra("name", getName());
+                    i.putExtra("id", id);
+                    startActivity(i);
+
+                    break;
+                case R.id.Sunday:
+
+                    id = "Sunday";
+                    i.putExtra("name", getName());
+                    i.putExtra("id", id);
+                    startActivity(i);
+
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,13 +181,13 @@ public class Employee extends AppCompatActivity {
         setUserId(i.getStringExtra("name"));
         Employee.setText(i.getStringExtra("name"));
 
-        Monday = findViewById(R.id.Monday1);
-        Tuesday = findViewById(R.id.Tuesday1);
-        Wednesday = findViewById(R.id.Wednesday1);
-        Thursday = findViewById(R.id.Thursday1);
-        Friday = findViewById(R.id.Friday1);
-        Saturday = findViewById(R.id.Saturday1);
-        Sunday = findViewById(R.id.Sunday1);
+        Monday = findViewById(R.id.Monday);
+        Tuesday = findViewById(R.id.Tuesday);
+        Wednesday = findViewById(R.id.Wednesday);
+        Thursday = findViewById(R.id.Thursday);
+        Friday = findViewById(R.id.Friday);
+        Saturday = findViewById(R.id.Saturday);
+        Sunday = findViewById(R.id.Sunday);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -107,6 +198,30 @@ public class Employee extends AppCompatActivity {
         Friday.setOnClickListener(editing);
         Saturday.setOnClickListener(editing);
         Sunday.setOnClickListener(editing);
+
+        monst = findViewById(R.id.monst);
+        tuesst = findViewById(R.id.tuesst);
+        wedst = findViewById(R.id.wedst);
+        thursst = findViewById(R.id.thurst);
+        frist = findViewById(R.id.frist);
+        satst = findViewById(R.id.satst);
+        sunst = findViewById(R.id.sunst);
+
+        monfn = findViewById(R.id.monfn);
+        tuesfn = findViewById(R.id.tuesfn);
+        wedfn = findViewById(R.id.wedfn);
+        thursfn = findViewById(R.id.thurfn);
+        frifn = findViewById(R.id.frifn);
+        satfn = findViewById(R.id.satfn);
+        sunfn = findViewById(R.id.sunfn);
+
+        montot = findViewById(R.id.montot);
+        tuestot = findViewById(R.id.tuestot);
+        wedtot = findViewById(R.id.wedtot);
+        thurstot = findViewById(R.id.thurtot);
+        fritot = findViewById(R.id.fritot);
+        sattot = findViewById(R.id.sattot);
+        suntot = findViewById(R.id.suntot);
     }
 
     @Override
@@ -142,23 +257,23 @@ public class Employee extends AppCompatActivity {
                                 boolean holiday = noteEmployee.isIfHoliday();
                                 boolean sick = noteEmployee.isIfSick();
                                 boolean lunch = noteEmployee.getIfLunch();
-                                String hadlunch = "No";
-
-                                if (lunch) {
-                                    hadlunch = "Yes";
-                                }
-                                if (start == null) {
-                                    start = "Invalid";
-                                }
-                                if (finish == null) {
-                                    finish = "Invalid";
-                                }
-                                if (time == null) {
-                                    time = "Invalid";
-                                }
-                                if (!time.contains("hours") && !time.equalsIgnoreCase("Invalid")) {
-                                    time = time + " hours";
-                                }
+//                                String hadlunch = "No";
+//
+//                                if (lunch) {
+//                                    hadlunch = "Yes";
+//                                }
+//                                if (start == null) {
+//                                    start = "Invalid";
+//                                }
+//                                if (finish == null) {
+//                                    finish = "Invalid";
+//                                }
+//                                if (time == null) {
+//                                    time = "Invalid";
+//                                }
+//                                if (!time.contains("hours") && !time.equalsIgnoreCase("Invalid")) {
+//                                    time = time + " hours";
+//                                }
 
                                 tot_count += tot_time;
 
@@ -167,108 +282,142 @@ public class Employee extends AppCompatActivity {
 
                                 if (documentId.equals("Monday")) {
                                     if (holiday) {
-                                        data = documentId + ":\nHoliday\n";
-                                        Monday.setText(data);
+                                        monst.setText("");
+                                        monfn.setText("");
+                                        data = "Holiday";
+                                        montot.setText(data);
                                         setMon(data);
                                     } else if (sick) {
-
-                                        data = documentId + ":\nSick\n";
-                                        Monday.setText(data);
+                                        monst.setText("");
+                                        monfn.setText("");
+                                        data = "Sick";
+                                        montot.setText(data);
                                         setMon(data);
                                     } else {
-                                        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                        Monday.setText(data);
-                                        setMon(data);
+                                        monst.setText(start);
+                                        monfn.setText(finish);
+                                        montot.setText(time);
+                                        setMon("Monday:    " + start + " " + finish + " " + time);
                                     }
                                 }
                                 if (documentId.equals("Tuesday")) {
                                     if (holiday) {
-                                        data = documentId + ":\nHoliday\n";
-                                        Tuesday.setText(data);
+                                        tuesst.setText("");
+                                        tuesfn.setText("");
+                                        data = "Holiday";
+                                        tuestot.setText(data);
                                         setTues(data);
                                     } else if (sick) {
-                                        data = documentId + ":\nSick\n";
-                                        Tuesday.setText(data);
+                                        tuesst.setText("");
+                                        tuesfn.setText("");
+                                        data = "Sick";
+                                        tuestot.setText(data);
                                         setTues(data);
                                     } else {
-                                        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                        Tuesday.setText(data);
-                                        setTues(data);
+                                        tuesst.setText(start);
+                                        tuesfn.setText(finish);
+                                        tuestot.setText(time);
+                                        setTues("Tuesday:   " + start + " " + finish + " " + time);
                                     }
                                 }
                                 if (documentId.equals("Wednesday")) {
                                     if (holiday) {
-                                        data = documentId + ":\nHoliday\n";
-                                        Wednesday.setText(data);
+                                        wedst.setText("");
+                                        wedfn.setText("");
+                                        data = "Holiday";
+                                        wedtot.setText(data);
                                         setWed(data);
                                     } else if (sick) {
-                                        data = documentId + ":\nSick\n";
-                                        Wednesday.setText(data);
+                                        wedst.setText("");
+                                        wedfn.setText("");
+                                        data = "Sick";
+                                        wedtot.setText(data);
                                         setWed(data);
                                     } else {
-                                        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                        Wednesday.setText(data);
-                                        setWed(data);
+                                        wedst.setText(start);
+                                        wedfn.setText(finish);
+                                        wedtot.setText(time);
+                                        setWed("Wednesday: " + start + " " + finish + " " + time);
                                     }
                                 }
                                 if (documentId.equals("Thursday")) {
                                     if (holiday) {
-                                        data = documentId + ":\nHoliday\n";
-                                        Thursday.setText(data);
+                                        thursst.setText("");
+                                        thursfn.setText("");
+                                        data = "Holiday";
+                                        thurstot.setText(data);
                                         setThurs(data);
                                     } else if (sick) {
-                                        data = documentId + ":\nSick\n";
-                                        Thursday.setText(data);
+                                        thursst.setText("");
+                                        thursfn.setText("");
+                                        data = "Sick";
+                                        thurstot.setText(data);
                                         setThurs(data);
                                     } else {
-                                        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                        Thursday.setText(data);
-                                        setThurs(data);
+                                        thursst.setText(start);
+                                        thursfn.setText(finish);
+                                        thurstot.setText(time);
+                                        setThurs("Thursday:  " + start + " " + finish + " " + time);
                                     }
                                 }
                                 if (documentId.equals("Friday")) {
                                     if (holiday) {
-                                        data = documentId + ":\nHoliday\n";
-                                        Friday.setText(data);
+                                        frist.setText("");
+                                        frifn.setText("");
+                                        data = "Holiday";
+                                        fritot.setText(data);
                                         setFri(data);
                                     } else if (sick) {
-                                        data = documentId + ":\nSick\n";
-                                        Friday.setText(data);
+                                        frist.setText("");
+                                        frifn.setText("");
+                                        data = "Sick";
+                                        fritot.setText(data);
                                         setFri(data);
                                     } else {
-                                        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                        Friday.setText(data);
-                                        setFri(data);
+                                        frist.setText(start);
+                                        frifn.setText(finish);
+                                        fritot.setText(time);
+                                        setFri("Friday:    " + start + " " + finish + " " + time);
                                     }
                                 }
                                 if (documentId.equals("Saturday")) {
                                     if (holiday) {
-                                        data = documentId + ":\nHoliday\n";
-                                        Saturday.setText(data);
+                                        satst.setText("");
+                                        satfn.setText("");
+                                        data = "Holiday";
+                                        sattot.setText(data);
                                         setSat(data);
                                     } else if (sick) {
-                                        data = documentId + ":\nSick\n";
-                                        Saturday.setText(data);
+                                        satst.setText("");
+                                        satfn.setText("");
+                                        data = "Sick";
+                                        sattot.setText(data);
                                         setSat(data);
                                     } else {
-                                        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                        Saturday.setText(data);
-                                        setSat(data);
+                                        satst.setText(start);
+                                        satfn.setText(finish);
+                                        sattot.setText(time);
+                                        setSat(String.format("%-20s:  " + start + " " + finish + " " + time, "Saturday"));
                                     }
                                 }
                                 if (documentId.equals("Sunday")) {
                                     if (holiday) {
-                                        data = documentId + ":\nHoliday\n";
-                                        Sunday.setText(data);
+                                        sunst.setText("");
+                                        sunfn.setText("");
+                                        data = "Holiday";
+                                        suntot.setText(data);
                                         setSun(data);
                                     } else if (sick) {
-                                        data = documentId + ":\nSick\n";
-                                        Sunday.setText(data);
+                                        sunst.setText("");
+                                        sunfn.setText("");
+                                        data = "Sick";
+                                        suntot.setText(data);
                                         setSun(data);
                                     } else {
-                                        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-                                        Sunday.setText(data);
-                                        setSun(data);
+                                        sunst.setText(start);
+                                        sunfn.setText(finish);
+                                        suntot.setText(time);
+                                        setSun(String.format("%-10s:    " + start + " " + finish + " " + time, "Sunday"));
                                     }
                                 }
                             }
@@ -294,40 +443,6 @@ public class Employee extends AppCompatActivity {
     }
 
 
-    public void send() {
-
-        String info_subject = weekEnding() + " " + getUserId();
-        if (getMon() == null) {
-            setMon("Did not work on Monday");
-        }
-        if (getTues() == null) {
-            setTues("Did not work on Tuesday");
-        }
-        if (getWed() == null) {
-            setWed("Did not work on Wednesday");
-        }
-        if (getThurs() == null) {
-            setThurs("Did not work on Thursday");
-        }
-        if (getFri() == null) {
-            setFri("Did not work on Friday");
-        }
-        if (getSat() == null) {
-            setSat("Did not work on Saturday");
-        }
-        if (getSun() == null) {
-            setSun("Did not work on Sunday");
-        }
-
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, info_subject);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, getTotal() + "\n\n" + getMon() + "\n" + getTues() + "\n" + getWed() + "\n" + getThurs() + "\n" + getFri() + "\n" + getSat() + "\n" + getSun());
-        shareIntent.setType("text/*");
-        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
-    }
-
-
     public String weekEnding() {
         int weekday = calendar.get(Calendar.DAY_OF_WEEK);
         int days = Calendar.SUNDAY - weekday;
@@ -342,72 +457,48 @@ public class Employee extends AppCompatActivity {
         return df.format(calendar.getTime());
     }
 
-    private View.OnClickListener editing = new View.OnClickListener() {
-        public void onClick(View v) {
-            Intent i = new Intent(Employee.this, Edit.class);
-            String id;
-            switch (v.getId() /*to get clicked view id**/) {
-                case R.id.Monday1:
+    public void send() {
 
-                    id = "Monday";
-                    i.putExtra("name", getName());
-                    i.putExtra("id", id);
-                    startActivity(i);
-
-                    break;
-                case R.id.Tuesday1:
-
-                    id = "Tuesday";
-                    i.putExtra("name", getName());
-                    i.putExtra("id", id);
-                    startActivity(i);
-
-                    break;
-                case R.id.Wednesday1:
-
-                    id = "Wednesday";
-                    i.putExtra("name", getName());
-                    i.putExtra("id", id);
-                    startActivity(i);
-
-                    break;
-                case R.id.Thursday1:
-
-                    id = "Thursday";
-                    i.putExtra("name", getName());
-                    i.putExtra("id", id);
-                    startActivity(i);
-
-                    break;
-                case R.id.Friday1:
-
-                    id = "Friday";
-                    i.putExtra("name", getName());
-                    i.putExtra("id", id);
-                    startActivity(i);
-
-                    break;
-                case R.id.Saturday1:
-
-                    id = "Saturday";
-                    i.putExtra("name", getName());
-                    i.putExtra("id", id);
-                    startActivity(i);
-
-                    break;
-                case R.id.Sunday1:
-
-                    id = "Sunday";
-                    i.putExtra("name", getName());
-                    i.putExtra("id", id);
-                    startActivity(i);
-
-                    break;
-                default:
-                    break;
-            }
+        String info_subject = weekEnding() + " " + getUserId();
+        if (getMon() == null) {
+            setMon("\nDid not work on Monday");
         }
-    };
+        if (getTues() == null) {
+            setTues("\nDid not work on Tuesday");
+        }
+        if (getWed() == null) {
+            setWed("\nDid not work on Wednesday");
+        }
+        if (getThurs() == null) {
+            setThurs("\nDid not work on Thursday");
+        }
+        if (getFri() == null) {
+            setFri("\nDid not work on Friday");
+        }
+        if (getSat() == null) {
+            setSat("\nDid not work on Saturday");
+        }
+        if (getSun() == null) {
+            setSun("\nDid not work on Sunday");
+        }
+
+
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, info_subject);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, getTotal() + "\n\n           Start:     Finish:     Total:\n\n"
+                + getMon() + "\n"
+                + getTues() + "\n"
+                + getWed() + "\n"
+                + getThurs() + "\n"
+                + getFri() + "\n"
+                + getSat() + "\n"
+                + getSun());
+
+        shareIntent.setType("text/*");
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
+//        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

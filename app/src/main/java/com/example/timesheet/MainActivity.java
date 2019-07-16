@@ -2,15 +2,15 @@ package com.example.timesheet;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -146,7 +146,9 @@ public class MainActivity extends BaseActivity implements
             mEmailField.onEditorAction(EditorInfo.IME_ACTION_DONE);
             mPasswordField.onEditorAction(EditorInfo.IME_ACTION_DONE);
         } else if (i == R.id.tvCreate) {
-            Intent create_pass = new Intent(MainActivity.this, CreateChoice.class);
+//            Intent create_pass = new Intent(MainActivity.this, CreateChoice.class);
+//            startActivity(create_pass);
+            Intent create_pass = new Intent(MainActivity.this, gridLayout.class);
             startActivity(create_pass);
         } else if (i == R.id.tvPasswordRetrieval) {
             Intent retrieval = new Intent(MainActivity.this, PasswordRetrieval.class);

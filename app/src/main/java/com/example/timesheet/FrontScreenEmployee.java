@@ -15,6 +15,7 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,7 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 
 
-public class FrontScreenEmployee extends AppCompatActivity{
+public class FrontScreenEmployee extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
 
     private static final String TAG = "FrontScreenEmployee";
     Calendar calendar = Calendar.getInstance();
@@ -48,8 +49,7 @@ public class FrontScreenEmployee extends AppCompatActivity{
 
     protected TextView timeSignedIn;
     protected TextView timeSignedOff;
-//    private TextView EmpCode;
-    private TextView date;
+    public static final int FLAG_START_TIME = 0;
 
     private Button sign_in;
     private Button sign_off;
@@ -82,6 +82,10 @@ public class FrontScreenEmployee extends AppCompatActivity{
 
     private static int hours4today;
     private static int minutes4today;
+    public static final int FLAG_END_TIME = 1;
+    //    private TextView EmpCode;
+    private TextView date;
+    private int flag = 0;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -243,13 +247,21 @@ public class FrontScreenEmployee extends AppCompatActivity{
         sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signInCustomPicker();
+//                signInCustomPicker();
+                setFlag(FLAG_START_TIME);
+                DialogFragment timePicker = new TimePickerFragment();
+                timePicker.show(getSupportFragmentManager(), "time picker");
+
             }
         });
         sign_off.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signOffCustomPicker();
+//                signOffCustomPicker();
+                setFlag(FLAG_END_TIME);
+                DialogFragment timePicker = new TimePickerFragment();
+                timePicker.show(getSupportFragmentManager(), "time picker");
+
             }
 
         });
@@ -277,6 +289,40 @@ public class FrontScreenEmployee extends AppCompatActivity{
                 }
             }
         });
+    }
+
+    public void setFlag(int i) {
+        flag = i;
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        if (flag == FLAG_START_TIME) {
+            setStartHr(hourOfDay);
+            setStartMin(minute);
+            if (hourOfDay > 12) {
+                amPm = "PM";
+                hourOfDay = hourOfDay - 12;
+            } else {
+                amPm = "AM";
+            }
+            timeSignedIn.setText(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minute, amPm));
+            setSignedIn(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minute, amPm));
+            in = true;
+        } else if (flag == FLAG_END_TIME) {
+            setFinishHr(hourOfDay);
+            setFinishMin(minute);
+            if (hourOfDay > 12) {
+                amPm = "PM";
+                hourOfDay = hourOfDay - 12;
+            } else {
+                amPm = "AM";
+            }
+            timeSignedOff.setText(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minute, amPm));
+
+            setSignedOff(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minute, amPm));
+            out = true;
+        }
     }
 
     @Override
@@ -413,20 +459,20 @@ public class FrontScreenEmployee extends AppCompatActivity{
         setHours4today(getFinishHr() - getStartHr());
         setMinutes4today(getFinishMin() - getStartMin());
 
-        if(getHours4today()<5){
+        if (getHours4today() < 5) {
             setLess_5(true);
         }
 
-        if(getHours4today()==0 && getMinutes4today()<0){
-            setHours4today(getHours4today()+24);
+        if (getHours4today() == 0 && getMinutes4today() < 0) {
+            setHours4today(getHours4today() + 24);
 
         }
-        if(getHours4today()<0){
-            setHours4today(getHours4today()+24);
+        if (getHours4today() < 0) {
+            setHours4today(getHours4today() + 24);
         }
-        if(getMinutes4today()>60){
-            setHours4today(getHours4today()+1);
-            setMinutes4today(getMinutes4today()-60);
+        if (getMinutes4today() > 60) {
+            setHours4today(getHours4today() + 1);
+            setMinutes4today(getMinutes4today() - 60);
         }
         if (getMinutes4today() < 0) {
             setHours4today(getHours4today() - 1);
@@ -455,19 +501,19 @@ public class FrontScreenEmployee extends AppCompatActivity{
         setMinutes4today(getFinishMin() - getStartMin() - 30);
 
 
-        if(getHours4today()<5){
+        if (getHours4today() < 5) {
             setLess_5(true);
         }
-        if(getHours4today()==0 && getMinutes4today()<0){
-            setHours4today(getHours4today()+24);
+        if (getHours4today() == 0 && getMinutes4today() < 0) {
+            setHours4today(getHours4today() + 24);
 
         }
-        if(getHours4today()<0){
-            setHours4today(getHours4today()+24);
+        if (getHours4today() < 0) {
+            setHours4today(getHours4today() + 24);
         }
-        if(getMinutes4today()>60){
-            setHours4today(getHours4today()+1);
-            setMinutes4today(getMinutes4today()-60);
+        if (getMinutes4today() > 60) {
+            setHours4today(getHours4today() + 1);
+            setMinutes4today(getMinutes4today() - 60);
         }
         if (getMinutes4today() < 0) {
             setHours4today(getHours4today() - 1);
@@ -499,3 +545,5 @@ public class FrontScreenEmployee extends AppCompatActivity{
         }
     }
 }
+//            timeSignedOff.setText("Hour: " + hourOfDay + " Minute: " + minute);
+//            timeSignedIn.setText("Hour: " + hourOfDay + " Minute: " + minute);

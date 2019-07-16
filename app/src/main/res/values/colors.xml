@@ -15,8 +15,8 @@
     <color name="Off_White">#DDDDDD</color>
 
 
-    <color name="colorPrimary">#1E88E5</color>
+    <color name="colorPrimary">#EDEDED</color>
     <color name="colorPrimaryDark">#6ab7ff</color>
     <color name="colorAccent">#005cb2</color>
 
-</resources>
+</resources><!--<color name="colorPrimary">#1E88E5</color>-->

@@ -15,7 +15,7 @@
         android:text="@string/week_ending"
         android:textColor="#9C27B0"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintBottom_toTopOf="@+id/mainListView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -46,33 +46,70 @@
         android:text="@string/employer_code"
         android:textColor="@color/Blue_dark"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintBottom_toTopOf="@+id/mainListView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvWeekEnding"
         app:layout_constraintVertical_bias="0.156" />
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="0dp"
-        android:layout_height="400dp"
-        android:layout_marginStart="24dp"
+    <ListView
+        android:id="@+id/mainListView"
+        android:layout_width="331dp"
+        android:layout_height="451dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:background="#EDEDED"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.64" />
+    <!--<ScrollView-->
+    <!--android:id="@+id/scrollView2"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="400dp"-->
+    <!--android:layout_marginStart="24dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--android:layout_marginEnd="24dp"-->
+    <!--android:background="#EDEDED"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintHorizontal_bias="1.0"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent">-->
 
-        <LinearLayout
-            android:id="@+id/llLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
+    <!--<LinearLayout-->
+    <!--android:id="@+id/llLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"/>-->
 
-    </ScrollView>
+    <!--<LinearLayout-->
+    <!--android:id="@+id/llLayout1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center">-->
+
+    <!--<CheckBox-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="helo"-->
+    <!--android:gravity="center"/>-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="hi"/>-->
+    <!--</LinearLayout>-->
+    <!--<GridLayout-->
+    <!--android:id="@+id/gridLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:columnCount="2"-->
+    <!--android:rowCount="10"/>-->
+
+    <!--</ScrollView>-->
+
 
     <!--<Button-->
     <!--android:id="@+id/btMngSend"-->

@@ -6,88 +6,298 @@
     android:layout_height="match_parent"
     tools:context=".Employee">
 
-    <ScrollView
-        android:id="@+id/ScrollView"
-        android:layout_width="357dp"
-        android:layout_height="370dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:scrollbars="horizontal"
-        android:background="@color/White"
-        app:layout_constraintBottom_toTopOf="@id/tvTotalHours1"
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:columnCount="4"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvWeekEnding1"
-        app:layout_constraintVertical_bias="0.355">
-
-        <LinearLayout
-            android:id="@+id/linearLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/Monday1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mon"
-                android:padding="10dp"
-                android:textColor="@color/Blue_text" />
-
-            <TextView
-                android:id="@+id/Tuesday1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tues"
-                android:padding="10dp"
-                android:textColor="@color/Blue_text" />
-
-            <TextView
-                android:id="@+id/Wednesday1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/wed"
-                android:padding="10dp"
-                android:textColor="@color/Blue_text" />
-
-            <TextView
-                android:id="@+id/Thursday1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/thur"
-                android:padding="10dp"
-                android:textColor="@color/Blue_text" />
-
-            <TextView
-                android:id="@+id/Friday1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fri"
-                android:padding="10dp"
-                android:textColor="@color/Blue_text" />
-
-            <TextView
-                android:id="@+id/Saturday1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sat"
-                android:padding="10dp"
-                android:textColor="@color/Blue_text" />
-
-            <TextView
-                android:id="@+id/Sunday1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sun"
-                android:padding="10dp"
-                android:textColor="@color/Blue_text" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:rowCount="8">
 
 
-        </LinearLayout>
-    </ScrollView>
+        <TextView
+            android:id="@+id/day_of_the_week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Day of the Week:"
+            app:layout_column="0"
+            app:layout_gravity="fill_horizontal"
+            app:layout_row="0"
+            tools:gravity="fill" />
+
+        <TextView
+            android:id="@+id/total_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Total Time:"
+            app:layout_column="3"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/finish_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Finish Time:"
+            app:layout_column="2"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Start Time:"
+            app:layout_column="1"
+            app:layout_row="0" />
+
+        <Button
+            android:id="@+id/Tuesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tues"
+            android:textColor="#9C27B0"
+            app:layout_column="0"
+            app:layout_gravity="fill"
+            app:layout_row="2" />
+
+        <Button
+            android:id="@+id/Monday"
+            android:layout_width="79dp"
+            android:layout_height="wrap_content"
+            android:text="@string/mon"
+            android:textColor="#9C27B0"
+            app:layout_column="0"
+            app:layout_gravity="fill"
+            app:layout_row="1" />
+
+        <Button
+            android:id="@+id/Sunday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sun"
+            android:textColor="#9C27B0"
+            app:layout_column="0"
+            app:layout_gravity="fill"
+            app:layout_row="7" />
+
+        <Button
+            android:id="@+id/Saturday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sat"
+            android:textColor="#9C27B0"
+            app:layout_column="0"
+            app:layout_gravity="fill"
+            app:layout_row="6" />
+
+        <Button
+            android:id="@+id/Friday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fri"
+            android:textColor="#9C27B0"
+            app:layout_column="0"
+            app:layout_gravity="fill"
+            app:layout_row="5" />
+
+        <Button
+            android:id="@+id/Thursday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/thur"
+            android:textColor="#9C27B0"
+            app:layout_column="0"
+            app:layout_gravity="fill"
+            app:layout_row="4" />
+
+        <Button
+            android:id="@+id/Wednesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wed"
+            android:textColor="#9C27B0"
+            app:layout_column="0"
+            app:layout_gravity="fill"
+            app:layout_row="3" />
+
+        <TextView
+            android:id="@+id/monst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="1"
+            app:layout_gravity="center"
+            app:layout_row="1" />
+
+        <TextView
+            android:id="@+id/monfn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="2"
+            app:layout_gravity="center"
+            app:layout_row="1" />
+
+        <TextView
+            android:id="@+id/montot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="3"
+            app:layout_gravity="center"
+            app:layout_row="1" />
+
+        <TextView
+            android:id="@+id/tuesst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="1"
+            app:layout_gravity="center"
+            app:layout_row="2" />
+
+        <TextView
+            android:id="@+id/tuesfn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="2"
+            app:layout_gravity="center"
+            app:layout_row="2" />
+
+        <TextView
+            android:id="@+id/tuestot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="3"
+            app:layout_gravity="center"
+            app:layout_row="2" />
+
+        <TextView
+            android:id="@+id/wedst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="1"
+            app:layout_gravity="center"
+            app:layout_row="3" />
+
+        <TextView
+            android:id="@+id/wedfn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="2"
+            app:layout_gravity="center"
+            app:layout_row="3" />
+
+        <TextView
+            android:id="@+id/wedtot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="3"
+            app:layout_gravity="center"
+            app:layout_row="3" />
+
+        <TextView
+            android:id="@+id/thurst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="1"
+            app:layout_gravity="center"
+            app:layout_row="4" />
+
+        <TextView
+            android:id="@+id/thurfn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="2"
+            app:layout_gravity="center"
+            app:layout_row="4" />
+
+        <TextView
+            android:id="@+id/thurtot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="3"
+            app:layout_gravity="center"
+            app:layout_row="4" />
+
+        <TextView
+            android:id="@+id/frist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="1"
+            app:layout_gravity="center"
+            app:layout_row="5" />
+
+        <TextView
+            android:id="@+id/frifn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="2"
+            app:layout_gravity="center"
+            app:layout_row="5" />
+
+        <TextView
+            android:id="@+id/fritot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="3"
+            app:layout_gravity="center"
+            app:layout_row="5" />
+
+        <TextView
+            android:id="@+id/satst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="1"
+            app:layout_gravity="center"
+            app:layout_row="6" />
+
+        <TextView
+            android:id="@+id/satfn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="2"
+            app:layout_gravity="center"
+            app:layout_row="6" />
+
+        <TextView
+            android:id="@+id/sattot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="3"
+            app:layout_gravity="center"
+            app:layout_row="6" />
+
+        <TextView
+            android:id="@+id/sunst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="1"
+            app:layout_gravity="center"
+            app:layout_row="7" />
+
+        <TextView
+            android:id="@+id/sunfn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="2"
+            app:layout_gravity="center"
+            app:layout_row="7" />
+
+        <TextView
+            android:id="@+id/suntot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_column="3"
+            app:layout_gravity="center"
+            app:layout_row="7" />
+    </androidx.gridlayout.widget.GridLayout>
+
 
     <TextView
         android:id="@+id/tvWeekEnding1"
@@ -127,7 +337,7 @@
         app:layout_constraintBottom_toTopOf="@id/btBack1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ScrollView" />
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
 
     <Button
         android:id="@+id/btSend"
@@ -146,4 +356,23 @@
         app:layout_constraintStart_toEndOf="@+id/btBack1"
         app:layout_constraintTop_toBottomOf="@+id/tvTotalHours1" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout><!--<ScrollView--><!--android:id="@+id/ScrollView"--><!--android:layout_width="357dp"--><!--android:layout_height="370dp"--><!--android:layout_marginStart="24dp"--><!--android:layout_marginLeft="24dp"--><!--android:layout_marginTop="8dp"--><!--android:layout_marginEnd="24dp"--><!--android:layout_marginRight="24dp"--><!--android:scrollbars="horizontal"--><!--android:background="@color/White"--><!--app:layout_constraintBottom_toTopOf="@id/tvTotalHours1"--><!--app:layout_constraintEnd_toEndOf="parent"--><!--app:layout_constraintStart_toStartOf="parent"--><!--app:layout_constraintTop_toBottomOf="@id/tvWeekEnding1"--><!--app:layout_constraintVertical_bias="0.355">-->
+
+    <!--<LinearLayout--><!--android:id="@+id/linearLayout1"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:orientation="vertical">-->
+
+    <!--<TextView--><!--android:id="@+id/Monday1"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="@string/mon"--><!--android:padding="10dp"--><!--android:textColor="@color/Blue_text" />-->
+
+    <!--<TextView--><!--android:id="@+id/Tuesday1"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="@string/tues"--><!--android:padding="10dp"--><!--android:textColor="@color/Blue_text" />-->
+
+    <!--<TextView--><!--android:id="@+id/Wednesday1"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="@string/wed"--><!--android:padding="10dp"--><!--android:textColor="@color/Blue_text" />-->
+
+    <!--<TextView--><!--android:id="@+id/Thursday1"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="@string/thur"--><!--android:padding="10dp"--><!--android:textColor="@color/Blue_text" />-->
+
+    <!--<TextView--><!--android:id="@+id/Friday1"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="@string/fri"--><!--android:padding="10dp"--><!--android:textColor="@color/Blue_text" />-->
+
+    <!--<TextView--><!--android:id="@+id/Saturday1"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="@string/sat"--><!--android:padding="10dp"--><!--android:textColor="@color/Blue_text" />-->
+
+    <!--<TextView--><!--android:id="@+id/Sunday1"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="@string/sun"--><!--android:padding="10dp"--><!--android:textColor="@color/Blue_text" />-->
+
+
+    <!--</LinearLayout>--><!--</ScrollView>-->
