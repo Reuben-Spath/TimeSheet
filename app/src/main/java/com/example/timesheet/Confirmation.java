@@ -2,13 +2,14 @@ package com.example.timesheet;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -88,7 +89,6 @@ public class Confirmation extends FrontScreenEmployee {
         setLong_pass(getTimeWorked());
         lunch = findViewById(R.id.cbLunch);
         if(getTimeWorked()<1){
-//            lunch.setTextIsSelectable(false);
             lunch.setEnabled(false);
         }
         lunch.setOnClickListener(new View.OnClickListener() {

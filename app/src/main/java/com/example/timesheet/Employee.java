@@ -32,15 +32,8 @@ public class Employee extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
-    private TextView Monday;
-    private TextView Tuesday;
-    private TextView Wednesday;
-    private TextView Thursday;
-    private TextView Friday;
-    private TextView Saturday;
-    private TextView Sunday;
+    //    private GridLayout layout;
     private TextView totalHours;
-    private TextView Employee;
 
     private Button Back;
     private Button send;
@@ -173,31 +166,31 @@ public class Employee extends AppCompatActivity {
         Back = findViewById(R.id.btBack1);
         send = findViewById(R.id.btSend);
 
-        Employee = findViewById(R.id.tvWeekEnding1);
+        TextView employee = findViewById(R.id.tvWeekEnding1);
         totalHours = findViewById(R.id.tvTotalHours1);
 
         Intent i = getIntent();
         setName(i.getStringExtra("id"));
         setUserId(i.getStringExtra("name"));
-        Employee.setText(i.getStringExtra("name"));
+        employee.setText(i.getStringExtra("name"));
 
-        Monday = findViewById(R.id.Monday);
-        Tuesday = findViewById(R.id.Tuesday);
-        Wednesday = findViewById(R.id.Wednesday);
-        Thursday = findViewById(R.id.Thursday);
-        Friday = findViewById(R.id.Friday);
-        Saturday = findViewById(R.id.Saturday);
-        Sunday = findViewById(R.id.Sunday);
+        TextView monday = findViewById(R.id.Monday);
+        TextView tuesday = findViewById(R.id.Tuesday);
+        TextView wednesday = findViewById(R.id.Wednesday);
+        TextView thursday = findViewById(R.id.Thursday);
+        TextView friday = findViewById(R.id.Friday);
+        TextView saturday = findViewById(R.id.Saturday);
+        TextView sunday = findViewById(R.id.Sunday);
 
         mAuth = FirebaseAuth.getInstance();
 
-        Monday.setOnClickListener(editing);
-        Tuesday.setOnClickListener(editing);
-        Wednesday.setOnClickListener(editing);
-        Thursday.setOnClickListener(editing);
-        Friday.setOnClickListener(editing);
-        Saturday.setOnClickListener(editing);
-        Sunday.setOnClickListener(editing);
+        monday.setOnClickListener(editing);
+        tuesday.setOnClickListener(editing);
+        wednesday.setOnClickListener(editing);
+        thursday.setOnClickListener(editing);
+        friday.setOnClickListener(editing);
+        saturday.setOnClickListener(editing);
+        sunday.setOnClickListener(editing);
 
         monst = findViewById(R.id.monst);
         tuesst = findViewById(R.id.tuesst);
@@ -245,6 +238,7 @@ public class Employee extends AppCompatActivity {
                             float tot_count = 0;
                             float tot_time;
                             String data = "";
+
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                 NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
 
@@ -256,26 +250,12 @@ public class Employee extends AppCompatActivity {
                                 tot_time = noteEmployee.getTimeInt();
                                 boolean holiday = noteEmployee.isIfHoliday();
                                 boolean sick = noteEmployee.isIfSick();
-                                boolean lunch = noteEmployee.getIfLunch();
-//                                String hadlunch = "No";
-//
-//                                if (lunch) {
-//                                    hadlunch = "Yes";
-//                                }
-//                                if (start == null) {
-//                                    start = "Invalid";
-//                                }
-//                                if (finish == null) {
-//                                    finish = "Invalid";
-//                                }
-//                                if (time == null) {
-//                                    time = "Invalid";
-//                                }
-//                                if (!time.contains("hours") && !time.equalsIgnoreCase("Invalid")) {
-//                                    time = time + " hours";
-//                                }
 
                                 tot_count += tot_time;
+
+                                if (holiday || sick) {
+                                    tot_count -= tot_time;
+                                }
 
                                 Log.d(TAG, "onEvent: " + data);
 
@@ -297,7 +277,7 @@ public class Employee extends AppCompatActivity {
                                         monst.setText(start);
                                         monfn.setText(finish);
                                         montot.setText(time);
-                                        setMon("Monday:    " + start + " " + finish + " " + time);
+                                        setMon(String.format("%-12s" + start + " " + finish + " " + time, "Monday:"));
                                     }
                                 }
                                 if (documentId.equals("Tuesday")) {
@@ -317,7 +297,7 @@ public class Employee extends AppCompatActivity {
                                         tuesst.setText(start);
                                         tuesfn.setText(finish);
                                         tuestot.setText(time);
-                                        setTues("Tuesday:   " + start + " " + finish + " " + time);
+                                        setTues(String.format("%-12s" + start + " " + finish + " " + time, "Tuesday:"));
                                     }
                                 }
                                 if (documentId.equals("Wednesday")) {
@@ -337,7 +317,7 @@ public class Employee extends AppCompatActivity {
                                         wedst.setText(start);
                                         wedfn.setText(finish);
                                         wedtot.setText(time);
-                                        setWed("Wednesday: " + start + " " + finish + " " + time);
+                                        setWed(String.format("%-12s" + start + " " + finish + " " + time, "Wednesday:"));
                                     }
                                 }
                                 if (documentId.equals("Thursday")) {
@@ -357,7 +337,7 @@ public class Employee extends AppCompatActivity {
                                         thursst.setText(start);
                                         thursfn.setText(finish);
                                         thurstot.setText(time);
-                                        setThurs("Thursday:  " + start + " " + finish + " " + time);
+                                        setThurs(String.format("%-12s" + start + " " + finish + " " + time, "Thursday:"));
                                     }
                                 }
                                 if (documentId.equals("Friday")) {
@@ -377,7 +357,7 @@ public class Employee extends AppCompatActivity {
                                         frist.setText(start);
                                         frifn.setText(finish);
                                         fritot.setText(time);
-                                        setFri("Friday:    " + start + " " + finish + " " + time);
+                                        setFri(String.format("%-12s" + start + " " + finish + " " + time, "Friday:"));
                                     }
                                 }
                                 if (documentId.equals("Saturday")) {
@@ -397,7 +377,7 @@ public class Employee extends AppCompatActivity {
                                         satst.setText(start);
                                         satfn.setText(finish);
                                         sattot.setText(time);
-                                        setSat(String.format("%-20s:  " + start + " " + finish + " " + time, "Saturday"));
+                                        setSat(String.format("%-12s" + start + " " + finish + " " + time, "Saturday:"));
                                     }
                                 }
                                 if (documentId.equals("Sunday")) {
@@ -417,7 +397,7 @@ public class Employee extends AppCompatActivity {
                                         sunst.setText(start);
                                         sunfn.setText(finish);
                                         suntot.setText(time);
-                                        setSun(String.format("%-10s:    " + start + " " + finish + " " + time, "Sunday"));
+                                        setSun(String.format("%-12s" + start + " " + finish + " " + time, "Sunday:"));
                                     }
                                 }
                             }
@@ -459,6 +439,8 @@ public class Employee extends AppCompatActivity {
 
     public void send() {
 
+//        layout = findViewById(R.id.gridLayout);
+
         String info_subject = weekEnding() + " " + getUserId();
         if (getMon() == null) {
             setMon("\nDid not work on Monday");
@@ -486,18 +468,27 @@ public class Employee extends AppCompatActivity {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, info_subject);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, getTotal() + "\n\n           Start:     Finish:     Total:\n\n"
-                + getMon() + "\n"
-                + getTues() + "\n"
-                + getWed() + "\n"
-                + getThurs() + "\n"
-                + getFri() + "\n"
-                + getSat() + "\n"
-                + getSun());
+        shareIntent.putExtra(Intent.EXTRA_TEXT,
 
+                formatted_day("Monday") + "\n" + formatted_day("Tuesday") + "\n" +
+                        formatted_day("Wednesday") + "\n" + formatted_day("Thursday") + "\n" +
+                        formatted_day("Friday") + "\n" + formatted_day("Saturday") + "\n" + formatted_day("Sunday")
+        );
         shareIntent.setType("text/*");
         startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
 //        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
+//        getTotal() + "\n\n           Start:     Finish:     Total:\n\n"
+//                + getMon() + "\n"
+//                + getTues() + "\n"
+//                + getWed() + "\n"
+//                + getThurs() + "\n"
+//                + getFri() + "\n"
+//                + getSat() + "\n"
+//                + getSun())
+    }
+
+    public String formatted_day(String day) {
+        return String.format("%.12s |", day + ":");
     }
 
     @Override

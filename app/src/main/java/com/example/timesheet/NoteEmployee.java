@@ -57,7 +57,8 @@ public class NoteEmployee {
     boolean getIfLunch() {
         return ifLunch;
     }
-    void setIfLunch(Boolean lunch){
+
+    void setIfLunch(Boolean lunch) {
         this.ifLunch = lunch;
     }
 
@@ -145,19 +146,19 @@ public class NoteEmployee {
         this.m4t = m4t;
     }
 
-    public boolean isIfSick() {
+    boolean isIfSick() {
         return ifSick;
     }
 
-    public void setIfSick(boolean ifSick) {
+    void setIfSick(boolean ifSick) {
         this.ifSick = ifSick;
     }
 
-    public boolean isIfHoliday() {
+    boolean isIfHoliday() {
         return ifHoliday;
     }
 
-    public void setIfHoliday(boolean ifHoliday) {
+    void setIfHoliday(boolean ifHoliday) {
         this.ifHoliday = ifHoliday;
     }
 }

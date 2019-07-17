@@ -32,6 +32,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
 
@@ -52,7 +53,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
     private TextView signedOut;
     private TextView totalHours;
 
-    private TimePickerDialog timePickerDialog;
+//    private TimePickerDialog timePickerDialog;
 //    private int i;
 
     private String pass;
@@ -66,8 +67,6 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
     private static String signedOff;
     private static float timeWorkedWLunch;
     private static float timeWorked;
-
-    private String amPm;
 
     private static long startMin;
     private static long startHr;
@@ -249,6 +248,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        String amPm;
         if (flag == FLAG_START_TIME) {
             setStartHr(hourOfDay);
             setStartMin(minute);
@@ -335,10 +335,10 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                                 return;
                             }
 
-                            if (snapshot.toObject(NoteEmployee.class) != null) {
+                            if (Objects.requireNonNull(snapshot).toObject(NoteEmployee.class) != null) {
                                 NoteEmployee noteEmployee = snapshot.toObject(NoteEmployee.class);
 
-                                setPass(noteEmployee.getTimeStr());
+                                setPass(Objects.requireNonNull(noteEmployee).getTimeStr());
                                 setStartHr(noteEmployee.getStartH());
                                 setStartMin(noteEmployee.getStartM());
                                 setFinishHr(noteEmployee.getFinishH());
@@ -365,6 +365,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                                     totalHours.setText(snapshot.getString("timeStr"));
                                 }
                                 if (snapshot.getBoolean("ifLunch") != null) {
+                                    //noinspection ConstantConditions
                                     if (snapshot.getBoolean("ifLunch")) {
                                         lunch1.setChecked(true);
                                     } else {
@@ -372,6 +373,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                                     }
                                 }
                                 if (snapshot.getBoolean("ifSick") != null) {
+                                    //noinspection ConstantConditions
                                     if (snapshot.getBoolean("ifSick")) {
                                         cbSick.setChecked(true);
                                         cbHoliday.setEnabled(false);
@@ -380,6 +382,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                                     }
                                 }
                                 if (snapshot.getBoolean("ifHoliday") != null) {
+                                    //noinspection ConstantConditions
                                     if (snapshot.getBoolean("ifHoliday")) {
                                         cbHoliday.setChecked(true);
                                         cbSick.setEnabled(false);
@@ -510,84 +513,6 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         return super.onKeyDown(keyCode, event);
     }
 
-    public void signInCustomPicker() {
-        final Calendar myCalender = Calendar.getInstance();
-        int hour = myCalender.get(Calendar.HOUR_OF_DAY);
-        int minute = myCalender.get(Calendar.MINUTE);
-
-        timePickerDialog = new TimePickerDialog(Edit.this, R.style.HoloDialog, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR, hourOfDay);
-                calendar.set(Calendar.MINUTE, minutes);
-
-                setStartHr(hourOfDay);
-                setStartMin(minutes);
-
-                if (hourOfDay > 12) {
-                    amPm = "PM";
-                    hourOfDay = hourOfDay - 12;
-                } else {
-                    amPm = "AM";
-                }
-                signedIn.setText(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minutes, amPm));
-
-                setSignedIn(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minutes, amPm));
-
-                if (lunch1.isChecked()) {
-                    totalHours.setText(hours_worked_with_lunch());
-                } else {
-                    totalHours.setText(hours_worked_without_lunch());
-                }
-
-            }
-        }, hour, minute, false);
-
-        timePickerDialog.setTitle("Sign In Time:");
-        timePickerDialog.show();
-    }
-
-    public void signOffCustomPicker() {
-        final Calendar myCalender = Calendar.getInstance();
-        int hour = myCalender.get(Calendar.HOUR_OF_DAY);
-        int minute = myCalender.get(Calendar.MINUTE);
-
-        timePickerDialog = new TimePickerDialog(Edit.this, R.style.HoloDialog, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR, hourOfDay);
-                calendar.set(Calendar.MINUTE, minutes);
-
-                setFinishHr(hourOfDay);
-                setFinishMin(minutes);
-
-                if (hourOfDay > 12) {
-                    amPm = "PM";
-                    hourOfDay = hourOfDay - 12;
-                } else {
-                    amPm = "AM";
-                }
-                signedOut.setText(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minutes, amPm));
-
-                setSignedOff(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minutes, amPm));
-
-                if (lunch1.isChecked()) {
-                    totalHours.setText(hours_worked_with_lunch());
-                } else {
-                    totalHours.setText(hours_worked_without_lunch());
-                }
-
-            }
-        }, hour, minute, false);
-
-        timePickerDialog.setTitle("Sign Off Time:");
-        timePickerDialog.show();
-    }
-
     public String hours_worked_without_lunch() {
 
         setHours4today(getFinishHr() - getStartHr());
@@ -612,13 +537,13 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         setTimeWorked(getHours4today() + minutes);
 
         if (getMinutes4today() < 10 && getMinutes4today() > 0) {
-            return getHours4today() + ":0" + getMinutes4today() + " hours";
+            return getHours4today() + ".0" + getMinutes4today() + " hours";
 
         } else if (getHours4today() < 1 && getMinutes4today() > 30) {
-            return getHours4today() + ":" + getMinutes4today() + " minutes";
+            return getMinutes4today() + " minutes";
 
         } else {
-            return getHours4today() + ":" + getMinutes4today() + " hours";
+            return getHours4today() + "." + getMinutes4today() + " hours";
         }
     }
 
@@ -643,7 +568,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         }
 
         if (getHours4today() < 1) {
-            return getHours4today() + ":" + getMinutes4today() + " minutes";
+            return getMinutes4today() + " minutes";
         } else {
 
             if (getMinutes4today() < 0) {
@@ -656,10 +581,10 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
             setTimeWorked(getHours4today() + minutes);
 
             if (getMinutes4today() < 10 && getMinutes4today() > 0) {
-                return getHours4today() + ":0" + getMinutes4today() + " hours";
+                return getHours4today() + ".0" + getMinutes4today() + " hours";
 
             } else {
-                return getHours4today() + ":" + getMinutes4today() + " hours";
+                return getHours4today() + "." + getMinutes4today() + " hours";
             }
         }
     }

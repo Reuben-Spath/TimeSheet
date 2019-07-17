@@ -28,25 +28,7 @@ public class EmployeeWeek extends FrontScreenEmployee {
 
     private Button back;
 
-    private String dialogDate;
-
     private TextView EmpCode;
-
-//    private TextView Monday;
-//    private TextView Tuesday;
-//    private TextView Wednesday;
-//    private TextView Thursday;
-//    private TextView Friday;
-//    private TextView Saturday;
-//    private TextView Sunday;
-
-    private TextView Monday;
-    private TextView Tuesday;
-    private TextView Wednesday;
-    private TextView Thursday;
-    private TextView Friday;
-    private TextView Saturday;
-    private TextView Sunday;
 
     private TextView totalHours;
     private TextView weekEnding;
@@ -108,21 +90,21 @@ public class EmployeeWeek extends FrontScreenEmployee {
         mAuth = FirebaseAuth.getInstance();
 
 
-        Monday = findViewById(R.id.Monday);
-        Tuesday = findViewById(R.id.Tuesday);
-        Wednesday = findViewById(R.id.Wednesday);
-        Thursday = findViewById(R.id.Thursday);
-        Friday = findViewById(R.id.Friday);
-        Saturday = findViewById(R.id.Saturday);
-        Sunday = findViewById(R.id.Sunday);
+        TextView monday = findViewById(R.id.Monday);
+        TextView tuesday = findViewById(R.id.Tuesday);
+        TextView wednesday = findViewById(R.id.Wednesday);
+        TextView thursday = findViewById(R.id.Thursday);
+        TextView friday = findViewById(R.id.Friday);
+        TextView saturday = findViewById(R.id.Saturday);
+        TextView sunday = findViewById(R.id.Sunday);
 
-        Monday.setOnClickListener(editing);
-        Tuesday.setOnClickListener(editing);
-        Wednesday.setOnClickListener(editing);
-        Thursday.setOnClickListener(editing);
-        Friday.setOnClickListener(editing);
-        Saturday.setOnClickListener(editing);
-        Sunday.setOnClickListener(editing);
+        monday.setOnClickListener(editing);
+        tuesday.setOnClickListener(editing);
+        wednesday.setOnClickListener(editing);
+        thursday.setOnClickListener(editing);
+        friday.setOnClickListener(editing);
+        saturday.setOnClickListener(editing);
+        sunday.setOnClickListener(editing);
 
         monst = findViewById(R.id.monst);
         tuesst = findViewById(R.id.tuesst);
@@ -210,37 +192,36 @@ public class EmployeeWeek extends FrontScreenEmployee {
                             if (e != null) {
                                 return;
                             }
+                            float tot_count = 0;
+                            float tot_time;
                             String data = "";
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                 NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
+//
+//                                noteEmployee.setDocumentId(documentSnapshot.getId());
+//                                String documentId = noteEmployee.getDocumentId();
+//                                String start = noteEmployee.getSignInN();
+//                                String finish = noteEmployee.getSignOutN();
+//                                String time = noteEmployee.getTimeStr();
+//                                boolean holiday = noteEmployee.isIfHoliday();
+//                                boolean sick = noteEmployee.isIfSick();
+
+
 
                                 noteEmployee.setDocumentId(documentSnapshot.getId());
                                 String documentId = noteEmployee.getDocumentId();
                                 String start = noteEmployee.getSignInN();
                                 String finish = noteEmployee.getSignOutN();
                                 String time = noteEmployee.getTimeStr();
+                                tot_time = noteEmployee.getTimeInt();
                                 boolean holiday = noteEmployee.isIfHoliday();
                                 boolean sick = noteEmployee.isIfSick();
-//                                boolean lunch = noteEmployee.getIfLunch();
-//
-//                                String hadlunch = "No";
-//
-//                                if (lunch) {
-//                                    hadlunch = "Yes";
-//                                }
-//                                if (start == null) {
-//                                    start = "Invalid";
-//                                }
-//                                if (finish == null) {
-//                                    finish = "Invalid";
-//                                }
-//                                if (time == null) {
-//                                    time = "Invalid";
-//                                }
-//                                if (!time.contains("hours") && !time.equalsIgnoreCase("Invalid")) {
-//                                    time = time + " hours";
-//                                }
 
+                                tot_count += tot_time;
+
+                                if (holiday || sick) {
+                                    tot_count -= tot_time;
+                                }
 
                                 Log.d(TAG, "onEvent: " + data);
 
@@ -367,39 +348,7 @@ public class EmployeeWeek extends FrontScreenEmployee {
                                 }
 
                             }
-                        }
-                    });
-            db.collection("Users").document(mUid).collection(weekEnding())
-                    .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
-                            if (e != null) {
-                                return;
-                            }
-
-                            float data = 0;
-                            float time;
-                            boolean holiday;
-                            boolean sick;
-                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
-
-                                time = noteEmployee.getTimeInt();
-
-                                holiday = noteEmployee.isIfHoliday();
-                                sick = noteEmployee.isIfSick();
-
-                                data += time;
-
-                                if (holiday || sick) {
-                                    data -= time;
-                                }
-
-                                Log.d(TAG, "onEvent: " + data);
-
-                            }
-
-                            String finalTime = String.format(Locale.getDefault(), "Total Hours:\n%.2f hours", data);
+                            String finalTime = String.format(Locale.getDefault(), "Total Hours:\n%.2f hours", tot_count);
 
                             totalHours.setText(finalTime);
                         }
@@ -487,130 +436,38 @@ public class EmployeeWeek extends FrontScreenEmployee {
     }
 }
 
-// for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-//         NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
+// db.collection("Users").document(mUid).collection(weekEnding())
+//                    .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+//                            if (e != null) {
+//                                return;
+//                            }
 //
-//        noteEmployee.setDocumentId(documentSnapshot.getId());
-//        String documentId = noteEmployee.getDocumentId();
-//        String start = noteEmployee.getSignInN();
-//        String finish = noteEmployee.getSignOutN();
-//        String time = noteEmployee.getTimeStr();
-//        boolean holiday = noteEmployee.isIfHoliday();
-//        boolean sick = noteEmployee.isIfSick();
-//        boolean lunch = noteEmployee.getIfLunch();
+//                            float data = 0;
+//                            float time;
+//                            boolean holiday;
+//                            boolean sick;
+//                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+//                                NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
 //
-//        String hadlunch = "No";
+//                                time = noteEmployee.getTimeInt();
 //
-//        if (lunch) {
-//        hadlunch = "Yes";
-//        }
-//        if (start == null) {
-//        start = "Invalid";
-//        }
-//        if (finish == null) {
-//        finish = "Invalid";
-//        }
-//        if (time == null) {
-//        time = "Invalid";
-//        }
-//        if (!time.contains("hours") && !time.equalsIgnoreCase("Invalid")) {
-//        time = time + " hours";
-//        }
+//                                holiday = noteEmployee.isIfHoliday();
+//                                sick = noteEmployee.isIfSick();
 //
+//                                data += time;
 //
-//        Log.d(TAG, "onEvent: " + data);
+//                                if (holiday || sick) {
+//                                    data -= time;
+//                                }
 //
-//        if (documentId.equals("Monday")) {
-//        if (holiday) {
-//        data = documentId + "\nHoliday";
-//        Monday.setText(data);
-//        } else if (sick) {
+//                                Log.d(TAG, "onEvent: " + data);
 //
-//        data = documentId + "\nSick";
-//        Monday.setText(data);
-//        } else {
-//        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-//        Monday.setText(data);
-//        }
-//        }
-//        if (documentId.equals("Tuesday")) {
-//        if (holiday) {
-//        data = documentId + "\nHoliday";
-//        Tuesday.setText(data);
-//        } else if (sick) {
+//                            }
 //
-//        data = documentId + "\nSick";
-//        Tuesday.setText(data);
-//        } else {
-//        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-//        Tuesday.setText(data);
-//        }
-//        }
-//        if (documentId.equals("Wednesday")) {
-//        if (holiday) {
-//        data = documentId + "\nHoliday";
-//        Wednesday.setText(data);
-//        } else if (sick) {
+//                            String finalTime = String.format(Locale.getDefault(), "Total Hours:\n%.2f hours", data);
 //
-//        data = documentId + "\nSick";
-//        Wednesday.setText(data);
-//        } else {
-//        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-//        Wednesday.setText(data);
-//        }
-//        }
-//        if (documentId.equals("Thursday")) {
-//        if (holiday) {
-//        data = documentId + "\nHoliday";
-//        Thursday.setText(data);
-//        } else if (sick) {
-//
-//        data = documentId + "\nSick";
-//        Thursday.setText(data);
-//        } else {
-//        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-//        Thursday.setText(data);
-//        }
-//        }
-//        if (documentId.equals("Friday")) {
-//        if (holiday) {
-//        data = documentId + "\nHoliday";
-//        Friday.setText(data);
-//        } else if (sick) {
-//
-//        data = documentId + "\nSick";
-//        Friday.setText(data);
-//        } else {
-//        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-//        Friday.setText(data);
-//        }
-//        }
-//        if (documentId.equals("Saturday")) {
-//        if (holiday) {
-//        data = documentId + "\nHoliday";
-//        Saturday.setText(data);
-//        } else if (sick) {
-//
-//        data = documentId + "\nSick";
-//        Saturday.setText(data);
-//        } else {
-//        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-//        Saturday.setText(data);
-//        }
-//        }
-//        if (documentId.equals("Sunday")) {
-//        if (holiday) {
-//        data = documentId + "\nHoliday";
-//        Sunday.setText(data);
-//        } else if (sick) {
-//
-//        data = documentId + "\nSick";
-//        Sunday.setText(data);
-//        } else {
-//        data = documentId + ":\nStart time: " + start + "\nFinish time: " + finish + "\nTime worked: " + time + "\nLunch: " + hadlunch + "\n";
-//        Sunday.setText(data);
-//        }
-//        }
-//
-//        }
-//
+//                            totalHours.setText(finalTime);
+//                        }
+//                    });

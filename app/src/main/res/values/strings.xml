@@ -141,5 +141,9 @@
     <string name="sign_in_time">Sign in time</string>
     <string name="sign_off_time">Sign off time</string>
     <string name="cancel">Cancel</string>
+    <string name="day_of_the_week">Day of the Week:</string>
+    <string name="total_time">Total Time:</string>
+    <string name="finish_time">Finish Time:</string>
+    <string name="start_time">Start Time:</string>
 </resources>
 

@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -38,9 +37,9 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
     private static final String TAG = "FrontScreenEmployee";
     Calendar calendar = Calendar.getInstance();
 
-    protected Chronometer chronometer;
+//    protected Chronometer chronometer;
 
-    protected static boolean less_5 = false;
+    //    protected static boolean less_5 = false;
     private boolean in = false;
     private boolean out = false;
 
@@ -53,8 +52,8 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
 
     private Button sign_in;
     private Button sign_off;
-    private Button employer_code;
-    private Button week;
+    //    private Button employer_code;
+//    private Button week;
     private Button confirm;
 
     private static String signedIn;
@@ -93,9 +92,9 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
 //        return less_5;
 //    }
 
-    public void setLess_5(boolean less_5) {
-        FrontScreenEmployee.less_5 = less_5;
-    }
+//    public void setLess_5(boolean less_5) {
+//        FrontScreenEmployee.less_5 = less_5;
+//    }
 
     public int getStartMin() {
         return startMin;
@@ -204,7 +203,7 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
 
         mAuth = FirebaseAuth.getInstance();
 
-        chronometer = findViewById(R.id.chronometer);
+//        chronometer = findViewById(R.id.chronometer);
 
         sign_in = findViewById(R.id.btSignIn);
         sign_off = findViewById(R.id.btSignOff);
@@ -319,7 +318,6 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
                 amPm = "AM";
             }
             timeSignedOff.setText(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minute, amPm));
-
             setSignedOff(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minute, amPm));
             out = true;
         }
@@ -459,9 +457,9 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
         setHours4today(getFinishHr() - getStartHr());
         setMinutes4today(getFinishMin() - getStartMin());
 
-        if (getHours4today() < 5) {
-            setLess_5(true);
-        }
+//        if (getHours4today() < 5) {
+//            setLess_5(true);
+//        }
 
         if (getHours4today() == 0 && getMinutes4today() < 0) {
             setHours4today(getHours4today() + 24);
@@ -484,13 +482,13 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
 
 
         if (getMinutes4today() < 10 && getMinutes4today() > 0) {
-            return getHours4today() + ":0" + getMinutes4today() + " hours";
+            return getHours4today() + ".0" + getMinutes4today() + " hours";
 
         } else if (getHours4today() < 1 && getMinutes4today() > 30) {
-            return getHours4today() + ":" + getMinutes4today() + " minutes";
+            return getHours4today() + "." + getMinutes4today() + " minutes";
 
         } else {
-            return getHours4today() + ":" + getMinutes4today() + " hours";
+            return getHours4today() + "." + getMinutes4today() + " hours";
         }
 
     }
@@ -500,10 +498,10 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
         setHours4today(getFinishHr() - getStartHr());
         setMinutes4today(getFinishMin() - getStartMin() - 30);
 
-
-        if (getHours4today() < 5) {
-            setLess_5(true);
-        }
+//
+//        if (getHours4today() < 5) {
+//            setLess_5(true);
+//        }
         if (getHours4today() == 0 && getMinutes4today() < 0) {
             setHours4today(getHours4today() + 24);
 
@@ -522,28 +520,20 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
 
 
         if (getHours4today() < 1) {
-            return getHours4today() + ":" + getMinutes4today() + " minutes";
+            return getMinutes4today() + " minutes";
         } else {
-
             if (getMinutes4today() < 0) {
-
                 setHours4today(getHours4today() - 1);
                 setMinutes4today(getMinutes4today() + 60);
             }
-
             float minutes = (float) getMinutes4today() / 60;
             setTimeWorked(getHours4today() + minutes);
 
             if (getMinutes4today() < 10 && getMinutes4today() > 0) {
-                return getHours4today() + ":0" + getMinutes4today() + " hours";
-
+                return getHours4today() + ".0" + getMinutes4today() + " hours";
             } else {
-                return getHours4today() + ":" + getMinutes4today() + " hours";
-
+                return getHours4today() + "." + getMinutes4today() + " hours";
             }
-
         }
     }
 }
-//            timeSignedOff.setText("Hour: " + hourOfDay + " Minute: " + minute);
-//            timeSignedIn.setText("Hour: " + hourOfDay + " Minute: " + minute);
