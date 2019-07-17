@@ -11,13 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         app:columnCount="4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvWeekEnding1"
+        app:layout_constraintVertical_bias="0.188"
         tools:rowCount="8">
 
 
@@ -59,80 +60,101 @@
             app:layout_column="1"
             app:layout_row="0" />
 
-        <Button
-            android:id="@+id/Tuesday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tues"
-            android:textColor="#9C27B0"
-            app:layout_column="0"
-            app:layout_gravity="fill"
-            app:layout_row="2" />
-
-        <Button
+        <TextView
             android:id="@+id/Monday"
             android:layout_width="79dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="@string/mon"
             android:textColor="#9C27B0"
+            android:textSize="20sp"
             app:layout_column="0"
             app:layout_gravity="fill"
             app:layout_row="1" />
 
-        <Button
-            android:id="@+id/Sunday"
+        <TextView
+            android:id="@+id/Tuesday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sun"
+            android:gravity="center"
+            android:text="@string/tues"
             android:textColor="#9C27B0"
+            android:textSize="20sp"
+
             app:layout_column="0"
             app:layout_gravity="fill"
-            app:layout_row="7" />
+            app:layout_row="2" />
 
-        <Button
-            android:id="@+id/Saturday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sat"
-            android:textColor="#9C27B0"
-            app:layout_column="0"
-            app:layout_gravity="fill"
-            app:layout_row="6" />
-
-        <Button
-            android:id="@+id/Friday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/fri"
-            android:textColor="#9C27B0"
-            app:layout_column="0"
-            app:layout_gravity="fill"
-            app:layout_row="5" />
-
-        <Button
-            android:id="@+id/Thursday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/thur"
-            android:textColor="#9C27B0"
-            app:layout_column="0"
-            app:layout_gravity="fill"
-            app:layout_row="4" />
-
-        <Button
+        <TextView
             android:id="@+id/Wednesday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="@string/wed"
             android:textColor="#9C27B0"
+            android:textSize="20sp"
+
             app:layout_column="0"
             app:layout_gravity="fill"
             app:layout_row="3" />
 
         <TextView
+            android:id="@+id/Thursday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/thur"
+            android:textColor="#9C27B0"
+            android:textSize="20sp"
+
+            app:layout_column="0"
+            app:layout_gravity="fill"
+            app:layout_row="4" />
+
+        <TextView
+            android:id="@+id/Friday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/fri"
+            android:textColor="#9C27B0"
+            android:textSize="20sp"
+
+            app:layout_column="0"
+            app:layout_gravity="fill"
+            app:layout_row="5" />
+
+        <TextView
+            android:id="@+id/Saturday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/sat"
+            android:textColor="#9C27B0"
+            android:textSize="20sp"
+            app:layout_column="0"
+            app:layout_gravity="fill"
+            app:layout_row="6" />
+
+        <TextView
+            android:id="@+id/Sunday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/sun"
+            android:textColor="#9C27B0"
+            android:textSize="20sp"
+            app:layout_column="0"
+            app:layout_gravity="fill"
+            app:layout_row="7" />
+
+
+        <TextView
             android:id="@+id/monst"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="1"
             app:layout_gravity="center"
             app:layout_row="1" />
@@ -141,6 +163,8 @@
             android:id="@+id/monfn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="2"
             app:layout_gravity="center"
             app:layout_row="1" />
@@ -149,6 +173,8 @@
             android:id="@+id/montot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="3"
             app:layout_gravity="center"
             app:layout_row="1" />
@@ -157,6 +183,8 @@
             android:id="@+id/tuesst"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="1"
             app:layout_gravity="center"
             app:layout_row="2" />
@@ -165,6 +193,8 @@
             android:id="@+id/tuesfn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="2"
             app:layout_gravity="center"
             app:layout_row="2" />
@@ -173,6 +203,8 @@
             android:id="@+id/tuestot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="3"
             app:layout_gravity="center"
             app:layout_row="2" />
@@ -181,6 +213,8 @@
             android:id="@+id/wedst"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="1"
             app:layout_gravity="center"
             app:layout_row="3" />
@@ -189,6 +223,8 @@
             android:id="@+id/wedfn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="2"
             app:layout_gravity="center"
             app:layout_row="3" />
@@ -197,6 +233,8 @@
             android:id="@+id/wedtot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="3"
             app:layout_gravity="center"
             app:layout_row="3" />
@@ -205,6 +243,8 @@
             android:id="@+id/thurst"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="1"
             app:layout_gravity="center"
             app:layout_row="4" />
@@ -213,6 +253,8 @@
             android:id="@+id/thurfn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="2"
             app:layout_gravity="center"
             app:layout_row="4" />
@@ -221,6 +263,8 @@
             android:id="@+id/thurtot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="3"
             app:layout_gravity="center"
             app:layout_row="4" />
@@ -229,6 +273,8 @@
             android:id="@+id/frist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="1"
             app:layout_gravity="center"
             app:layout_row="5" />
@@ -237,6 +283,8 @@
             android:id="@+id/frifn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="2"
             app:layout_gravity="center"
             app:layout_row="5" />
@@ -245,6 +293,8 @@
             android:id="@+id/fritot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="3"
             app:layout_gravity="center"
             app:layout_row="5" />
@@ -253,6 +303,8 @@
             android:id="@+id/satst"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="1"
             app:layout_gravity="center"
             app:layout_row="6" />
@@ -261,6 +313,8 @@
             android:id="@+id/satfn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="2"
             app:layout_gravity="center"
             app:layout_row="6" />
@@ -269,6 +323,8 @@
             android:id="@+id/sattot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="3"
             app:layout_gravity="center"
             app:layout_row="6" />
@@ -277,6 +333,8 @@
             android:id="@+id/sunst"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="1"
             app:layout_gravity="center"
             app:layout_row="7" />
@@ -285,6 +343,8 @@
             android:id="@+id/sunfn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="2"
             app:layout_gravity="center"
             app:layout_row="7" />
@@ -293,6 +353,8 @@
             android:id="@+id/suntot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Blue_text"
+            android:textSize="16sp"
             app:layout_column="3"
             app:layout_gravity="center"
             app:layout_row="7" />

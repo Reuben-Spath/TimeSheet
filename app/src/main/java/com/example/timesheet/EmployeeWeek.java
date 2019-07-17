@@ -40,13 +40,13 @@ public class EmployeeWeek extends FrontScreenEmployee {
 //    private TextView Saturday;
 //    private TextView Sunday;
 
-    private Button Monday;
-    private Button Tuesday;
-    private Button Wednesday;
-    private Button Thursday;
-    private Button Friday;
-    private Button Saturday;
-    private Button Sunday;
+    private TextView Monday;
+    private TextView Tuesday;
+    private TextView Wednesday;
+    private TextView Thursday;
+    private TextView Friday;
+    private TextView Saturday;
+    private TextView Sunday;
 
     private TextView totalHours;
     private TextView weekEnding;
@@ -379,12 +379,22 @@ public class EmployeeWeek extends FrontScreenEmployee {
 
                             float data = 0;
                             float time;
+                            boolean holiday;
+                            boolean sick;
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                 NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
 
                                 time = noteEmployee.getTimeInt();
 
+                                holiday = noteEmployee.isIfHoliday();
+                                sick = noteEmployee.isIfSick();
+
                                 data += time;
+
+                                if (holiday || sick) {
+                                    data -= time;
+                                }
+
                                 Log.d(TAG, "onEvent: " + data);
 
                             }

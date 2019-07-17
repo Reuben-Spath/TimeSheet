@@ -30,13 +30,13 @@
     <string name="title_create_company">Company name</string>
 
     <string name="week_ending">Week ending</string>
-    <string name="mon">Monday</string>
-    <string name="tues">Tuesday</string>
-    <string name="wed">Wednesday</string>
-    <string name="thur">Thursday</string>
-    <string name="fri">Friday</string>
-    <string name="sat">Saturday</string>
-    <string name="sun">Sunday</string>
+    <string name="mon"><u>Monday</u>:</string>
+    <string name="tues"><u>Tuesday</u>:</string>
+    <string name="wed"><u>Wednesday</u>:</string>
+    <string name="thur"><u>Thursday</u>:</string>
+    <string name="fri"><u>Friday</u>:</string>
+    <string name="sat"><u>Saturday</u>:</string>
+    <string name="sun"><u>Sunday</u>:</string>
     <string name="hours_worked">Hours Worked</string>
     <string name="hours">Hours</string>
 
