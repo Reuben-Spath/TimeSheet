@@ -238,6 +238,7 @@ public class Employee extends AppCompatActivity {
                             float tot_count = 0;
                             float tot_time;
                             String data = "";
+                            String hours;
 
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                 NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
@@ -255,6 +256,16 @@ public class Employee extends AppCompatActivity {
 
                                 if (holiday || sick) {
                                     tot_count -= tot_time;
+                                }
+                                if (tot_time != 0.0) {
+                                    hours = tot_time + " hrs";
+                                } else hours = "";
+
+                                if (start == null) {
+                                    start = "";
+                                }
+                                if (finish == null) {
+                                    finish = "";
                                 }
 
                                 Log.d(TAG, "onEvent: " + data);
@@ -276,7 +287,7 @@ public class Employee extends AppCompatActivity {
                                     } else {
                                         monst.setText(start);
                                         monfn.setText(finish);
-                                        montot.setText(time);
+                                        montot.setText(hours);
                                         setMon(String.format("%-12s" + start + " " + finish + " " + time, "Monday:"));
                                     }
                                 }
@@ -296,7 +307,7 @@ public class Employee extends AppCompatActivity {
                                     } else {
                                         tuesst.setText(start);
                                         tuesfn.setText(finish);
-                                        tuestot.setText(time);
+                                        tuestot.setText(hours);
                                         setTues(String.format("%-12s" + start + " " + finish + " " + time, "Tuesday:"));
                                     }
                                 }
@@ -316,7 +327,7 @@ public class Employee extends AppCompatActivity {
                                     } else {
                                         wedst.setText(start);
                                         wedfn.setText(finish);
-                                        wedtot.setText(time);
+                                        wedtot.setText(hours);
                                         setWed(String.format("%-12s" + start + " " + finish + " " + time, "Wednesday:"));
                                     }
                                 }
@@ -336,7 +347,7 @@ public class Employee extends AppCompatActivity {
                                     } else {
                                         thursst.setText(start);
                                         thursfn.setText(finish);
-                                        thurstot.setText(time);
+                                        thurstot.setText(hours);
                                         setThurs(String.format("%-12s" + start + " " + finish + " " + time, "Thursday:"));
                                     }
                                 }
@@ -356,7 +367,7 @@ public class Employee extends AppCompatActivity {
                                     } else {
                                         frist.setText(start);
                                         frifn.setText(finish);
-                                        fritot.setText(time);
+                                        fritot.setText(hours);
                                         setFri(String.format("%-12s" + start + " " + finish + " " + time, "Friday:"));
                                     }
                                 }
@@ -376,7 +387,7 @@ public class Employee extends AppCompatActivity {
                                     } else {
                                         satst.setText(start);
                                         satfn.setText(finish);
-                                        sattot.setText(time);
+                                        sattot.setText(hours);
                                         setSat(String.format("%-12s" + start + " " + finish + " " + time, "Saturday:"));
                                     }
                                 }
@@ -396,7 +407,7 @@ public class Employee extends AppCompatActivity {
                                     } else {
                                         sunst.setText(start);
                                         sunfn.setText(finish);
-                                        suntot.setText(time);
+                                        suntot.setText(hours);
                                         setSun(String.format("%-12s" + start + " " + finish + " " + time, "Sunday:"));
                                     }
                                 }

@@ -8,8 +8,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -220,6 +222,8 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
 
         dayOfWeek.setText(getDay());
 
+        ImageView delete = findViewById(R.id.img_delete);
+
         mAuth = FirebaseAuth.getInstance();
         create();
         checkbox();
@@ -240,6 +244,30 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                 finish();
             }
         });
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.collection("Users").document(getUser()).collection(weekEnding()).document(getDay())
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                Toast.makeText(Edit.this, "Deleted!", Toast.LENGTH_SHORT).show();
+                                create();
+                                finish();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error deleting document", e);
+                            }
+                        });
+
+            }
+        });
+
     }
 
     public void setFlag(int i) {
@@ -619,6 +647,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.w(TAG, "onSuccess: ");
+                            Toast.makeText(Edit.this, "Saved!", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
