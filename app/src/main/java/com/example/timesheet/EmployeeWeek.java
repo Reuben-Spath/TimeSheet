@@ -1,21 +1,26 @@
 package com.example.timesheet;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -28,13 +33,20 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 //information and total time need to be added together
-public class EmployeeWeek extends FrontScreenEmployee {
-
+public class EmployeeWeek extends AppCompatActivity implements exampleDialog.ExampleDialogistener {
+    // extends FrontScreenEmployee
+    Calendar calendar = Calendar.getInstance();
     private Button back;
     private Button save;
+
+    private ImageView history;
 
     private TextView EmpCode;
 
@@ -67,10 +79,15 @@ public class EmployeeWeek extends FrontScreenEmployee {
 
     private String name;
     private String week_header;
+    private String week_pass;
 
     private String sendInfo;
 
+    private String userId;
+
     private FirebaseAuth mAuth;
+
+    private exampleDialog.ExampleDialogistener listener;
 
     private static final String TAG = "EmployeeWeek";
 
@@ -82,21 +99,30 @@ public class EmployeeWeek extends FrontScreenEmployee {
         this.name = name;
     }
 
-    public static void store(Bitmap bm, String fileName) {
-        final String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Screenshots";
-        File dir = new File(dirPath);
-        if (!dir.exists())
-            dir.mkdirs();
-        File file = new File(dirPath, fileName);
-        try {
-            FileOutputStream fOut = new FileOutputStream(file);
-            bm.compress(Bitmap.CompressFormat.PNG, 85, fOut);
-            fOut.flush();
-            fOut.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public String getUserId() {
+        return userId;
     }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+
+//    public static void store(Bitmap bm, String fileName) {
+//        final String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Screenshots";
+//        File dir = new File(dirPath);
+//        if (!dir.exists())
+//            dir.mkdirs();
+//        File file = new File(dirPath, fileName);
+//        try {
+//            FileOutputStream fOut = new FileOutputStream(file);
+//            bm.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+//            fOut.flush();
+//            fOut.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,13 +130,25 @@ public class EmployeeWeek extends FrontScreenEmployee {
         setContentView(R.layout.activity_employee_week);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
+        builder.detectFileUriExposure();
+
+        Intent i = getIntent();
+        setUserId(i.getStringExtra("name"));
+
         EmpCode = findViewById(R.id.tvEmpCode);
 
+        FrontScreenEmployee frontScreenEmployee = new FrontScreenEmployee();
+        setWeek_pass(frontScreenEmployee.weekEnding());
         week_header = "Week Ending:\n" + weekEnding();
 
         back = findViewById(R.id.btBackEdit);
         save = findViewById(R.id.btSaveEdit);
 
+        history = findViewById(R.id.draw_history);
 
         weekEnding = findViewById(R.id.tvWeekEnding);
         totalHours = findViewById(R.id.tvTotalHours);
@@ -158,21 +196,15 @@ public class EmployeeWeek extends FrontScreenEmployee {
         sattot = findViewById(R.id.sattot);
         suntot = findViewById(R.id.suntot);
     }
-//    View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
 
     @Override
     public void onStart() {
         super.onStart();
         info();
         empListner();
-//        save();
-//        load();
-        String text = monst + " " + monfn + " " + montot;
-
-
-//        writeToFile(text);
 
         weekEnding.setText(week_header);
+
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,254 +215,79 @@ public class EmployeeWeek extends FrontScreenEmployee {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                send();
-//                Bitmap bitmap = takeScreenshot();
-//                saveBitmap(bitmap);
-//                Bitmap bitmap = getScreenShot();
-//                store(bitmap,"tester");
-//                shareImage();
                 takeScreenshot();
-
-
-//                csvCode();
+            }
+        });
+        history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                history();
+                openDialog();
             }
         });
     }
 
-    public Bitmap getScreenShot() {
-        View rootView = findViewById(android.R.id.content).getRootView();
-        rootView.setDrawingCacheEnabled(true);
-        return rootView.getDrawingCache();
+    @Override
+    public void applyTexts(String editTextHistory) {
+        Toast.makeText(this, editTextHistory, Toast.LENGTH_SHORT).show();
     }
 
-    private void shareImage(File file) {
-        Uri uri = Uri.fromFile(file);
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
-        intent.setType("image/*");
+    public void openDialog() {
+        exampleDialog exampleDialog = new exampleDialog();
+        exampleDialog.show(getSupportFragmentManager(), "example dialog");
+    }
 
-        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
-        intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-        try {
-            startActivity(Intent.createChooser(intent, "Share Screenshot"));
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(this, "No App Available", Toast.LENGTH_SHORT).show();
+    public void history() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String mUid = user.getUid();
+
+            db.collection("Users").document(mUid).collection("History")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+
+//            db.collection("Users").document(mUid).collection("History")
+//                    .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+//                            if (e != null) {
+//                                return;
+//                            }
+//                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+//
+//                                }
+//                            }
+//                    });
         }
     }
 
-    private void takeScreenshot() {
-//        Date now = new Date();
-//        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
-        try {
-            // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + "Tester" + ".jpg";
+    public String weekEnding() {
 
-            // create bitmap screen capture
-            View v1 = getWindow().getDecorView().getRootView();
-            v1.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-            v1.setDrawingCacheEnabled(false);
-
-            File imageFile = new File(mPath);
-
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
-            int quality = 100;
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-            outputStream.flush();
-            outputStream.close();
-//            Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
-
-//            Toast.makeText(this, imageFile.getPath(), Toast.LENGTH_SHORT).show();
-            openScreenshot(imageFile);
-        } catch (Throwable e) {
-            // Several error may come out with file handling or DOM
-            e.printStackTrace();
+        int weekday = calendar.get(Calendar.DAY_OF_WEEK);
+        int days = Calendar.SUNDAY - weekday;
+        if (days < 0) {
+            // this will usually be the case since Calendar.SUNDAY is the smallest
+            days += 7;
         }
+        calendar.add(Calendar.DAY_OF_YEAR, days);
+
+        DateFormat df = new SimpleDateFormat("dd-MMM-yy", Locale.getDefault());
+
+        return df.format(calendar.getTime());
     }
-
-    private void openScreenshot(File imageFile) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        Uri uri = Uri.fromFile(imageFile);
-        intent.setDataAndType(uri, "image/*");
-        startActivity(intent);
-    }
-
-    public void send() {
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Tester");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, getSendInfo());
-        shareIntent.setType("text/csv");
-        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
-    }
-//    public Bitmap takeScreenshot() {
-//        View rootView = findViewById(android.R.id.content).getRootView();
-//        rootView.setDrawingCacheEnabled(true);
-//        return rootView.getDrawingCache();
-//    }
-
-//    public void saveBitmap(Bitmap bitmap) {
-//        File imagePath = new File(Environment.getExternalStorageDirectory() + "/screenshot.png");
-//
-//        FileOutputStream fos = null;
-//        try {
-//            fos = new FileOutputStream(imagePath);
-//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-//            fos.flush();
-//            fos.close();
-//            Toast.makeText(this, "Yes", Toast.LENGTH_SHORT).show();
-//        } catch (FileNotFoundException e) {
-//            Log.e("GREC", e.getMessage(), e);
-//            Toast.makeText(this, "No", Toast.LENGTH_SHORT).show();
-//
-//        } catch (IOException e) {
-//            Log.e("GREC", e.getMessage(), e);
-//            Toast.makeText(this, "No", Toast.LENGTH_SHORT).show();
-//
-//        }
-//    }
-//
-//    //
-//    private static final String FILE_NAME = "example.csv";
-//
-////    EditText mEditText;
-//
-//    public void save() {
-//        String text = monst+" "+monfn+" "+montot;
-////                mEditText.getText().toString();
-//
-//        FileOutputStream fos = null;
-//
-//        try {
-//            fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
-//            fos.write(text.getBytes());
-//
-////            mEditText.getText().clear();
-//            Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME,
-//                    Toast.LENGTH_LONG).show();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (fos != null) {
-//                try {
-//                    fos.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
-////
-//    public void load() {
-//        FileInputStream fis = null;
-//
-//        try {
-//            fis = openFileInput(FILE_NAME);
-//            InputStreamReader isr = new InputStreamReader(fis);
-//            BufferedReader br = new BufferedReader(isr);
-//            StringBuilder sb = new StringBuilder();
-//            String text;
-//
-//            while ((text = br.readLine()) != null) {
-//                sb.append(text).append("\n");
-//            }
-//
-//            setSendInfo(sb.toString());
-////            mEditText.setText(sb.toString());
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (fis != null) {
-//                try {
-//                    fis.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
-//    final File path =
-//            Environment.getExternalStoragePublicDirectory
-//                    (
-//                            //Environment.DIRECTORY_PICTURES
-//                            Environment.DIRECTORY_DOCUMENTS + "/YourFolder/"
-//                    );
-
-//    public void writeToFile(String data) {
-//        // Get the directory for the user's public pictures directory.
-//
-//
-//        // Make sure the path directory exists.
-//        if (!path.exists()) {
-//            // Make it, if it doesn't exit
-//            path.mkdirs();
-//        }
-//
-//        final File file = new File(path, "example.txt");
-//
-//        // Save your stream, don't forget to flush() it before closing it.
-//
-//        try {
-//            file.createNewFile();
-//            FileOutputStream fOut = new FileOutputStream(file);
-//            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-//            myOutWriter.append(data);
-//
-//            myOutWriter.close();
-//
-//            fOut.flush();
-//            fOut.close();
-//        } catch (IOException e) {
-//            Log.e("Exception", "File write failed: " + e.toString());
-//        }
-//    }
-
-//    public void textReader(){
-//        StringBuilder text = new StringBuilder();
-//        try {
-//            File sdcard = Environment.getExternalStorageDirectory();
-//            File file = new File(sdcard,"testFile.txt");
-//
-//            BufferedReader br = new BufferedReader(new FileReader(file));
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                text.append(line);
-//                text.append('\n');
-//            }
-//            br.close() ;
-//        }catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-////        TextView tv = (TextView)findViewById(R.id.amount);
-////        tv.setText(text.toString()); ////Set the text to text view.
-//    }
-
-//    public void csvCode() {
-//        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-//        sharingIntent.setType("text/*");
-//        sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(path.toString()));
-//        startActivity(Intent.createChooser(sharingIntent, "share file with"));
-//    }
-
-//    public void send() {
-//        Toast.makeText(this, getSendInfo(), Toast.LENGTH_SHORT).show();
-//        Intent shareIntent = new Intent();
-//        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-//        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Tester");
-//        shareIntent.putExtra(Intent.EXTRA_TEXT, getSendInfo());
-//        shareIntent.setType("text/csv");
-//        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
-//    }
-
 
 
     public void empListner() {
@@ -469,7 +326,7 @@ public class EmployeeWeek extends FrontScreenEmployee {
             setName(currentUser.getUid());
 
 
-            db.collection("Users").document(mUid).collection(weekEnding())
+            db.collection("Users").document(mUid).collection(getWeek_pass())
                     .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
@@ -641,6 +498,61 @@ public class EmployeeWeek extends FrontScreenEmployee {
     }
 
 
+    private void takeScreenshot() {
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+
+
+            // create bitmap screen capture
+            View v1 = getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+//            openScreenshot(imageFile);
+            sendScreenshot(imageFile);
+        } catch (Throwable e) {
+            // Several error may come out with file handling or DOM
+            e.printStackTrace();
+        }
+    }
+
+    //    private void openScreenshot(File imageFile) {
+////        Intent intent = new Intent();
+////        intent.setAction(Intent.ACTION_VIEW);
+////        Uri uri = Uri.fromFile(imageFile);
+////        intent.setDataAndType(uri, "image/*");
+////        startActivity(intent);
+////    }
+    private void sendScreenshot(File imageFile) {
+        Uri uri = Uri.fromFile(imageFile);
+        FrontScreenEmployee frontScreenEmployee = new FrontScreenEmployee();
+
+        String info_subject = frontScreenEmployee.weekEnding() + " " + getUserId();
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_SUBJECT, info_subject);
+
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+
+        startActivity(Intent.createChooser(intent, "Share Image"));
+
+//        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
+    }
+
     private View.OnClickListener editing = new View.OnClickListener() {
         public void onClick(View v) {
 
@@ -726,40 +638,13 @@ public class EmployeeWeek extends FrontScreenEmployee {
     public void setSendInfo(String sendInfo) {
         this.sendInfo = sendInfo;
     }
-}
 
-// db.collection("Users").document(mUid).collection(weekEnding())
-//                    .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
-//                            if (e != null) {
-//                                return;
-//                            }
-//
-//                            float data = 0;
-//                            float time;
-//                            boolean holiday;
-//                            boolean sick;
-//                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-//                                NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
-//
-//                                time = noteEmployee.getTimeInt();
-//
-//                                holiday = noteEmployee.isIfHoliday();
-//                                sick = noteEmployee.isIfSick();
-//
-//                                data += time;
-//
-//                                if (holiday || sick) {
-//                                    data -= time;
-//                                }
-//
-//                                Log.d(TAG, "onEvent: " + data);
-//
-//                            }
-//
-//                            String finalTime = String.format(Locale.getDefault(), "Total Hours:\n%.2f hours", data);
-//
-//                            totalHours.setText(finalTime);
-//                        }
-//                    });
+    public String getWeek_pass() {
+        return week_pass;
+    }
+
+    public void setWeek_pass(String week_pass) {
+        this.week_pass = week_pass;
+    }
+
+}

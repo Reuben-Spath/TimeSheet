@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--Colour purple as a colour scheme-->
+
+    <color name="purple">#9C27B0</color>
     <color name="Blue">#1E88E5</color>
     <color name="Blue_light">#6ab7ff</color>
     <color name="Blue_dark">#005cb2</color>

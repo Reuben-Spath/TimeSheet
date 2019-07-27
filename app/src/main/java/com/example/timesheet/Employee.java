@@ -487,15 +487,6 @@ public class Employee extends AppCompatActivity {
         );
         shareIntent.setType("text/*");
         startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
-//        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
-//        getTotal() + "\n\n           Start:     Finish:     Total:\n\n"
-//                + getMon() + "\n"
-//                + getTues() + "\n"
-//                + getWed() + "\n"
-//                + getThurs() + "\n"
-//                + getFri() + "\n"
-//                + getSat() + "\n"
-//                + getSun())
     }
 
     public String formatted_day(String day) {

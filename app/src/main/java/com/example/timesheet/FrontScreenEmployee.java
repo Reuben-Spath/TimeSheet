@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
@@ -37,9 +38,6 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
     private static final String TAG = "FrontScreenEmployee";
     Calendar calendar = Calendar.getInstance();
 
-//    protected Chronometer chronometer;
-
-    //    protected static boolean less_5 = false;
     private boolean in = false;
     private boolean out = false;
 
@@ -52,16 +50,10 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
 
     private Button sign_in;
     private Button sign_off;
-    //    private Button employer_code;
-//    private Button week;
     private Button confirm;
 
     private static String signedIn;
     private static String signedOff;
-
-    //    private long pauseOffset = 0L;
-//    private long startT;
-//    private long finishT;
 
     private static float timeWorkedWLunch;
     private static float timeWorked;
@@ -69,10 +61,6 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
     private TimePickerDialog timePickerDialog;
     private String amPm;
     private FirebaseAuth mAuth;
-
-
-//    private String time1;
-//    private String time2;
 
     private static int startMin;
     private static int startHr;
@@ -82,19 +70,10 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
     private static int hours4today;
     private static int minutes4today;
     public static final int FLAG_END_TIME = 1;
-    //    private TextView EmpCode;
     private TextView date;
     private int flag = 0;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-//    public boolean isLess_5() {
-//        return less_5;
-//    }
-
-//    public void setLess_5(boolean less_5) {
-//        FrontScreenEmployee.less_5 = less_5;
-//    }
 
     public int getStartMin() {
         return startMin;
@@ -144,22 +123,6 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
         FrontScreenEmployee.minutes4today = minutes4today;
     }
 
-//    public long getStartT() {
-//        return startT;
-//    }
-
-//    public void setStartT(long startT) {
-//        this.startT = startT;
-//    }
-
-//    public long getFinishT() {
-//        return finishT;
-//    }
-
-//    public void setFinishT(long finishT) {
-//        this.finishT = finishT;
-//    }
-
     public String getSignedIn() {
         return signedIn;
     }
@@ -185,12 +148,18 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
         return timeWorked;
     }
 
-//    public void setTimeWorkedWLunch(float timeWorkedWLunch) {
-//        FrontScreenEmployee.timeWorkedWLunch = timeWorkedWLunch;
-//    }
-
     public float getTimeWorkedWLunch() {
         return timeWorkedWLunch;
+    }
+
+    public String history;
+
+    public String getHistory() {
+        return history;
+    }
+
+    public void setHistory(String history) {
+        this.history = history;
     }
 
 
@@ -200,10 +169,7 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
         setContentView(R.layout.activity_front_screen_employee);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-
         mAuth = FirebaseAuth.getInstance();
-
-//        chronometer = findViewById(R.id.chronometer);
 
         sign_in = findViewById(R.id.btSignIn);
         sign_off = findViewById(R.id.btSignOff);
@@ -212,9 +178,6 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
         profile = findViewById(R.id.draw_profile);
 
         logo = findViewById(R.id.logo);
-//        week = findViewById(R.id.btWeek);
-
-//        EmpCode = findViewById(R.id.tvEmpCode);
         date = findViewById(R.id.tvWEnd);
         timeSignedIn = findViewById(R.id.tvTimeSignedIn);
         timeSignedOff = findViewById(R.id.tvTimeSignedOff);
@@ -239,14 +202,32 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent profile_pass = new Intent(FrontScreenEmployee.this, EmployeeWeek.class);
-                startActivity(profile_pass);
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                if (currentUser != null) {
+
+                    String mUid = currentUser.getUid();
+                    Map<String, Object> note = new HashMap<>();
+
+                    db.collection("Users").document(mUid)
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    String name_pass = documentSnapshot.getString("name");
+                                    Intent i = new Intent(FrontScreenEmployee.this, EmployeeWeek.class);
+
+                                    i.putExtra("name", name_pass);
+                                    startActivity(i);
+                                }
+                            });
+                }
+//                Intent profile_pass = new Intent(FrontScreenEmployee.this, EmployeeWeek.class);
+//                startActivity(profile_pass);
             }
         });
         sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                signInCustomPicker();
                 setFlag(FLAG_START_TIME);
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "time picker");
@@ -256,7 +237,6 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
         sign_off.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                signOffCustomPicker();
                 setFlag(FLAG_END_TIME);
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "time picker");
@@ -288,6 +268,28 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
                 }
             }
         });
+    }
+
+    public void getName() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+
+            String mUid = currentUser.getUid();
+            Map<String, Object> note = new HashMap<>();
+
+            db.collection("Users").document(mUid)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            String name_pass = documentSnapshot.getString("name");
+                            Intent i = new Intent(FrontScreenEmployee.this, EmployeeWeek.class);
+
+                            i.putExtra("name", name_pass);
+                            startActivity(i);
+                        }
+                    });
+        }
     }
 
     public void setFlag(int i) {
@@ -334,7 +336,6 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
         return super.onKeyDown(keyCode, event);
     }
 
-    //Changed "dd-MMM"
     public String getCurrentDate() {
         final Calendar myCalender1 = Calendar.getInstance();
         DateFormat df = new SimpleDateFormat("EEEE\ndd-MMMM", Locale.getDefault());
@@ -350,10 +351,25 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
         }
         calendar.add(Calendar.DAY_OF_YEAR, days);
 
-        DateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        DateFormat df = new SimpleDateFormat("dd-MMM-yy", Locale.getDefault());
 
         return df.format(calendar.getTime());
     }
+
+    public String history_maker() {
+        int weekday = calendar.get(Calendar.DAY_OF_WEEK);
+        int days = Calendar.SUNDAY - weekday;
+        if (days < 0) {
+            // this will usually be the case since Calendar.SUNDAY is the smallest
+            days += 7;
+        }
+        calendar.add(Calendar.DAY_OF_YEAR, days);
+
+        DateFormat df = new SimpleDateFormat("dd-m-yy", Locale.getDefault());
+
+        return df.format(calendar.getTime());
+    }
+
 
     public String asWeek() {
         Date now = new Date();
@@ -362,14 +378,33 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
     }
 
     public void create() {
+        setHistory(weekEnding());
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
 
             String mUid = currentUser.getUid();
             Map<String, Object> note = new HashMap<>();
+            Map<String, Object> past_week = new HashMap<>();
+            past_week.put(history_maker(), history_maker());
+
+
 
             db.collection("Users").document(mUid).collection(weekEnding()).document(asWeek())
                     .set(note, SetOptions.merge())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully written!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error writing document", e);
+                        }
+                    });
+            db.collection("Users").document(mUid).collection("History").document("History")
+                    .set(past_week, SetOptions.merge())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
