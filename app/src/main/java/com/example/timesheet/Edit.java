@@ -527,7 +527,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         }
         calendar.add(Calendar.DAY_OF_YEAR, days);
 
-        DateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        DateFormat df = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
 
         return df.format(calendar.getTime());
     }

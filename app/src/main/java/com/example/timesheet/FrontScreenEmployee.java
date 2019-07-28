@@ -365,7 +365,7 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
         }
         calendar.add(Calendar.DAY_OF_YEAR, days);
 
-        DateFormat df = new SimpleDateFormat("dd-m-yy", Locale.getDefault());
+        DateFormat df = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
 
         return df.format(calendar.getTime());
     }
@@ -388,8 +388,7 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
             past_week.put(history_maker(), history_maker());
 
 
-
-            db.collection("Users").document(mUid).collection(weekEnding()).document(asWeek())
+            db.collection("Users").document(mUid).collection(history_maker()).document(asWeek())
                     .set(note, SetOptions.merge())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

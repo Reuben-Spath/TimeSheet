@@ -33,16 +33,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 //information and total time need to be added together
 public class EmployeeWeek extends AppCompatActivity implements exampleDialog.ExampleDialogistener {
     // extends FrontScreenEmployee
-    Calendar calendar = Calendar.getInstance();
+//    Calendar calendar = Calendar.getInstance();
     private Button back;
     private Button save;
 
@@ -77,17 +74,18 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
     private TextView sattot;
     private TextView suntot;
 
+    private String total;
     private String name;
     private String week_header;
     private String week_pass;
 
-    private String sendInfo;
+    private String email_subject;
 
     private String userId;
 
     private FirebaseAuth mAuth;
 
-    private exampleDialog.ExampleDialogistener listener;
+//    private exampleDialog.ExampleDialogistener listener;
 
     private static final String TAG = "EmployeeWeek";
 
@@ -107,29 +105,11 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         this.userId = userId;
     }
 
-
-//    public static void store(Bitmap bm, String fileName) {
-//        final String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Screenshots";
-//        File dir = new File(dirPath);
-//        if (!dir.exists())
-//            dir.mkdirs();
-//        File file = new File(dirPath, fileName);
-//        try {
-//            FileOutputStream fOut = new FileOutputStream(file);
-//            bm.compress(Bitmap.CompressFormat.PNG, 85, fOut);
-//            fOut.flush();
-//            fOut.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_week);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -143,7 +123,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
 
         FrontScreenEmployee frontScreenEmployee = new FrontScreenEmployee();
         setWeek_pass(frontScreenEmployee.weekEnding());
-        week_header = "Week Ending:\n" + weekEnding();
+        week_header = "Week Ending:\n" + getWeek_pass();
 
         back = findViewById(R.id.btBackEdit);
         save = findViewById(R.id.btSaveEdit);
@@ -154,7 +134,6 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         totalHours = findViewById(R.id.tvTotalHours);
 
         mAuth = FirebaseAuth.getInstance();
-
 
         TextView monday = findViewById(R.id.Monday);
         TextView tuesday = findViewById(R.id.Tuesday);
@@ -200,12 +179,14 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
     @Override
     public void onStart() {
         super.onStart();
-        info();
+        FrontScreenEmployee frontScreenEmployee = new FrontScreenEmployee();
+        info(frontScreenEmployee.history_maker());
+        setEmail_subject(frontScreenEmployee.weekEnding() + " " + getUserId());
         empListner();
 
         weekEnding.setText(week_header);
 
-
+//        writeToFile("hello",getApplicationContext());
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,6 +196,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 takeScreenshot();
             }
         });
@@ -230,6 +212,12 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
     @Override
     public void applyTexts(String editTextHistory) {
         Toast.makeText(this, editTextHistory, Toast.LENGTH_SHORT).show();
+        info(editTextHistory);
+
+        String pass = "Week Ending:\n" + editTextHistory;
+        weekEnding.setText(pass);
+        setEmail_subject(editTextHistory + " " + getUserId());
+
     }
 
     public void openDialog() {
@@ -249,7 +237,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
                                 }
                             } else {
@@ -257,38 +245,8 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                             }
                         }
                     });
-
-//            db.collection("Users").document(mUid).collection("History")
-//                    .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
-//                            if (e != null) {
-//                                return;
-//                            }
-//                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-//
-//                                }
-//                            }
-//                    });
         }
     }
-
-
-    public String weekEnding() {
-
-        int weekday = calendar.get(Calendar.DAY_OF_WEEK);
-        int days = Calendar.SUNDAY - weekday;
-        if (days < 0) {
-            // this will usually be the case since Calendar.SUNDAY is the smallest
-            days += 7;
-        }
-        calendar.add(Calendar.DAY_OF_YEAR, days);
-
-        DateFormat df = new SimpleDateFormat("dd-MMM-yy", Locale.getDefault());
-
-        return df.format(calendar.getTime());
-    }
-
 
     public void empListner() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -316,7 +274,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         }
     }
 
-    public void info() {
+    public void info(final String week_ending) {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -326,13 +284,14 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
             setName(currentUser.getUid());
 
 
-            db.collection("Users").document(mUid).collection(getWeek_pass())
+            db.collection("Users").document(mUid).collection(week_ending)
                     .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
                             if (e != null) {
                                 return;
                             }
+
                             float tot_count = 0;
                             float tot_time;
                             String data = "";
@@ -491,16 +450,15 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                             }
                             String finalTime = String.format(Locale.getDefault(), "Total Hours:\n%.2f hours", tot_count);
 
+
+                            setTotal(finalTime);
                             totalHours.setText(finalTime);
                         }
                     });
         }
     }
-
-
     private void takeScreenshot() {
-        Date now = new Date();
-        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+        String now = getEmail_subject();
 
         try {
             // image naming and path  to include sd card  appending name you choose for file
@@ -529,24 +487,24 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         }
     }
 
-    //    private void openScreenshot(File imageFile) {
-////        Intent intent = new Intent();
-////        intent.setAction(Intent.ACTION_VIEW);
-////        Uri uri = Uri.fromFile(imageFile);
-////        intent.setDataAndType(uri, "image/*");
-////        startActivity(intent);
-////    }
     private void sendScreenshot(File imageFile) {
         Uri uri = Uri.fromFile(imageFile);
-        FrontScreenEmployee frontScreenEmployee = new FrontScreenEmployee();
-
-        String info_subject = frontScreenEmployee.weekEnding() + " " + getUserId();
 
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_SUBJECT, info_subject);
+        intent.putExtra(Intent.EXTRA_SUBJECT, getEmail_subject());
 
         intent.setType("image/*");
+
+        String text_message = "Total hours worked are: " + getTotal();
+        intent.putExtra(Intent.EXTRA_TEXT, text_message);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
+
+        File file = new File(Environment.getExternalStorageDirectory().toString() + "/" + "abc.txt");
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/*");
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
+        startActivity(Intent.createChooser(sharingIntent, "share file with"));
+
 
         startActivity(Intent.createChooser(intent, "Share Image"));
 
@@ -631,14 +589,6 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         return super.onKeyDown(keyCode, event);
     }
 
-    public String getSendInfo() {
-        return sendInfo;
-    }
-
-    public void setSendInfo(String sendInfo) {
-        this.sendInfo = sendInfo;
-    }
-
     public String getWeek_pass() {
         return week_pass;
     }
@@ -647,4 +597,115 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         this.week_pass = week_pass;
     }
 
+    public String getEmail_subject() {
+        return email_subject;
+    }
+
+    public void setEmail_subject(String email_subject) {
+        this.email_subject = email_subject;
+    }
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
+    }
 }
+
+
+//    private static final String FILE_NAME = "example.txt";
+//
+//    public void save(View v) {
+//        String text = "hello";
+//        FileOutputStream fos = null;
+//
+//        try {
+//            fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
+//            fos.write(text.getBytes());
+//
+//            Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME,
+//                    Toast.LENGTH_LONG).show();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (fos != null) {
+//                try {
+//                    fos.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
+//
+//    private void writeToFile(String data, Context context) {
+//        try {
+//            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE));
+//            outputStreamWriter.write(data);
+//            outputStreamWriter.close();
+//        }
+//        catch (IOException e) {
+//            Log.e("Exception", "File write failed: " + e.toString());
+//        }
+//    }
+//    private String readFromFile(Context context) {
+//
+//        String ret = "";
+//
+//        try {
+//            InputStream inputStream = context.openFileInput("config.txt");
+//
+//            if ( inputStream != null ) {
+//                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+//                String receiveString = "";
+//                StringBuilder stringBuilder = new StringBuilder();
+//
+//                while ( (receiveString = bufferedReader.readLine()) != null ) {
+//                    stringBuilder.append(receiveString);
+//                }
+//
+//                inputStream.close();
+//                ret = stringBuilder.toString();
+//            }
+//        }
+//        catch (FileNotFoundException e) {
+//            Log.e("login activity", "File not found: " + e.toString());
+//        } catch (IOException e) {
+//            Log.e("login activity", "Can not read file: " + e.toString());
+//        }
+//
+//        return ret;
+//    }
+//    public void load(View v) {
+//        FileInputStream fis = null;
+//
+//        try {
+//            fis = openFileInput(FILE_NAME);
+//            InputStreamReader isr = new InputStreamReader(fis);
+//            BufferedReader br = new BufferedReader(isr);
+//            StringBuilder sb = new StringBuilder();
+//            String text;
+//
+//            while ((text = br.readLine()) != null) {
+//                sb.append(text).append("\n");
+//            }
+//
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (fis != null) {
+//                try {
+//                    fis.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }

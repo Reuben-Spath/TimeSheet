@@ -2,7 +2,10 @@ package com.example.timesheet;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,9 +22,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class Employee extends AppCompatActivity {
@@ -428,7 +434,7 @@ public class Employee extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                send();
+                takeScreenshot();
             }
         });
     }
@@ -443,51 +449,100 @@ public class Employee extends AppCompatActivity {
         }
         calendar.add(Calendar.DAY_OF_YEAR, days);
 
-        DateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        DateFormat df = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
 
         return df.format(calendar.getTime());
     }
 
-    public void send() {
 
-//        layout = findViewById(R.id.gridLayout);
+    //    public void send() {
+//
+////        layout = findViewById(R.id.gridLayout);
+//
+//        String info_subject = weekEnding() + " " + getUserId();
+//        if (getMon() == null) {
+//            setMon("\nDid not work on Monday");
+//        }
+//        if (getTues() == null) {
+//            setTues("\nDid not work on Tuesday");
+//        }
+//        if (getWed() == null) {
+//            setWed("\nDid not work on Wednesday");
+//        }
+//        if (getThurs() == null) {
+//            setThurs("\nDid not work on Thursday");
+//        }
+//        if (getFri() == null) {
+//            setFri("\nDid not work on Friday");
+//        }
+//        if (getSat() == null) {
+//            setSat("\nDid not work on Saturday");
+//        }
+//        if (getSun() == null) {
+//            setSun("\nDid not work on Sunday");
+//        }
+//
+//
+//        Intent shareIntent = new Intent();
+//        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+//        shareIntent.putExtra(Intent.EXTRA_SUBJECT, info_subject);
+//        shareIntent.putExtra(Intent.EXTRA_TEXT,
+//
+//                formatted_day("Monday") + "\n" + formatted_day("Tuesday") + "\n" +
+//                        formatted_day("Wednesday") + "\n" + formatted_day("Thursday") + "\n" +
+//                        formatted_day("Friday") + "\n" + formatted_day("Saturday") + "\n" + formatted_day("Sunday")
+//        );
+//        shareIntent.setType("text/*");
+//        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
+//    }
+    private void takeScreenshot() {
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
-        String info_subject = weekEnding() + " " + getUserId();
-        if (getMon() == null) {
-            setMon("\nDid not work on Monday");
-        }
-        if (getTues() == null) {
-            setTues("\nDid not work on Tuesday");
-        }
-        if (getWed() == null) {
-            setWed("\nDid not work on Wednesday");
-        }
-        if (getThurs() == null) {
-            setThurs("\nDid not work on Thursday");
-        }
-        if (getFri() == null) {
-            setFri("\nDid not work on Friday");
-        }
-        if (getSat() == null) {
-            setSat("\nDid not work on Saturday");
-        }
-        if (getSun() == null) {
-            setSun("\nDid not work on Sunday");
-        }
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
 
 
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, info_subject);
-        shareIntent.putExtra(Intent.EXTRA_TEXT,
+            // create bitmap screen capture
+            View v1 = getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
 
-                formatted_day("Monday") + "\n" + formatted_day("Tuesday") + "\n" +
-                        formatted_day("Wednesday") + "\n" + formatted_day("Thursday") + "\n" +
-                        formatted_day("Friday") + "\n" + formatted_day("Saturday") + "\n" + formatted_day("Sunday")
-        );
-        shareIntent.setType("text/*");
-        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+//            openScreenshot(imageFile);
+            sendScreenshot(imageFile);
+        } catch (Throwable e) {
+            // Several error may come out with file handling or DOM
+            e.printStackTrace();
+        }
     }
+
+    private void sendScreenshot(File imageFile) {
+        Uri uri = Uri.fromFile(imageFile);
+        FrontScreenEmployee frontScreenEmployee = new FrontScreenEmployee();
+
+        String info_subject = frontScreenEmployee.weekEnding() + " " + getUserId();
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_SUBJECT, info_subject);
+
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+
+        startActivity(Intent.createChooser(intent, "Share Image"));
+
+//        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
+    }
+
 
     public String formatted_day(String day) {
         return String.format("%.12s |", day + ":");
