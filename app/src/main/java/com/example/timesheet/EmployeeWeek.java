@@ -2,10 +2,8 @@ package com.example.timesheet;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -18,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,14 +31,15 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 
 //information and total time need to be added together
 public class EmployeeWeek extends AppCompatActivity implements exampleDialog.ExampleDialogistener {
-    // extends FrontScreenEmployee
-//    Calendar calendar = Calendar.getInstance();
+
     private Button back;
     private Button save;
 
@@ -85,7 +85,9 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
 
     private FirebaseAuth mAuth;
 
-//    private exampleDialog.ExampleDialogistener listener;
+    private String input_text = "";
+    private String fileName = "config.csv";
+
 
     private static final String TAG = "EmployeeWeek";
 
@@ -179,14 +181,14 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
     @Override
     public void onStart() {
         super.onStart();
-        FrontScreenEmployee frontScreenEmployee = new FrontScreenEmployee();
+        final FrontScreenEmployee frontScreenEmployee = new FrontScreenEmployee();
         info(frontScreenEmployee.history_maker());
         setEmail_subject(frontScreenEmployee.weekEnding() + " " + getUserId());
         empListner();
 
         weekEnding.setText(week_header);
 
-//        writeToFile("hello",getApplicationContext());
+        setInput_text("Day of the week:, Start Time:, Finish Time:, Total Time: \n");
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,28 +198,62 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                takeScreenshot();
+                fileName = getEmail_subject() + ".csv";
+                save(getInput_text());
+//                write_to_save(input_text);
+                share_text();
             }
         });
         history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                history();
+//                history();
                 openDialog();
             }
         });
     }
 
+    public void save(String text) {
+        FileOutputStream fos = null;
+
+        try {
+            fos = openFileOutput(fileName, MODE_PRIVATE);
+            fos.write(text.getBytes());
+
+//            Toast.makeText(this, "Saved to " + getFilesDir() + "/" + fileName,
+//                    Toast.LENGTH_LONG).show();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void share_text() {
+        File file = new File(getFilesDir() + "/" + fileName);
+        Uri path = FileProvider.getUriForFile(this, "com.example.timesheet", file);
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.putExtra(Intent.EXTRA_SUBJECT, getEmail_subject());
+        String text_message = getTotal();
+        i.putExtra(Intent.EXTRA_TEXT, text_message);
+        i.putExtra(Intent.EXTRA_STREAM, path);
+        i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        i.setType("text/*");
+        startActivity(i);
+    }
+
     @Override
     public void applyTexts(String editTextHistory) {
-        Toast.makeText(this, editTextHistory, Toast.LENGTH_SHORT).show();
-        info(editTextHistory);
-
-        String pass = "Week Ending:\n" + editTextHistory;
-        weekEnding.setText(pass);
-        setEmail_subject(editTextHistory + " " + getUserId());
-
+        history(editTextHistory);
     }
 
     public void openDialog() {
@@ -225,7 +261,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         exampleDialog.show(getSupportFragmentManager(), "example dialog");
     }
 
-    public void history() {
+    public void history(final String input_text) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -239,6 +275,17 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
+                                    if (document.getData().containsValue(input_text)) {
+                                        setInput_text("Day of the week:, Start Time:, Finish Time:, Total Time: \n");
+                                        info(input_text);
+
+                                        String pass = "Week Ending:\n" + input_text;
+                                        weekEnding.setText(pass);
+                                        setEmail_subject(input_text + " " + getUserId());
+                                        Toast.makeText(EmployeeWeek.this, "Hello", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(EmployeeWeek.this, "Nam", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             } else {
                                 Log.d(TAG, "Error getting documents: ", task.getException());
@@ -283,8 +330,8 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
             String mUid = currentUser.getUid();
             setName(currentUser.getUid());
 
-
             db.collection("Users").document(mUid).collection(week_ending)
+                    .whereGreaterThan("priority", 0)
                     .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
@@ -331,17 +378,20 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         monfn.setText("");
                                         data = "Holiday";
                                         montot.setText(data);
+                                        setInput_text(getInput_text() + "Monday:,,,Holiday\n");
 
                                     } else if (sick) {
                                         monst.setText("");
                                         monfn.setText("");
                                         data = "Sick";
                                         montot.setText(data);
+                                        setInput_text(getInput_text() + "Monday:,,,Sick\n");
 
                                     } else {
                                         monst.setText(start);
                                         monfn.setText(finish);
                                         montot.setText(hours);
+                                        setInput_text(getInput_text() + "Monday:," + start + "," + finish + "," + hours + "\n");
                                     }
                                 }
                                 if (documentId.equals("Tuesday")) {
@@ -350,15 +400,21 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         tuesfn.setText("");
                                         data = "Holiday";
                                         tuestot.setText(data);
+                                        setInput_text(getInput_text() + "Tuesday:,,,Holida\n");
+
                                     } else if (sick) {
                                         tuesst.setText("");
                                         tuesfn.setText("");
                                         data = "Sick";
                                         tuestot.setText(data);
+                                        setInput_text(getInput_text() + "Tuesday:,,,Sick\n");
+
                                     } else {
                                         tuesst.setText(start);
                                         tuesfn.setText(finish);
                                         tuestot.setText(hours);
+                                        setInput_text(getInput_text() + "Tuesday:," + start + "," + finish + "," + hours + "\n");
+
                                     }
                                 }
                                 if (documentId.equals("Wednesday")) {
@@ -367,15 +423,21 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         wedfn.setText("");
                                         data = "Holiday";
                                         wedtot.setText(data);
+                                        setInput_text(getInput_text() + "Wednesday:,,,Holiday\n");
+
                                     } else if (sick) {
                                         wedst.setText("");
                                         wedfn.setText("");
                                         data = "Sick";
                                         wedtot.setText(data);
+                                        setInput_text(getInput_text() + "Wednesday:,,,Sick\n");
+
                                     } else {
                                         wedst.setText(start);
                                         wedfn.setText(finish);
                                         wedtot.setText(hours);
+                                        setInput_text(getInput_text() + "Wednesday:," + start + "," + finish + "," + hours + "\n");
+
                                     }
                                 }
                                 if (documentId.equals("Thursday")) {
@@ -384,15 +446,21 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         thursfn.setText("");
                                         data = "Holiday";
                                         thurstot.setText(data);
+                                        setInput_text(getInput_text() + "Thursday:,,,Holiday\n");
+
                                     } else if (sick) {
                                         thursst.setText("");
                                         thursfn.setText("");
                                         data = "Sick";
                                         thurstot.setText(data);
+                                        setInput_text(getInput_text() + "Thursday:,,,Sick\n");
+
                                     } else {
                                         thursst.setText(start);
                                         thursfn.setText(finish);
                                         thurstot.setText(hours);
+                                        setInput_text(getInput_text() + "Thursday:," + start + "," + finish + "," + hours + "\n");
+
                                     }
                                 }
                                 if (documentId.equals("Friday")) {
@@ -401,15 +469,21 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         frifn.setText("");
                                         data = "Holiday";
                                         fritot.setText(data);
+                                        setInput_text(getInput_text() + "Friday:,,,Holiday\n");
+
                                     } else if (sick) {
                                         frist.setText("");
                                         frifn.setText("");
                                         data = "Sick";
                                         fritot.setText(data);
+                                        setInput_text(getInput_text() + "Friday:,,,Sick\n");
+
                                     } else {
                                         frist.setText(start);
                                         frifn.setText(finish);
                                         fritot.setText(hours);
+                                        setInput_text(getInput_text() + "Friday:," + start + "," + finish + "," + hours + "\n");
+
                                     }
                                 }
                                 if (documentId.equals("Saturday")) {
@@ -418,15 +492,21 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         satfn.setText("");
                                         data = "Holiday";
                                         sattot.setText(data);
+                                        setInput_text(getInput_text() + "Saturday:,,,Holiday\n");
+
                                     } else if (sick) {
                                         satst.setText("");
                                         satfn.setText("");
                                         data = "Sick";
                                         sattot.setText(data);
+                                        setInput_text(getInput_text() + "Saturday:,,,Sick\n");
+
                                     } else {
                                         satst.setText(start);
                                         satfn.setText(finish);
                                         sattot.setText(hours);
+                                        setInput_text(getInput_text() + "Saturday:," + start + "," + finish + "," + hours + "\n");
+
                                     }
                                 }
                                 if (documentId.equals("Sunday")) {
@@ -435,80 +515,32 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         sunfn.setText("");
                                         data = "Holiday";
                                         suntot.setText(data);
+                                        setInput_text(getInput_text() + "Sunday:,,,Holiday\n");
+
                                     } else if (sick) {
                                         sunst.setText("");
                                         sunfn.setText("");
                                         data = "Sick";
                                         suntot.setText(data);
+                                        setInput_text(getInput_text() + "Sunday:,,,Sick\n");
+
                                     } else {
                                         sunst.setText(start);
                                         sunfn.setText(finish);
                                         suntot.setText(hours);
+                                        setInput_text(getInput_text() + "Sunday:," + start + "," + finish + "," + hours + "\n");
+
                                     }
                                 }
-
                             }
                             String finalTime = String.format(Locale.getDefault(), "Total Hours:\n%.2f hours", tot_count);
 
-
+                            setInput_text(getInput_text() + ",,Total Hours:," + tot_count + "\n");
                             setTotal(finalTime);
                             totalHours.setText(finalTime);
                         }
                     });
         }
-    }
-    private void takeScreenshot() {
-        String now = getEmail_subject();
-
-        try {
-            // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
-
-
-            // create bitmap screen capture
-            View v1 = getWindow().getDecorView().getRootView();
-            v1.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-            v1.setDrawingCacheEnabled(false);
-
-            File imageFile = new File(mPath);
-
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
-            int quality = 100;
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-            outputStream.flush();
-            outputStream.close();
-
-//            openScreenshot(imageFile);
-            sendScreenshot(imageFile);
-        } catch (Throwable e) {
-            // Several error may come out with file handling or DOM
-            e.printStackTrace();
-        }
-    }
-
-    private void sendScreenshot(File imageFile) {
-        Uri uri = Uri.fromFile(imageFile);
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_SUBJECT, getEmail_subject());
-
-        intent.setType("image/*");
-
-        String text_message = "Total hours worked are: " + getTotal();
-        intent.putExtra(Intent.EXTRA_TEXT, text_message);
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-
-        File file = new File(Environment.getExternalStorageDirectory().toString() + "/" + "abc.txt");
-        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-        sharingIntent.setType("text/*");
-        sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
-        startActivity(Intent.createChooser(sharingIntent, "share file with"));
-
-
-        startActivity(Intent.createChooser(intent, "Share Image"));
-
-//        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_text)));
     }
 
     private View.OnClickListener editing = new View.OnClickListener() {
@@ -612,100 +644,12 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
     public void setTotal(String total) {
         this.total = total;
     }
+
+    public String getInput_text() {
+        return input_text;
+    }
+
+    public void setInput_text(String input_text) {
+        this.input_text = input_text;
+    }
 }
-
-
-//    private static final String FILE_NAME = "example.txt";
-//
-//    public void save(View v) {
-//        String text = "hello";
-//        FileOutputStream fos = null;
-//
-//        try {
-//            fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
-//            fos.write(text.getBytes());
-//
-//            Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME,
-//                    Toast.LENGTH_LONG).show();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (fos != null) {
-//                try {
-//                    fos.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
-//
-//    private void writeToFile(String data, Context context) {
-//        try {
-//            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE));
-//            outputStreamWriter.write(data);
-//            outputStreamWriter.close();
-//        }
-//        catch (IOException e) {
-//            Log.e("Exception", "File write failed: " + e.toString());
-//        }
-//    }
-//    private String readFromFile(Context context) {
-//
-//        String ret = "";
-//
-//        try {
-//            InputStream inputStream = context.openFileInput("config.txt");
-//
-//            if ( inputStream != null ) {
-//                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-//                String receiveString = "";
-//                StringBuilder stringBuilder = new StringBuilder();
-//
-//                while ( (receiveString = bufferedReader.readLine()) != null ) {
-//                    stringBuilder.append(receiveString);
-//                }
-//
-//                inputStream.close();
-//                ret = stringBuilder.toString();
-//            }
-//        }
-//        catch (FileNotFoundException e) {
-//            Log.e("login activity", "File not found: " + e.toString());
-//        } catch (IOException e) {
-//            Log.e("login activity", "Can not read file: " + e.toString());
-//        }
-//
-//        return ret;
-//    }
-//    public void load(View v) {
-//        FileInputStream fis = null;
-//
-//        try {
-//            fis = openFileInput(FILE_NAME);
-//            InputStreamReader isr = new InputStreamReader(fis);
-//            BufferedReader br = new BufferedReader(isr);
-//            StringBuilder sb = new StringBuilder();
-//            String text;
-//
-//            while ((text = br.readLine()) != null) {
-//                sb.append(text).append("\n");
-//            }
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (fis != null) {
-//                try {
-//                    fis.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }

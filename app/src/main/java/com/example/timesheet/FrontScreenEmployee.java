@@ -73,6 +73,16 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
     private TextView date;
     private int flag = 0;
 
+    private int priority = 0;
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public int getStartMin() {
@@ -182,7 +192,9 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
         timeSignedIn = findViewById(R.id.tvTimeSignedIn);
         timeSignedOff = findViewById(R.id.tvTimeSignedOff);
 
+        priority_setter();
         create();
+
 
     }
 
@@ -221,8 +233,6 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
                                 }
                             });
                 }
-//                Intent profile_pass = new Intent(FrontScreenEmployee.this, EmployeeWeek.class);
-//                startActivity(profile_pass);
             }
         });
         sign_in.setOnClickListener(new View.OnClickListener() {
@@ -248,13 +258,17 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
         timeSignedIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signInCustomPicker();
+                setFlag(FLAG_START_TIME);
+                DialogFragment timePicker = new TimePickerFragment();
+                timePicker.show(getSupportFragmentManager(), "time picker");
             }
         });
         timeSignedOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signOffCustomPicker();
+                setFlag(FLAG_END_TIME);
+                DialogFragment timePicker = new TimePickerFragment();
+                timePicker.show(getSupportFragmentManager(), "time picker");
             }
 
         });
@@ -289,6 +303,25 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
                             startActivity(i);
                         }
                     });
+        }
+    }
+
+    public void priority_setter() {
+        String day_pass = asWeek();
+        if (day_pass.equalsIgnoreCase("Monday")) {
+            setPriority(1);
+        } else if (day_pass.equalsIgnoreCase("Tuesday")) {
+            setPriority(2);
+        } else if (day_pass.equalsIgnoreCase("Wednesday")) {
+            setPriority(3);
+        } else if (day_pass.equalsIgnoreCase("Thursday")) {
+            setPriority(4);
+        } else if (day_pass.equalsIgnoreCase("Friday")) {
+            setPriority(5);
+        } else if (day_pass.equalsIgnoreCase("Saturday")) {
+            setPriority(6);
+        } else if (day_pass.equalsIgnoreCase("Sunday")) {
+            setPriority(7);
         }
     }
 
@@ -384,6 +417,7 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
 
             String mUid = currentUser.getUid();
             Map<String, Object> note = new HashMap<>();
+            note.put("priority", getPriority());
             Map<String, Object> past_week = new HashMap<>();
             past_week.put(history_maker(), history_maker());
 
@@ -570,4 +604,6 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
             }
         }
     }
+
+
 }

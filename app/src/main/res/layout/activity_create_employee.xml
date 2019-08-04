@@ -17,14 +17,15 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:hint="Name"
+        android:hint="@string/name"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/etEmpCodeCreate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCreateTitle"
-        app:layout_constraintVertical_bias="0.081" />
+        app:layout_constraintVertical_bias="0.081"
+        tools:ignore="Autofill" />
 
     <EditText
         android:id="@+id/etEmpCodeCreate"
@@ -42,7 +43,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEmpCreateName" />
+        app:layout_constraintTop_toBottomOf="@+id/etEmpCreateName"
+        tools:ignore="Autofill" />
 
     <EditText
         android:id="@+id/uyePasswordConfirm"
@@ -61,22 +63,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/uyePassword" />
+        app:layout_constraintTop_toBottomOf="@+id/uyePassword"
+        tools:ignore="Autofill" />
 
     <TextView
         android:id="@+id/tvCreateTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:text="@string/create_account"
         android:textColor="#9C27B0"
         android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.08" />
+        app:layout_constraintBottom_toTopOf="@+id/etEmpCreateName" />
 
     <EditText
         android:id="@+id/uyeEmail"
@@ -94,7 +95,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etEmpCodeCreate" />
+        app:layout_constraintTop_toBottomOf="@id/etEmpCodeCreate"
+        tools:ignore="Autofill" />
 
     <EditText
         android:id="@+id/uyePassword"
@@ -112,7 +114,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/uyeEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/uyeEmail"
+        tools:ignore="Autofill" />
 
     <Button
         android:id="@+id/uyeSignUp"

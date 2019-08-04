@@ -18,7 +18,9 @@
         app:layout_constraintBottom_toTopOf="@+id/tvTimeOut"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvDayOfWeek"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
     <TextView
         android:id="@+id/tvTotalTime"
         android:layout_width="wrap_content"
@@ -26,10 +28,11 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/total_hours"
-        android:textSize="30sp"
         android:textColor="@color/Blue_text"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/btConfirmEdit"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cbSick"
         app:layout_constraintVertical_bias=".5" />
@@ -44,7 +47,7 @@
         android:textColor="#FFFF"
         app:layout_constraintBottom_toTopOf="@+id/btBackEdit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTotalTime" />
 
@@ -63,6 +66,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btConfirmEdit"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.95" />
 
@@ -70,8 +74,8 @@
         android:id="@+id/cbLunchEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/lunch"
@@ -87,8 +91,8 @@
         android:id="@+id/cbHoliday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/holiday"
@@ -104,8 +108,8 @@
         android:id="@+id/cbSick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/sick"
@@ -131,8 +135,8 @@
         app:layout_constraintEnd_toStartOf="@+id/tvTimeOut"
         app:layout_constraintHorizontal_bias="0.377"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.241" />
+        app:layout_constraintTop_toBottomOf="@+id/tvDayOfWeek"
+        app:layout_constraintVertical_bias="0.087" />
 
     <TextView
         android:id="@+id/tvTimeOut"
@@ -141,14 +145,14 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/signed_out"
-        android:textSize="30sp"
         android:textColor="#9C27B0"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.924"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.241" />
+        app:layout_constraintTop_toBottomOf="@+id/tvDayOfWeek"
+        app:layout_constraintVertical_bias="0.085" />
 
     <TextView
         android:id="@+id/tvDayOfWeek"

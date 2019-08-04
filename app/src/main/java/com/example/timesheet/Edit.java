@@ -82,6 +82,9 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
     public static final int FLAG_END_TIME = 1;
     private int flag = 0;
 
+    private int priority = 0;
+
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public String getUser() {
@@ -225,6 +228,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         ImageView delete = findViewById(R.id.img_delete);
 
         mAuth = FirebaseAuth.getInstance();
+        priority_setter();
         create();
         checkbox();
         checkbox_holiday();
@@ -426,11 +430,30 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         }
     }
 
+    public void priority_setter() {
+        String day_pass = getDay();
+        if (day_pass.equalsIgnoreCase("Monday")) {
+            setPriority(1);
+        } else if (day_pass.equalsIgnoreCase("Tuesday")) {
+            setPriority(2);
+        } else if (day_pass.equalsIgnoreCase("Wednesday")) {
+            setPriority(3);
+        } else if (day_pass.equalsIgnoreCase("Thursday")) {
+            setPriority(4);
+        } else if (day_pass.equalsIgnoreCase("Friday")) {
+            setPriority(5);
+        } else if (day_pass.equalsIgnoreCase("Saturday")) {
+            setPriority(6);
+        } else if (day_pass.equalsIgnoreCase("Sunday")) {
+            setPriority(7);
+        }
+    }
     public void create() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
 
             Map<String, Object> note = new HashMap<>();
+            note.put("priority", getPriority());
 
             db.collection("Users").document(getUser()).collection(weekEnding()).document(getDay())
                     .set(note, SetOptions.merge())
@@ -673,5 +696,13 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
 
     public void setHoliday(boolean holiday) {
         this.holiday = holiday;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }

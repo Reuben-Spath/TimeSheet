@@ -66,7 +66,6 @@ public class MainActivity extends BaseActivity implements
             return;
         }
 
-
         showProgressDialog();
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -148,12 +147,9 @@ public class MainActivity extends BaseActivity implements
         } else if (i == R.id.tvCreate) {
             Intent create_pass = new Intent(MainActivity.this, CreateChoice.class);
             startActivity(create_pass);
-//            Intent create_pass = new Intent(MainActivity.this, gridLayout.class);
-//            startActivity(create_pass);
         } else if (i == R.id.tvPasswordRetrieval) {
             Intent retrieval = new Intent(MainActivity.this, PasswordRetrieval.class);
             startActivity(retrieval);
-
         }
     }
 }

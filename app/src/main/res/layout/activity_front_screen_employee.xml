@@ -96,14 +96,15 @@
         android:id="@+id/tvTimeSignedIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:textColor="#9C27B0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias=".25"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".55"
+        app:layout_constraintTop_toBottomOf="@+id/btSignIn"
+        app:layout_constraintVertical_bias="0.135"
         tools:text="TIme Signed @string/app_name" />
 
 
@@ -111,14 +112,15 @@
         android:id="@+id/tvTimeSignedOff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:textColor="#9C27B0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".55"
+        app:layout_constraintTop_toBottomOf="@+id/btSignOff"
+        app:layout_constraintVertical_bias="0.135"
         tools:text="TIme Signed @string/app_name" />
 
     <Button
