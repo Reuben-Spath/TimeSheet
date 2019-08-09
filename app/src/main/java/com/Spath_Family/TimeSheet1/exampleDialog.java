@@ -1,4 +1,4 @@
-package com.example.timesheet;
+package com.Spath_Family.TimeSheet1;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
+
 
 public class exampleDialog extends AppCompatDialogFragment {
 

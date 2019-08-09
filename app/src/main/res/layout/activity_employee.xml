@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Employee">
+    tools:context="com.Spath_Family.TimeSheet1.Employee">
 
     <ImageView
         android:id="@+id/draw_history_mng"

@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:641285682665:android:ff5b464a1519011f",
         "android_client_info": {
-          "package_name": "com.example.timesheet"
+          "package_name": "com.Spath_Family.TimeSheet1"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "641285682665-fmg8ibrqh5f63cir4sucp5jqfem0ini3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.timesheet",
+            "package_name": "com.Spath_Family.TimeSheet1",
             "certificate_hash": "68cb51b4e012251ebf1c6592ce76577268ef951a"
           }
         },

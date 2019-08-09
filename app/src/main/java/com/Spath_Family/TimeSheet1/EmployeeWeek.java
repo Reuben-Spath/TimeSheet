@@ -1,11 +1,10 @@
-package com.example.timesheet;
+package com.Spath_Family.TimeSheet1;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -274,7 +273,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                    Log.d(TAG, document.getId() + " => " + document.getData());
+//                                    Log.d(TAG, document.getId() + " => " + document.getData());
                                     if (document.getData().containsValue(input_text)) {
                                         setInput_text("Day of the week:, Start Time:, Finish Time:, Total Time: \n");
                                         info(input_text);
@@ -288,7 +287,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                     }
                                 }
                             } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
+//                                Log.d(TAG, "Error getting documents: ", task.getException());
                             }
                         }
                     });
@@ -306,15 +305,15 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                 public void onEvent(@Nullable DocumentSnapshot snapshot,
                                     @Nullable FirebaseFirestoreException e) {
                     if (e != null) {
-                        Log.w(TAG, "Listen failed.", e);
+//                        Log.w(TAG, "Listen failed.", e);
                         return;
                     }
 
                     if (snapshot != null && snapshot.exists()) {
-                        Log.d(TAG, "Current data: " + snapshot.getData());
+//                        Log.d(TAG, "Current data: " + snapshot.getData());
                         EmpCode.setText(snapshot.getString("Employer Code"));
                     } else {
-                        Log.d(TAG, "Current data: null");
+//                        Log.d(TAG, "Current data: null");
                     }
                 }
             });
@@ -370,7 +369,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                     finish = "";
                                 }
 
-                                Log.d(TAG, "onEvent: " + data);
+//                                Log.d(TAG, "onEvent: " + data);
 
                                 if (documentId.equals("Monday")) {
                                     if (holiday) {

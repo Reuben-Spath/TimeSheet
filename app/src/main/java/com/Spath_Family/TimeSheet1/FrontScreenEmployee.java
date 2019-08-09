@@ -1,10 +1,9 @@
-package com.example.timesheet;
+package com.Spath_Family.TimeSheet1;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -427,13 +426,13 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "DocumentSnapshot successfully written!");
+//                            Log.d(TAG, "DocumentSnapshot successfully written!");
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error writing document", e);
+//                            Log.w(TAG, "Error writing document", e);
                         }
                     });
             db.collection("Users").document(mUid).collection("History").document("History")
@@ -441,13 +440,13 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "DocumentSnapshot successfully written!");
+//                            Log.d(TAG, "DocumentSnapshot successfully written!");
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error writing document", e);
+//                            Log.w(TAG, "Error writing document", e);
                         }
                     });
         }

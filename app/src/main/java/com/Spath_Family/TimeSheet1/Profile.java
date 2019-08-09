@@ -1,15 +1,15 @@
-package com.example.timesheet;
+package com.Spath_Family.TimeSheet1;
 
 import android.content.pm.ActivityInfo;
-import androidx.annotation.NonNull;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -85,7 +85,7 @@ public class Profile extends FrontScreenEmployee {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(Profile.this, "An Error Occurred", Toast.LENGTH_SHORT).show();
-                            Log.d("Failure to add", e.toString());
+//                            Log.d("Failure to add", e.toString());
                         }
                     });
         } else {

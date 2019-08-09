@@ -1,9 +1,8 @@
-package com.example.timesheet;
+package com.Spath_Family.TimeSheet1;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -256,7 +255,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
+//                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
                                 Toast.makeText(Edit.this, "Deleted!", Toast.LENGTH_SHORT).show();
                                 create();
                                 finish();
@@ -265,7 +264,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error deleting document", e);
+//                                Log.w(TAG, "Error deleting document", e);
                             }
                         });
 
@@ -363,7 +362,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                         public void onEvent(@androidx.annotation.Nullable DocumentSnapshot snapshot,
                                             @Nullable FirebaseFirestoreException e) {
                             if (e != null) {
-                                Log.w(TAG, "Listen failed.", e);
+//                                Log.w(TAG, "Listen failed.", e);
                                 return;
                             }
 
@@ -383,7 +382,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                             }
 
                             if (snapshot.exists()) {
-                                Log.d(TAG, "Current data: " + snapshot.getData());
+//                                Log.d(TAG, "Current data: " + snapshot.getData());
 
                                 if (snapshot.getString("signInN") != null) {
                                     signedIn.setText(snapshot.getString("signInN"));
@@ -423,7 +422,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                                     }
                                 }
                             } else {
-                                Log.d(TAG, "Current data: null");
+//                                Log.d(TAG, "Current data: null");
                             }
                         }
                     });
@@ -460,13 +459,13 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "DocumentSnapshot successfully written!");
+//                            Log.d(TAG, "DocumentSnapshot successfully written!");
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error writing document", e);
+//                            Log.w(TAG, "Error writing document", e);
                         }
                     });
         }
@@ -669,14 +668,14 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.w(TAG, "onSuccess: ");
+//                            Log.w(TAG, "onSuccess: ");
                             Toast.makeText(Edit.this, "Saved!", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.d("Failure to add", e.toString());
+//                            Log.d("Failure to add", e.toString());
                         }
                     });
         }

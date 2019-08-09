@@ -1,10 +1,9 @@
-package com.example.timesheet;
+package com.Spath_Family.TimeSheet1;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -283,7 +282,7 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                    Log.d(TAG, document.getId() + " => " + document.getData());
+//                                    Log.d(TAG, document.getId() + " => " + document.getData());
                                     if (document.getData().containsValue(input_text)) {
                                         setInput_text("Day of the week:, Start Time:, Finish Time:, Total Time: \n");
                                         info_pt_2(input_text);
@@ -297,7 +296,7 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                     }
                                 }
                             } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
+//                                Log.d(TAG, "Error getting documents: ", task.getException());
                             }
                         }
                     });
@@ -388,7 +387,7 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                     finish = "";
                                 }
 
-                                Log.d(TAG, "onEvent: " + data);
+//                                Log.d(TAG, "onEvent: " + data);
 
 
                                 if (documentId.equals("Monday")) {

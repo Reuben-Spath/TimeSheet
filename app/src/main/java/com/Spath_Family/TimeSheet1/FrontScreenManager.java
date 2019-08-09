@@ -1,10 +1,9 @@
-package com.example.timesheet;
+package com.Spath_Family.TimeSheet1;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,15 +98,15 @@ public class FrontScreenManager extends FragmentActivity {
                 public void onEvent(@Nullable DocumentSnapshot snapshot,
                                     @Nullable FirebaseFirestoreException e) {
                     if (e != null) {
-                        Log.w(TAG, "Listen failed.", e);
+//                        Log.w(TAG, "Listen failed.", e);
                         return;
                     }
 
                     if (snapshot != null && snapshot.exists()) {
-                        Log.d(TAG, "Current data: " + snapshot.getData());
+//                        Log.d(TAG, "Current data: " + snapshot.getData());
                         mng_code.setText(snapshot.getString("empCode"));
                     } else {
-                        Log.d(TAG, "Current data: null");
+//                        Log.d(TAG, "Current data: null");
                     }
                 }
             });
@@ -155,8 +154,8 @@ public class FrontScreenManager extends FragmentActivity {
                                             if (task.isSuccessful()) {
 
                                                 for (final DocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                                    Log.d(TAG, document.getId() + " => " + document.getData());
-                                                    Log.d(TAG, "onComplete: " + document.getString("name"));
+//                                                    Log.d(TAG, document.getId() + " => " + document.getData());
+//                                                    Log.d(TAG, "onComplete: " + document.getString("name"));
 
                                                     String name = document.getString("name");
                                                     String id = document.getId();
@@ -199,7 +198,7 @@ public class FrontScreenManager extends FragmentActivity {
                                                 mainListView.setAdapter(listAdapter);
 
                                             } else {
-                                                Log.d(TAG, "Error getting documents: ", task.getException());
+//                                                Log.d(TAG, "Error getting documents: ", task.getException());
                                             }
                                         }
                                     });

@@ -1,17 +1,17 @@
-package com.example.timesheet;
+package com.Spath_Family.TimeSheet1;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,6 +25,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Objects;
+
+//import android.util.Log;
+//import com.Spath_Family.TimeSheet1.R;
 
 public class CreateCompany extends AppCompatActivity implements View.OnClickListener {
 
@@ -85,7 +88,7 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
+//                                Log.d(TAG, document.getId() + " => " + document.getData());
                                 String temp_code = document.getString("empCode");
                                 if(empCode.equalsIgnoreCase(temp_code)){
                                     setIndi_code(false);
@@ -94,7 +97,7 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
                             }
                         } else {
                             setIndi_code(false);
-                            Log.d(TAG, "Error getting documents: ", task.getException());
+//                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });

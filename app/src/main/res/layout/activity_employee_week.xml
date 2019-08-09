@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:alwaysDrawnWithCache="false"
     android:screenOrientation="portrait"
-    tools:context=".EmployeeWeek">
+    tools:context="com.Spath_Family.TimeSheet1.EmployeeWeek">
 
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/gridLayout"

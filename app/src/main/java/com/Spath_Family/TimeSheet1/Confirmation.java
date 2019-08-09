@@ -1,8 +1,7 @@
-package com.example.timesheet;
+package com.Spath_Family.TimeSheet1;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +15,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.SetOptions;
+
+//import android.util.Log;
+//import com.Spath_Family.TimeSheet1.R;
 
 public class Confirmation extends FrontScreenEmployee {
 
@@ -134,13 +136,13 @@ public class Confirmation extends FrontScreenEmployee {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.w(TAG, "onSuccess: ");
+//                            Log.w(TAG, "onSuccess: ");
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.d("Failure to add", e.toString());
+//                            Log.d("Failure to add", e.toString());
 
                         }
                     });

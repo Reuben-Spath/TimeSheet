@@ -1,9 +1,8 @@
-package com.example.timesheet;
+package com.Spath_Family.TimeSheet1;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -61,7 +60,7 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void signIn(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
+//        Log.d(TAG, "signIn:" + email);
         if (!validateForm()) {
             return;
         }
@@ -77,7 +76,7 @@ public class MainActivity extends BaseActivity implements
                                 tester();
                             }
                         } else {
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+//                            Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
                         hideProgressDialog();
@@ -97,18 +96,18 @@ public class MainActivity extends BaseActivity implements
                     public void onEvent(@Nullable DocumentSnapshot snapshot,
                                         @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
+//                            Log.w(TAG, "Listen failed.", e);
                             return;
                         }
 
                         if (snapshot != null && snapshot.exists()) {
-                            Log.d(TAG, "Current data: " + snapshot.getData());
+//                            Log.d(TAG, "Current data: " + snapshot.getData());
                             snapshot.getBoolean("company");
                             if( snapshot.getBoolean("company")!=null){
                                 goToFrontScreenManager();
                             }
                         } else {
-                            Log.d(TAG, "Current data: null");
+//                            Log.d(TAG, "Current data: null");
                             goToFrontScreen();
                         }
                     }
