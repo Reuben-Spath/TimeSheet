@@ -5,36 +5,27 @@ import com.google.firebase.database.Exclude;
 public class NoteEmployee {
 
     private String documentId;
-    private String signInN;
-    private String signOutN;
 
-//    private String empCode;
-//    private String name;
-
-    private String timeStr;
-    private float timeInt;
     private boolean ifLunch;
     private boolean ifHoliday;
     private boolean ifSick;
 
-    private long startH;
-    private long startM;
-    private long finishH;
-    private long finishM;
-
-    private long h4t;
-    private long m4t;
+    private float start;
+    private float finish;
+    private String start_s;
+    private String finish_s;
 
     NoteEmployee() {
         //public no-arg constructor needed
     }
 
-    NoteEmployee(String timeStr, float timeInt, boolean ifLunch, String signInN, String signOutN) {
-        this.timeStr = timeStr;
-        this.timeInt = timeInt;
+    NoteEmployee(float start, float finish, boolean ifLunch, String start_s, String finish_s) {
+        this.start = start;
+        this.finish = finish;
         this.ifLunch = ifLunch;
-        this.signInN = signInN;
-        this.signOutN = signOutN;
+        this.start_s = start_s;
+        this.finish_s = finish_s;
+
     }
 
     @Exclude
@@ -44,106 +35,6 @@ public class NoteEmployee {
 
     void setDocumentId(String documentId) {
         this.documentId = documentId;
-    }
-
-    String getTimeStr() {
-        return timeStr;
-    }
-
-    void setTimeStr(String timeStr) {
-        this.timeStr = timeStr;
-    }
-
-    boolean getIfLunch() {
-        return ifLunch;
-    }
-
-    void setIfLunch(Boolean lunch) {
-        this.ifLunch = lunch;
-    }
-
-    float getTimeInt() {
-        return timeInt;
-    }
-
-    String getSignInN() {
-        return signInN;
-    }
-
-    public void setSignInN(String signInN) {
-        this.signInN = signInN;
-    }
-
-    String getSignOutN() {
-        return signOutN;
-    }
-
-    public void setSignOutN(String signOutN) {
-        this.signOutN = signOutN;
-    }
-
-//    public String getEmpCode() {
-//        return empCode;
-//    }
-//
-//    void setEmpCode(String empCode) {
-//        this.empCode = empCode;
-//    }
-
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-
-    long getStartH() {
-        return startH;
-    }
-
-    void setStartH(long startH) {
-        this.startH = startH;
-    }
-
-    long getStartM() {
-        return startM;
-    }
-
-    void setStartM(long startM) {
-        this.startM = startM;
-    }
-
-    long getFinishH() {
-        return finishH;
-    }
-
-    void setFinishH(long finishH) {
-        this.finishH = finishH;
-    }
-
-    long getFinishM() {
-        return finishM;
-    }
-
-    void setFinishM(long finishM) {
-        this.finishM = finishM;
-    }
-
-    long getH4t() {
-        return h4t;
-    }
-
-    void setH4t(long h4t) {
-        this.h4t = h4t;
-    }
-
-    long getM4t() {
-        return m4t;
-    }
-
-    void setM4t(long m4t) {
-        this.m4t = m4t;
     }
 
     boolean isIfSick() {
@@ -160,5 +51,45 @@ public class NoteEmployee {
 
     void setIfHoliday(boolean ifHoliday) {
         this.ifHoliday = ifHoliday;
+    }
+
+    public float getStart() {
+        return start;
+    }
+
+    public void setStart(float start) {
+        this.start = start;
+    }
+
+    public float getFinish() {
+        return finish;
+    }
+
+    public void setFinish(float finish) {
+        this.finish = finish;
+    }
+
+    boolean getIfLunch() {
+        return ifLunch;
+    }
+
+    void setIfLunch(Boolean lunch) {
+        this.ifLunch = lunch;
+    }
+
+    public String getStart_s() {
+        return start_s;
+    }
+
+    public void setStart_s(String start_s) {
+        this.start_s = start_s;
+    }
+
+    public String getFinish_s() {
+        return finish_s;
+    }
+
+    public void setFinish_s(String finish_s) {
+        this.finish_s = finish_s;
     }
 }

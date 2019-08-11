@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -63,33 +64,6 @@ public class CreateEmployee extends AppCompatActivity implements View.OnClickLis
         btn_signup.setOnClickListener(this);
     }
 
-//    private boolean indi(final String empCode) {
-//        final FirebaseFirestore db1 = FirebaseFirestore.getInstance();
-//        db1.collection("Users")
-//                .whereEqualTo("Employer Code", empCode)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Log.d(TAG, document.getId() + " => " + document.getData());
-//                                String temp_code = document.getString("Employer Code");
-//                                if(temp_code!=empCode){
-//                                    indi_code = true;
-//                                }else{
-//                                    indi_code = false;
-//                                }
-//                            }
-//                        } else {
-//
-//                            Log.d(TAG, "Error getting documents: ", task.getException());
-//                        }
-//                    }
-//                });
-//        return indi_code;
-//    }
-
     private void registerUser() {
         //get user input
         final String name = txt_employer_name.getText().toString().trim();
@@ -98,13 +72,6 @@ public class CreateEmployee extends AppCompatActivity implements View.OnClickLis
         String password = txt_password_signup.getText().toString().trim();
         String confirm = txt_passwordConfirm.getText().toString().trim();
 
-//        indi_code=false;
-
-//        if (!indi(empCode)) {
-//            Toast.makeText(CreateEmployee.this, "That code is already in use", Toast.LENGTH_SHORT).show();
-//            //stop further execution
-//            return;
-//        }
         if (TextUtils.isEmpty(name)) { //email is empty
             Toast.makeText(this, "Please enter your first name", Toast.LENGTH_SHORT).show();
             //stop further execution
@@ -150,16 +117,16 @@ public class CreateEmployee extends AppCompatActivity implements View.OnClickLis
 
                     if (user != null) {
                         EmpDoc empDoc = new EmpDoc(name, empCode);
-//                        NoteEmployee noteEmployee = new NoteEmployee();
-//                        noteEmployee.setName(name);
-//                        noteEmployee.setEmpCode(empCode);
-                        // user registered, start profile activity
                         newUser();
                         finish();
                         startActivity(new Intent(CreateEmployee.this, MainActivity.class));
                     }
                 } else {
-                    Toast.makeText(CreateEmployee.this, "Could not create account. Please try again", Toast.LENGTH_SHORT).show();
+                    if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                        Toast.makeText(CreateEmployee.this, "This account is already registered", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(CreateEmployee.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

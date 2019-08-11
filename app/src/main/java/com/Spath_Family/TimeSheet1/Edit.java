@@ -12,12 +12,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,19 +25,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
-
-    Calendar calendar = Calendar.getInstance();
-
-    private static final String TAG = "Edit";
     private FirebaseAuth mAuth;
 
     private String day;
@@ -54,34 +43,22 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
     private TextView signedOut;
     private TextView totalHours;
 
-//    private TimePickerDialog timePickerDialog;
-//    private int i;
-
-    private String pass;
-    private float longpass;
+    private static float lunch = (float) 0.5;
 
     private boolean hadLunch;
     private boolean sick;
     private boolean holiday;
 
-    private static String signedInS;
-    private static String signedOff;
-    private static float timeWorkedWLunch;
-    private static float timeWorked;
-
-    private static long startMin;
-    private static long startHr;
-    private static long finishMin;
-    private static long finishHr;
-
-    private static long hours4today;
-    private static long minutes4today;
+    private String start_s;
+    private String finish_s;
+    private float start;
+    private float finish;
 
     public static final int FLAG_START_TIME = 0;
     public static final int FLAG_END_TIME = 1;
     private int flag = 0;
 
-    private int priority = 0;
+    private String end;
 
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -102,14 +79,6 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         this.day = day;
     }
 
-    public String getPass() {
-        return pass;
-    }
-
-    public void setPass(String pass) {
-        this.pass = pass;
-    }
-
     public boolean getHadLunch() {
         return hadLunch;
     }
@@ -118,90 +87,15 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         this.hadLunch = hadLunch;
     }
 
-    public float getLongpass() {
-        return longpass;
-    }
+//    public void setLongpass(float longpass) {
+//        this.longpass = longpass;
+//    }
 
-    public void setLongpass(float longpass) {
-        this.longpass = longpass;
-    }
+    private float start_time;
+    private float finish_time;
 
-    public long getStartMin() {
-        return startMin;
-    }
+    private FrontScreenEmployee fse = new FrontScreenEmployee();
 
-    public void setStartMin(long startMin) {
-        Edit.startMin = startMin;
-    }
-
-    public long getStartHr() {
-        return startHr;
-    }
-
-    public void setStartHr(long startHr) {
-        Edit.startHr = startHr;
-    }
-
-    public long getFinishMin() {
-        return finishMin;
-    }
-
-    public void setFinishMin(long finishMin) {
-        Edit.finishMin = finishMin;
-    }
-
-    public long getFinishHr() {
-        return finishHr;
-    }
-
-    public void setFinishHr(long finishHr) {
-        Edit.finishHr = finishHr;
-    }
-
-    public long getHours4today() {
-        return hours4today;
-    }
-
-    public void setHours4today(long hours4today) {
-        Edit.hours4today = hours4today;
-    }
-
-    public long getMinutes4today() {
-        return minutes4today;
-    }
-
-    public void setMinutes4today(long minutes4today) {
-        Edit.minutes4today = minutes4today;
-    }
-
-    public String getSignedIn() {
-        return signedInS;
-    }
-
-    public void setSignedIn(String signedIn) {
-        Edit.signedInS = signedIn;
-    }
-
-    public String getSignedOff() {
-        return signedOff;
-    }
-
-    public void setSignedOff(String signedOff) {
-        Edit.signedOff = signedOff;
-    }
-
-
-    public void setTimeWorked(float timeWorked) {
-        Edit.timeWorked = timeWorked;
-    }
-
-    public float getTimeWorked() {
-        return timeWorked;
-    }
-
-    public float getTimeWorkedWLunch() {
-        return timeWorkedWLunch;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,6 +111,8 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         back = findViewById(R.id.btBackEdit);
 
 
+        setEnd(fse.history_maker());
+
         TextView dayOfWeek = findViewById(R.id.tvDayOfWeek);
         signedIn = findViewById(R.id.tvTimeIn);
         signedOut = findViewById(R.id.tvTimeOut);
@@ -227,8 +123,6 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         ImageView delete = findViewById(R.id.img_delete);
 
         mAuth = FirebaseAuth.getInstance();
-        priority_setter();
-        create();
         checkbox();
         checkbox_holiday();
         checkbox_sick();
@@ -237,12 +131,6 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getHadLunch()) {
-                    setPass(hours_worked_with_lunch());
-                } else {
-                    setPass(hours_worked_without_lunch());
-                }
-                setLongpass(getTimeWorked());
                 fullTimeSave();
                 finish();
             }
@@ -250,21 +138,14 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.collection("Users").document(getUser()).collection(weekEnding()).document(getDay())
+                db.collection("Users").document(getUser()).collection(getEnd()).document(getDay())
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-//                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
                                 Toast.makeText(Edit.this, "Deleted!", Toast.LENGTH_SHORT).show();
-                                create();
+//                                create();
                                 finish();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-//                                Log.w(TAG, "Error deleting document", e);
                             }
                         });
 
@@ -279,48 +160,43 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        int value = hourOfDay;
         String amPm;
+        if (hourOfDay > 12) {
+            amPm = "PM";
+            value = hourOfDay - 12;
+        } else if (hourOfDay == 12) {
+            amPm = "PM";
+        } else {
+            amPm = "AM";
+        }
         if (flag == FLAG_START_TIME) {
-            setStartHr(hourOfDay);
-            setStartMin(minute);
 
-            if (hourOfDay > 12) {
-                amPm = "PM";
-                hourOfDay = hourOfDay - 12;
-            } else {
-                amPm = "AM";
-            }
-            signedIn.setText(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minute, amPm));
-            setSignedIn(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minute, amPm));
+            float minutes = (float) minute / 60;
+            setStart_time(hourOfDay + minutes);
 
-            if (lunch1.isChecked()) {
-                totalHours.setText(hours_worked_with_lunch());
-            } else {
-                totalHours.setText(hours_worked_without_lunch());
-            }
+            setStart_s(String.format(Locale.getDefault(), "%d:%02d %s", value, minute, amPm));
+            signedIn.setText(getStart_s());
 
         } else if (flag == FLAG_END_TIME) {
+            float minutes = (float) minute / 60;
+            setFinish_time(hourOfDay + minutes);
 
-            setFinishHr(hourOfDay);
-            setFinishMin(minute);
-
-            if (hourOfDay > 12) {
-                amPm = "PM";
-                hourOfDay = hourOfDay - 12;
-            } else {
-                amPm = "AM";
-            }
-            signedOut.setText(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minute, amPm));
-            setSignedOff(String.format(Locale.getDefault(), "%d:%02d %s", hourOfDay, minute, amPm));
-
-            if (lunch1.isChecked()) {
-                totalHours.setText(hours_worked_with_lunch());
-            } else {
-                totalHours.setText(hours_worked_without_lunch());
-            }
-
+            setFinish_s(String.format(Locale.getDefault(), "%d:%02d %s", value, minute, amPm));
+            signedOut.setText(getFinish_s());
         }
+        totalHours.setText(text_update());
+
     }
+
+    public String text_update() {
+        return fse.timeworked(getHadLunch(), lunch, getStart(), getFinish()) + " hours";
+    }
+
+    public void call() {
+        fse.timeworked(getHadLunch(), lunch, getStart(), getFinish());
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -328,19 +204,19 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         signedIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                signInCustomPicker();
                 setFlag(FLAG_START_TIME);
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "time picker");
+//                totalHours.setText(text_update());
             }
         });
         signedOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                signOffCustomPicker();
                 setFlag(FLAG_END_TIME);
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "time picker");
+//                totalHours.setText(text_update());
             }
 
         });
@@ -356,45 +232,46 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
 
         if (currentUser != null) {
 
-            db.collection("Users").document(getUser()).collection(weekEnding()).document(getDay())
+            db.collection("Users").document(getUser()).collection(getEnd()).document(getDay())
                     .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                         @Override
                         public void onEvent(@androidx.annotation.Nullable DocumentSnapshot snapshot,
                                             @Nullable FirebaseFirestoreException e) {
                             if (e != null) {
-//                                Log.w(TAG, "Listen failed.", e);
                                 return;
                             }
-
+                            String total = "";
+                            float tot_time = 0;
                             if (Objects.requireNonNull(snapshot).toObject(NoteEmployee.class) != null) {
                                 NoteEmployee noteEmployee = snapshot.toObject(NoteEmployee.class);
 
-                                setPass(Objects.requireNonNull(noteEmployee).getTimeStr());
-                                setStartHr(noteEmployee.getStartH());
-                                setStartMin(noteEmployee.getStartM());
-                                setFinishHr(noteEmployee.getFinishH());
-                                setFinishMin(noteEmployee.getFinishM());
-                                setSignedOff(noteEmployee.getSignOutN());
-                                setSignedIn(noteEmployee.getSignInN());
-                                setMinutes4today(noteEmployee.getM4t());
-                                setHours4today(noteEmployee.getH4t());
-                                setHadLunch(noteEmployee.getIfLunch());
+                                if (noteEmployee != null) {
+                                    setStart_s(noteEmployee.getStart_s());
+                                    setFinish_s(noteEmployee.getFinish_s());
+                                    setFinish(noteEmployee.getFinish());
+                                    setStart(noteEmployee.getStart());
+                                    tot_time = noteEmployee.getFinish() - noteEmployee.getStart();
+
+                                }
+                                total = tot_time + " hours";
+                                totalHours.setText(total);
+                                signedIn.setText(getStart_s());
+                                signedOut.setText(getFinish_s());
+
+
                             }
 
                             if (snapshot.exists()) {
-//                                Log.d(TAG, "Current data: " + snapshot.getData());
 
-                                if (snapshot.getString("signInN") != null) {
-                                    signedIn.setText(snapshot.getString("signInN"));
-                                    setSignedIn(snapshot.getString("signInN"));
-                                }
-                                if (snapshot.getString("signOutN") != null) {
-                                    signedOut.setText(snapshot.getString("signOutN"));
-                                    setSignedOff(snapshot.getString("signOutN"));
-                                }
-                                if (snapshot.getString("timeStr") != null) {
-                                    totalHours.setText(snapshot.getString("timeStr"));
-                                }
+//                                if (snapshot.getString("start_s") != null) {
+//                                    signedIn.setText(snapshot.getString("start_s"));
+//                                    setStart_s(snapshot.getString("start_s"));
+//                                }
+//                                if (snapshot.getString("finish_s") != null) {
+//                                    signedOut.setText(snapshot.getString("finish_s"));
+//                                    setFinish_s(snapshot.getString("finish_s"));
+//                                }
+//
                                 if (snapshot.getBoolean("ifLunch") != null) {
                                     //noinspection ConstantConditions
                                     if (snapshot.getBoolean("ifLunch")) {
@@ -421,51 +298,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                                         cbHoliday.setChecked(false);
                                     }
                                 }
-                            } else {
-//                                Log.d(TAG, "Current data: null");
                             }
-                        }
-                    });
-        }
-    }
-
-    public void priority_setter() {
-        String day_pass = getDay();
-        if (day_pass.equalsIgnoreCase("Monday")) {
-            setPriority(1);
-        } else if (day_pass.equalsIgnoreCase("Tuesday")) {
-            setPriority(2);
-        } else if (day_pass.equalsIgnoreCase("Wednesday")) {
-            setPriority(3);
-        } else if (day_pass.equalsIgnoreCase("Thursday")) {
-            setPriority(4);
-        } else if (day_pass.equalsIgnoreCase("Friday")) {
-            setPriority(5);
-        } else if (day_pass.equalsIgnoreCase("Saturday")) {
-            setPriority(6);
-        } else if (day_pass.equalsIgnoreCase("Sunday")) {
-            setPriority(7);
-        }
-    }
-    public void create() {
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-
-            Map<String, Object> note = new HashMap<>();
-            note.put("priority", getPriority());
-
-            db.collection("Users").document(getUser()).collection(weekEnding()).document(getDay())
-                    .set(note, SetOptions.merge())
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-//                            Log.d(TAG, "DocumentSnapshot successfully written!");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-//                            Log.w(TAG, "Error writing document", e);
                         }
                     });
         }
@@ -473,9 +306,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
 
     public void checkbox() {
         setHadLunch(false);
-        totalHours.setText(hours_worked_without_lunch());
-        setPass(hours_worked_without_lunch());
-        setLongpass(getTimeWorked());
+        totalHours.setText(text_update());
 
         lunch1 = findViewById(R.id.cbLunchEdit);
 
@@ -484,15 +315,11 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
             public void onClick(View v) {
                 if (lunch1.isChecked()) {
                     setHadLunch(true);
-                    totalHours.setText(hours_worked_with_lunch());
-                    setPass(hours_worked_with_lunch());
-                    setLongpass(getTimeWorkedWLunch());
+                    totalHours.setText(text_update());
 
                 } else {
                     setHadLunch(false);
-                    totalHours.setText(hours_worked_without_lunch());
-                    setPass(hours_worked_without_lunch());
-                    setLongpass(getTimeWorked());
+                    totalHours.setText(text_update());
                 }
             }
         });
@@ -511,9 +338,12 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                 if (cbHoliday.isChecked()) {
                     cbSick.setEnabled(false);
                     setHoliday(true);
+                    String holiday = "Holiday";
+                    totalHours.setText(holiday);
                 } else {
                     cbSick.setEnabled(true);
                     setHoliday(false);
+                    totalHours.setText(text_update());
                 }
             }
         });
@@ -532,26 +362,16 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                 if (cbSick.isChecked()) {
                     cbHoliday.setEnabled(false);
                     setSick(true);
+                    String sick = "Sick";
+                    totalHours.setText(sick);
+
                 } else {
                     cbHoliday.setEnabled(true);
                     setSick(false);
+                    totalHours.setText(text_update());
                 }
             }
         });
-    }
-
-    public String weekEnding() {
-        int weekday = calendar.get(Calendar.DAY_OF_WEEK);
-        int days = Calendar.SUNDAY - weekday;
-        if (days < 0) {
-            // this will usually be the case since Calendar.SUNDAY is the smallest
-            days += 7;
-        }
-        calendar.add(Calendar.DAY_OF_YEAR, days);
-
-        DateFormat df = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
-
-        return df.format(calendar.getTime());
     }
 
     @Override
@@ -563,122 +383,41 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         return super.onKeyDown(keyCode, event);
     }
 
-    public String hours_worked_without_lunch() {
-
-        setHours4today(getFinishHr() - getStartHr());
-        setMinutes4today(getFinishMin() - getStartMin());
-
-        if (getHours4today() == 0 && getMinutes4today() < 0) {
-            setHours4today(getHours4today() + 24);
-        }
-        if (getHours4today() < 0) {
-            setHours4today(getHours4today() + 24);
-        }
-        if (getMinutes4today() > 60) {
-            setHours4today(getHours4today() + 1);
-            setMinutes4today(getMinutes4today() - 60);
-        }
-        if (getMinutes4today() < 0) {
-            setHours4today(getHours4today() - 1);
-            setMinutes4today(getMinutes4today() + 60);
-        }
-
-        float minutes = (float) getMinutes4today() / 60;
-        setTimeWorked(getHours4today() + minutes);
-
-        if (getMinutes4today() < 10 && getMinutes4today() > 0) {
-            return getHours4today() + ".0" + getMinutes4today() + " hours";
-
-        } else if (getHours4today() < 1 && getMinutes4today() > 30) {
-            return getMinutes4today() + " minutes";
-
-        } else {
-            return getHours4today() + "." + getMinutes4today() + " hours";
-        }
-    }
-
-    public String hours_worked_with_lunch() {
-
-        setHours4today(getFinishHr() - getStartHr());
-        setMinutes4today(getFinishMin() - getStartMin() - 30);
-
-        if (getHours4today() == 0 && getMinutes4today() < 0) {
-            setHours4today(getHours4today() + 24);
-        }
-        if (getHours4today() < 0) {
-            setHours4today(getHours4today() + 24);
-        }
-        if (getMinutes4today() > 60) {
-            setHours4today(getHours4today() + 1);
-            setMinutes4today(getMinutes4today() - 60);
-        }
-        if (getMinutes4today() < 0) {
-            setHours4today(getHours4today() - 1);
-            setMinutes4today(getMinutes4today() + 60);
-        }
-
-        if (getHours4today() < 1) {
-            return getMinutes4today() + " minutes";
-        } else {
-
-            if (getMinutes4today() < 0) {
-
-                setHours4today(getHours4today() - 1);
-                setMinutes4today(getMinutes4today() + 60);
-            }
-
-            float minutes = (float) getMinutes4today() / 60;
-            setTimeWorked(getHours4today() + minutes);
-
-            if (getMinutes4today() < 10 && getMinutes4today() > 0) {
-                return getHours4today() + ".0" + getMinutes4today() + " hours";
-
-            } else {
-                return getHours4today() + "." + getMinutes4today() + " hours";
-            }
-        }
-    }
-
     public void fullTimeSave() {
 
+        FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
 
-            NoteEmployee noteEmployee = new NoteEmployee(getPass(), getLongpass(), getHadLunch(), getSignedIn(), getSignedOff());
-
-            noteEmployee.setStartH(getStartHr());
-            noteEmployee.setStartM(getStartMin());
-
-            noteEmployee.setFinishH(getFinishHr());
-            noteEmployee.setFinishM(getFinishMin());
-
-            if (getStartHr() == 0 && getStartMin() == 0 && getFinishHr() == 0 && getFinishMin() == 0) {
-                noteEmployee.setTimeStr("");
-            }
-            noteEmployee.setH4t(getHours4today());
-            noteEmployee.setM4t(getMinutes4today());
-
-            noteEmployee.setIfLunch(getHadLunch());
-
-            noteEmployee.setIfHoliday(isHoliday());
+            NoteEmployee noteEmployee = new NoteEmployee(getStart_time(), getFinish_time(), getHadLunch(), getStart_s(), getFinish_s());
 
             noteEmployee.setIfSick(isSick());
+            noteEmployee.setIfHoliday(isHoliday());
 
-            db.collection("Users").document(getUser()).collection(weekEnding()).document(getDay())
+            db.collection("Users").document(getUser()).collection(getEnd()).document(getDay())
                     .set(noteEmployee, SetOptions.merge())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-//                            Log.w(TAG, "onSuccess: ");
                             Toast.makeText(Edit.this, "Saved!", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-//                            Log.d("Failure to add", e.toString());
                         }
                     });
         }
+    }
+
+    public String getStart_s() {
+        return start_s;
+    }
+
+    public void setStart_s(String start_s) {
+        this.start_s = start_s;
+    }
+
+    public String getFinish_s() {
+        return finish_s;
+    }
+
+    public void setFinish_s(String finish_s) {
+        this.finish_s = finish_s;
     }
 
     public boolean isSick() {
@@ -697,11 +436,43 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         this.holiday = holiday;
     }
 
-    public int getPriority() {
-        return priority;
+    public float getStart_time() {
+        return start_time;
     }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
+    public void setStart_time(float start_time) {
+        this.start_time = start_time;
+    }
+
+    public float getFinish_time() {
+        return finish_time;
+    }
+
+    public void setFinish_time(float finish_time) {
+        this.finish_time = finish_time;
+    }
+
+    public String getEnd() {
+        return end;
+    }
+
+    public void setEnd(String end) {
+        this.end = end;
+    }
+
+    public float getStart() {
+        return start;
+    }
+
+    public void setStart(float start) {
+        this.start = start;
+    }
+
+    public float getFinish() {
+        return finish;
+    }
+
+    public void setFinish(float finish) {
+        this.finish = finish;
     }
 }

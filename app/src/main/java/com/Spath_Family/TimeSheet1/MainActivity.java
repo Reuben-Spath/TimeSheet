@@ -31,15 +31,17 @@ public class MainActivity extends BaseActivity implements
     private EditText mPasswordField;
 
     private FirebaseAuth mAuth;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         mEmailField = findViewById(R.id.etEmpCreateName);
         mPasswordField = findViewById(R.id.etPassword);
-
 
         findViewById(R.id.btLogin).setOnClickListener(this);
         findViewById(R.id.tvCreate).setOnClickListener(this);
@@ -47,6 +49,33 @@ public class MainActivity extends BaseActivity implements
 
         mAuth = FirebaseAuth.getInstance();
 
+
+        if (user != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            final DocumentReference docRef = db.collection("Company").document(user.getUid());
+            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                    @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        return;
+                    }
+                    if (snapshot != null && snapshot.exists()) {
+                        snapshot.getBoolean("company");
+                        if (snapshot.getBoolean("company") != null) {
+                            goToFrontScreenManager();
+                            Toast.makeText(MainActivity.this, "Welcome Back!", Toast.LENGTH_SHORT).show();
+
+                        }
+                    } else {
+                        goToFrontScreen();
+                        Toast.makeText(MainActivity.this, "Welcome Back!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        }
     }
 
     public void goToFrontScreen() {
@@ -60,11 +89,9 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void signIn(String email, String password) {
-//        Log.d(TAG, "signIn:" + email);
         if (!validateForm()) {
             return;
         }
-
         showProgressDialog();
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -76,7 +103,6 @@ public class MainActivity extends BaseActivity implements
                                 tester();
                             }
                         } else {
-//                            Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
                         hideProgressDialog();
@@ -96,18 +122,15 @@ public class MainActivity extends BaseActivity implements
                     public void onEvent(@Nullable DocumentSnapshot snapshot,
                                         @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
-//                            Log.w(TAG, "Listen failed.", e);
                             return;
                         }
 
                         if (snapshot != null && snapshot.exists()) {
-//                            Log.d(TAG, "Current data: " + snapshot.getData());
                             snapshot.getBoolean("company");
                             if( snapshot.getBoolean("company")!=null){
                                 goToFrontScreenManager();
                             }
                         } else {
-//                            Log.d(TAG, "Current data: null");
                             goToFrontScreen();
                         }
                     }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,9 +67,6 @@ public class FrontScreenManager extends FragmentActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
-//
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
 
         logoM = findViewById(R.id.logoM);
         week_ending = findViewById(R.id.tvWeekEnding);
@@ -80,6 +78,17 @@ public class FrontScreenManager extends FragmentActivity {
         employerCounter();
         empListner();
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            mAuth.signOut();
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -332,13 +341,13 @@ public class FrontScreenManager extends FragmentActivity {
                 convertView.setTag(new PlanetViewHolder(textView, checkBox));
 
                 // If CheckBox is toggled, update the planet it is tagged with.
-                checkBox.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        CheckBox cb = (CheckBox) v;
-                        Planet planet = (Planet) cb.getTag();
-                        planet.setChecked(cb.isChecked());
-                    }
-                });
+//                checkBox.setOnClickListener(new View.OnClickListener() {
+//                    public void onClick(View v) {
+//                        CheckBox cb = (CheckBox) v;
+//                        Planet planet = (Planet) cb.getTag();
+//                        planet.setChecked(cb.isChecked());
+//                    }
+//                });
             }
             // Reuse existing row view
             else {

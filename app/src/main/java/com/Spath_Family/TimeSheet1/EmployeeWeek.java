@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -88,7 +87,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
     private String fileName = "config.csv";
 
 
-    private static final String TAG = "EmployeeWeek";
+//    private static final String TAG = "EmployeeWeek";
 
     public String getName() {
         return name;
@@ -112,10 +111,10 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         setContentView(R.layout.activity_employee_week);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
+//        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+//        StrictMode.setVmPolicy(builder.build());
 
-        builder.detectFileUriExposure();
+//        builder.detectFileUriExposure();
 
         Intent i = getIntent();
         setUserId(i.getStringExtra("name"));
@@ -123,7 +122,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         EmpCode = findViewById(R.id.tvEmpCode);
 
         FrontScreenEmployee frontScreenEmployee = new FrontScreenEmployee();
-        setWeek_pass(frontScreenEmployee.weekEnding());
+        setWeek_pass(frontScreenEmployee.history_maker());
         week_header = "Week Ending:\n" + getWeek_pass();
 
         back = findViewById(R.id.btBackEdit);
@@ -182,7 +181,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         super.onStart();
         final FrontScreenEmployee frontScreenEmployee = new FrontScreenEmployee();
         info(frontScreenEmployee.history_maker());
-        setEmail_subject(frontScreenEmployee.weekEnding() + " " + getUserId());
+        setEmail_subject(frontScreenEmployee.history_maker() + " " + getUserId());
         empListner();
 
         weekEnding.setText(week_header);
@@ -218,10 +217,6 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         try {
             fos = openFileOutput(fileName, MODE_PRIVATE);
             fos.write(text.getBytes());
-
-//            Toast.makeText(this, "Saved to " + getFilesDir() + "/" + fileName,
-//                    Toast.LENGTH_LONG).show();
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -239,7 +234,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
 
     public void share_text() {
         File file = new File(getFilesDir() + "/" + fileName);
-        Uri path = FileProvider.getUriForFile(this, "com.example.timesheet", file);
+        Uri path = FileProvider.getUriForFile(this, "com.Spath_Family.TimeSheet1", file);
         Intent i = new Intent(Intent.ACTION_SEND);
         i.putExtra(Intent.EXTRA_SUBJECT, getEmail_subject());
         String text_message = getTotal();
@@ -281,13 +276,11 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         String pass = "Week Ending:\n" + input_text;
                                         weekEnding.setText(pass);
                                         setEmail_subject(input_text + " " + getUserId());
-                                        Toast.makeText(EmployeeWeek.this, "Hello", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EmployeeWeek.this, "Successfully Loaded", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(EmployeeWeek.this, "Nam", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EmployeeWeek.this, "Please enter the correct format (e.g 28-07-19)", Toast.LENGTH_SHORT).show();
                                     }
                                 }
-                            } else {
-//                                Log.d(TAG, "Error getting documents: ", task.getException());
                             }
                         }
                     });
@@ -312,11 +305,24 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                     if (snapshot != null && snapshot.exists()) {
 //                        Log.d(TAG, "Current data: " + snapshot.getData());
                         EmpCode.setText(snapshot.getString("Employer Code"));
-                    } else {
-//                        Log.d(TAG, "Current data: null");
                     }
                 }
             });
+        }
+    }
+
+    public String info_pass(float number) {
+        String amPm;
+        if (number > 12) {
+            amPm = "PM";
+            number = number - 12;
+            return number + " " + amPm;
+        } else if (number == 12) {
+            amPm = "PM";
+            return number + " " + amPm;
+        } else {
+            amPm = "AM";
+            return number + " " + amPm;
         }
     }
 
@@ -340,16 +346,18 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
 
                             float tot_count = 0;
                             float tot_time;
-                            String data = "";
+                            String data;
                             String hours;
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
 
+                                NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
                                 noteEmployee.setDocumentId(documentSnapshot.getId());
                                 String documentId = noteEmployee.getDocumentId();
-                                String start = noteEmployee.getSignInN();
-                                String finish = noteEmployee.getSignOutN();
-                                tot_time = noteEmployee.getTimeInt();
+                                tot_time = noteEmployee.getFinish() - noteEmployee.getStart();
+
+                                String start = noteEmployee.getStart_s();
+                                String finish = noteEmployee.getFinish_s();
+
                                 boolean holiday = noteEmployee.isIfHoliday();
                                 boolean sick = noteEmployee.isIfSick();
 
@@ -368,8 +376,6 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                 if (finish == null) {
                                     finish = "";
                                 }
-
-//                                Log.d(TAG, "onEvent: " + data);
 
                                 if (documentId.equals("Monday")) {
                                     if (holiday) {
@@ -399,7 +405,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         tuesfn.setText("");
                                         data = "Holiday";
                                         tuestot.setText(data);
-                                        setInput_text(getInput_text() + "Tuesday:,,,Holida\n");
+                                        setInput_text(getInput_text() + "Tuesday:,,,Holiday\n");
 
                                     } else if (sick) {
                                         tuesst.setText("");
@@ -505,7 +511,6 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         satfn.setText(finish);
                                         sattot.setText(hours);
                                         setInput_text(getInput_text() + "Saturday:," + start + "," + finish + "," + hours + "\n");
-
                                     }
                                 }
                                 if (documentId.equals("Sunday")) {
@@ -528,7 +533,6 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         sunfn.setText(finish);
                                         suntot.setText(hours);
                                         setInput_text(getInput_text() + "Sunday:," + start + "," + finish + "," + hours + "\n");
-
                                     }
                                 }
                             }

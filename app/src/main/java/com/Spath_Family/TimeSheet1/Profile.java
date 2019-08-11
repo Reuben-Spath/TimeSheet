@@ -1,5 +1,6 @@
 package com.Spath_Family.TimeSheet1;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -25,6 +26,7 @@ public class Profile extends FrontScreenEmployee {
 
     private Button back;
     private Button change;
+    private Button logOut;
     private EditText employer_code_change;
 
     public static final String EMP_CODE = "Employer Code";
@@ -38,8 +40,10 @@ public class Profile extends FrontScreenEmployee {
         setContentView(R.layout.activity_profile);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+
         back = findViewById(R.id.btBackEdit);
         change = findViewById(R.id.btChange);
+        logOut = findViewById(R.id.logOut);
         employer_code_change = findViewById(R.id.etEmployerCode);
 
         mAuth = FirebaseAuth.getInstance();
@@ -60,6 +64,15 @@ public class Profile extends FrontScreenEmployee {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
     }

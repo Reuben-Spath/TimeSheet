@@ -148,5 +148,6 @@
     <string name="start_time">Start Time:</string>
     <string name="week_ending_dd_mm_yy">week ending (dd-mm-yy)</string>
     <string name="name">Name</string>
+    <string name="log_out">Log Out</string>
 </resources>
 

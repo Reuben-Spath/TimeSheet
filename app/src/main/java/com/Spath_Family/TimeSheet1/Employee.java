@@ -365,9 +365,9 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
 
                                 noteEmployee.setDocumentId(documentSnapshot.getId());
                                 String documentId = noteEmployee.getDocumentId();
-                                String start = noteEmployee.getSignInN();
-                                String finish = noteEmployee.getSignOutN();
-                                tot_time = noteEmployee.getTimeInt();
+                                String start = String.valueOf(noteEmployee.getStart());
+                                String finish = String.valueOf(noteEmployee.getFinish());
+                                tot_time = noteEmployee.getFinish() - noteEmployee.getStart();
                                 boolean holiday = noteEmployee.isIfHoliday();
                                 boolean sick = noteEmployee.isIfSick();
 

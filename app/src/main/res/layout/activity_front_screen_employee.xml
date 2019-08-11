@@ -48,17 +48,33 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:gravity="center"
         android:text="@string/date"
         android:textColor="#9C27B0"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        android:gravity="center"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2"
+        app:layout_constraintVertical_bias="0.181"
         tools:text="Date" />
+
+    <CheckBox
+        android:id="@+id/cbLunchFS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="60dp"
+        android:checked="false"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/lunch"
+        app:layout_constraintBottom_toTopOf="@+id/btConfirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHours"
+        app:layout_constraintVertical_bias="0.486" />
 
     <Button
         android:id="@+id/btSignIn"
@@ -74,7 +90,22 @@
         app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".45" />
+        app:layout_constraintVertical_bias="0.35" />
+
+    <TextView
+        android:id="@+id/tvHoursFS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="  "
+        android:textColor="#9C27B0"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvWEnd"
+        app:layout_constraintVertical_bias="0.379" />
 
     <Button
         android:id="@+id/btSignOff"
@@ -87,10 +118,10 @@
         android:textColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.752"
+        app:layout_constraintHorizontal_bias="0.77"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".45" />
+        app:layout_constraintVertical_bias="0.35" />
 
     <TextView
         android:id="@+id/tvTimeSignedIn"
