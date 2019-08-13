@@ -53,9 +53,6 @@
             android:name="com.Spath_Family.TimeSheet1.BaseActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.Spath_Family.TimeSheet1.Confirmation"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.Spath_Family.TimeSheet1.EmployeeWeek"
             android:screenOrientation="portrait" />
         <activity

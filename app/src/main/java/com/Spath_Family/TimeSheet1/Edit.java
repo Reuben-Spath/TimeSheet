@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -34,11 +35,13 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
     private String day;
     private String user;
     private Button back;
+    private Button confirm;
 
     private CheckBox lunch1;
     private CheckBox cbHoliday;
     private CheckBox cbSick;
 
+    private ImageView delete;
     private TextView signedIn;
     private TextView signedOut;
     private TextView totalHours;
@@ -59,7 +62,6 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
     private int flag = 0;
 
     private String end;
-
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -87,71 +89,15 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         this.hadLunch = hadLunch;
     }
 
-//    public void setLongpass(float longpass) {
-//        this.longpass = longpass;
-//    }
-
     private float start_time;
     private float finish_time;
 
     private FrontScreenEmployee fse = new FrontScreenEmployee();
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit);
-
-        Intent i = getIntent();
-
-        setUser(i.getStringExtra("name"));
-        setDay(i.getStringExtra("id"));
-
-        Button confirm = findViewById(R.id.btConfirmEdit);
-        back = findViewById(R.id.btBackEdit);
-
-
-        setEnd(fse.history_maker());
-
-        TextView dayOfWeek = findViewById(R.id.tvDayOfWeek);
-        signedIn = findViewById(R.id.tvTimeIn);
-        signedOut = findViewById(R.id.tvTimeOut);
-        totalHours = findViewById(R.id.tvTotalTime);
-
-        dayOfWeek.setText(getDay());
-
-        ImageView delete = findViewById(R.id.img_delete);
-
-        mAuth = FirebaseAuth.getInstance();
-        checkbox();
-        checkbox_holiday();
-        checkbox_sick();
-
-
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fullTimeSave();
-                finish();
-            }
-        });
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                db.collection("Users").document(getUser()).collection(getEnd()).document(getDay())
-                        .delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(Edit.this, "Deleted!", Toast.LENGTH_SHORT).show();
-//                                create();
-                                finish();
-                            }
-                        });
-
-            }
-        });
-
+    public static float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
     }
 
     public void setFlag(int i) {
@@ -185,21 +131,103 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
             setFinish_s(String.format(Locale.getDefault(), "%d:%02d %s", value, minute, amPm));
             signedOut.setText(getFinish_s());
         }
-        totalHours.setText(text_update());
-
     }
 
-    public String text_update() {
-        return fse.timeworked(getHadLunch(), lunch, getStart(), getFinish()) + " hours";
-    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit);
 
-    public void call() {
-        fse.timeworked(getHadLunch(), lunch, getStart(), getFinish());
+        Intent i = getIntent();
+
+        setUser(i.getStringExtra("name"));
+        setDay(i.getStringExtra("id"));
+
+        confirm = findViewById(R.id.btConfirmEdit);
+        back = findViewById(R.id.btBackEdit);
+
+        setEnd(fse.history_maker());
+
+        TextView dayOfWeek = findViewById(R.id.tvDayOfWeek);
+        signedIn = findViewById(R.id.tvTimeIn);
+        signedOut = findViewById(R.id.tvTimeOut);
+        totalHours = findViewById(R.id.tvTotalTime);
+
+        dayOfWeek.setText(getDay());
+
+        delete = findViewById(R.id.img_delete);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        lunch1 = findViewById(R.id.cbLunchEdit);
+
+        cbHoliday = findViewById(R.id.cbHoliday);
+
+        cbSick = findViewById(R.id.cbSick);
+
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        if (currentUser != null) {
+
+            db.collection("Users").document(getUser()).collection(getEnd()).document(getDay())
+                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@androidx.annotation.Nullable DocumentSnapshot snapshot,
+                                            @Nullable FirebaseFirestoreException e) {
+                            if (e != null) {
+                                return;
+                            }
+                            String total;
+                            float tot_time = 0;
+                            if (Objects.requireNonNull(snapshot).toObject(NoteEmployee.class) != null) {
+                                NoteEmployee noteEmployee = snapshot.toObject(NoteEmployee.class);
+
+                                if (noteEmployee != null) {
+                                    setStart_s(noteEmployee.getStart_s());
+                                    setFinish_s(noteEmployee.getFinish_s());
+                                    setFinish_time(noteEmployee.getFinish());
+                                    setStart_time(noteEmployee.getStart());
+                                    Toast.makeText(Edit.this, String.valueOf(getStart_time()), Toast.LENGTH_SHORT).show();
+                                    setHadLunch(noteEmployee.getIfLunch());
+                                    setHoliday(noteEmployee.isIfHoliday());
+                                    setSick(noteEmployee.isIfSick());
+
+                                    if (isHoliday()) {
+                                        cbHoliday.setChecked(true);
+//                                        cbHoliday.setEnabled(true);
+                                        cbSick.setEnabled(false);
+                                    }
+                                    if (isSick()) {
+                                        cbSick.setChecked(true);
+//                                        cbSick.setEnabled(true);
+                                        cbHoliday.setEnabled(false);
+                                    }
+                                    if (getHadLunch()) {
+                                        lunch1.setChecked(true);
+                                    }
+                                    if (isHoliday() || isSick()) {
+                                        lunch1.setEnabled(false);
+                                    }
+
+                                    tot_time = noteEmployee.getFinish() - noteEmployee.getStart();
+
+                                    total = tot_time + " hours";
+                                    totalHours.setText(total);
+                                    signedIn.setText(getStart_s());
+                                    signedOut.setText(getFinish_s());
+                                }
+                            }
+                        }
+                    });
+        }
 
         signedIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,152 +255,107 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
             }
         });
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        if (currentUser != null) {
-
-            db.collection("Users").document(getUser()).collection(getEnd()).document(getDay())
-                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                        @Override
-                        public void onEvent(@androidx.annotation.Nullable DocumentSnapshot snapshot,
-                                            @Nullable FirebaseFirestoreException e) {
-                            if (e != null) {
-                                return;
+                timeworked(getHadLunch(), lunch, getStart_time(), getFinish_time());
+                fullTimeSave();
+                finish();
+            }
+        });
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.collection("Users").document(getUser()).collection(getEnd()).document(getDay())
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(Edit.this, "Deleted!", Toast.LENGTH_SHORT).show();
+                                finish();
                             }
-                            String total = "";
-                            float tot_time = 0;
-                            if (Objects.requireNonNull(snapshot).toObject(NoteEmployee.class) != null) {
-                                NoteEmployee noteEmployee = snapshot.toObject(NoteEmployee.class);
+                        });
 
-                                if (noteEmployee != null) {
-                                    setStart_s(noteEmployee.getStart_s());
-                                    setFinish_s(noteEmployee.getFinish_s());
-                                    setFinish(noteEmployee.getFinish());
-                                    setStart(noteEmployee.getStart());
-                                    tot_time = noteEmployee.getFinish() - noteEmployee.getStart();
-
-                                }
-                                total = tot_time + " hours";
-                                totalHours.setText(total);
-                                signedIn.setText(getStart_s());
-                                signedOut.setText(getFinish_s());
-
-
-                            }
-
-                            if (snapshot.exists()) {
-
-//                                if (snapshot.getString("start_s") != null) {
-//                                    signedIn.setText(snapshot.getString("start_s"));
-//                                    setStart_s(snapshot.getString("start_s"));
-//                                }
-//                                if (snapshot.getString("finish_s") != null) {
-//                                    signedOut.setText(snapshot.getString("finish_s"));
-//                                    setFinish_s(snapshot.getString("finish_s"));
-//                                }
-//
-                                if (snapshot.getBoolean("ifLunch") != null) {
-                                    //noinspection ConstantConditions
-                                    if (snapshot.getBoolean("ifLunch")) {
-                                        lunch1.setChecked(true);
-                                    } else {
-                                        lunch1.setChecked(false);
-                                    }
-                                }
-                                if (snapshot.getBoolean("ifSick") != null) {
-                                    //noinspection ConstantConditions
-                                    if (snapshot.getBoolean("ifSick")) {
-                                        cbSick.setChecked(true);
-                                        cbHoliday.setEnabled(false);
-                                    } else {
-                                        cbSick.setChecked(false);
-                                    }
-                                }
-                                if (snapshot.getBoolean("ifHoliday") != null) {
-                                    //noinspection ConstantConditions
-                                    if (snapshot.getBoolean("ifHoliday")) {
-                                        cbHoliday.setChecked(true);
-                                        cbSick.setEnabled(false);
-                                    } else {
-                                        cbHoliday.setChecked(false);
-                                    }
-                                }
-                            }
-                        }
-                    });
-        }
-    }
-
-    public void checkbox() {
-        setHadLunch(false);
-        totalHours.setText(text_update());
-
-        lunch1 = findViewById(R.id.cbLunchEdit);
-
+            }
+        });
         lunch1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (lunch1.isChecked()) {
                     setHadLunch(true);
                     totalHours.setText(text_update());
-
                 } else {
                     setHadLunch(false);
                     totalHours.setText(text_update());
                 }
             }
         });
-    }
-
-    public void checkbox_holiday() {
-        setHoliday(false);
-        cbHoliday = findViewById(R.id.cbHoliday);
-
-        if (isSick()) {
-            cbSick.setEnabled(true);
-        }
         cbHoliday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (cbHoliday.isChecked()) {
                     cbSick.setEnabled(false);
+                    lunch1.setEnabled(false);
                     setHoliday(true);
                     String holiday = "Holiday";
                     totalHours.setText(holiday);
                 } else {
                     cbSick.setEnabled(true);
+                    lunch1.setEnabled(true);
                     setHoliday(false);
                     totalHours.setText(text_update());
                 }
             }
         });
-    }
-
-    public void checkbox_sick() {
-        setSick(false);
-        cbSick = findViewById(R.id.cbSick);
-
-        if (isHoliday()) {
-            cbSick.setEnabled(true);
-        }
         cbSick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (cbSick.isChecked()) {
                     cbHoliday.setEnabled(false);
+                    lunch1.setEnabled(false);
                     setSick(true);
                     String sick = "Sick";
                     totalHours.setText(sick);
-
                 } else {
                     cbHoliday.setEnabled(true);
+                    lunch1.setEnabled(true);
                     setSick(false);
                     totalHours.setText(text_update());
                 }
             }
         });
     }
+
+    public String text_update() {
+        return timeworked(getHadLunch(), lunch, getStart_time(), getFinish_time()) + " hours";
+    }
+
+    public float timeworked(boolean lunch, float lunch_length, float start, float finish) {
+        float total_time;
+
+        total_time = finish - start;
+        if (total_time < 0) {
+            total_time = total_time + 24;
+        }
+        float outcome = round(total_time, 2);
+
+        if (lunch) {
+            total_time = total_time - lunch_length;
+            if (total_time < 0) {
+                total_time = total_time + 24;
+            }
+            outcome = round(total_time, 2);
+            return outcome;
+        } else {
+            if (total_time < 0) {
+                total_time = total_time + 24;
+            }
+            outcome = round(total_time, 2);
+            return outcome;
+        }
+    }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -388,6 +371,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
 
+            Toast.makeText(this, String.valueOf(getStart_time()), Toast.LENGTH_SHORT).show();
             NoteEmployee noteEmployee = new NoteEmployee(getStart_time(), getFinish_time(), getHadLunch(), getStart_s(), getFinish_s());
 
             noteEmployee.setIfSick(isSick());
@@ -460,19 +444,4 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         this.end = end;
     }
 
-    public float getStart() {
-        return start;
-    }
-
-    public void setStart(float start) {
-        this.start = start;
-    }
-
-    public float getFinish() {
-        return finish;
-    }
-
-    public void setFinish(float finish) {
-        this.finish = finish;
-    }
 }

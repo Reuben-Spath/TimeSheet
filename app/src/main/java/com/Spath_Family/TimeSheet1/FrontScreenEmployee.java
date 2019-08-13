@@ -125,7 +125,6 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
                 }
             }
         });
-
     }
 
     @Override
@@ -160,7 +159,6 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
                                 }
                             });
                 }
-
             }
         });
         sign_in.setOnClickListener(new View.OnClickListener() {
@@ -208,6 +206,7 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
                                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        fullTimeSave();
                                         String name_pass = documentSnapshot.getString("name");
                                         Intent i = new Intent(FrontScreenEmployee.this, EmployeeWeek.class);
                                         i.putExtra("name", name_pass);
@@ -217,7 +216,6 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
                     }
                 }
             }
-
         });
     }
 

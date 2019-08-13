@@ -86,6 +86,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
     private String input_text = "";
     private String fileName = "config.csv";
 
+    private float lunch = (float) 0.5;
 
 //    private static final String TAG = "EmployeeWeek";
 
@@ -110,11 +111,6 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_week);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-//        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-//        StrictMode.setVmPolicy(builder.build());
-
-//        builder.detectFileUriExposure();
 
         Intent i = getIntent();
         setUserId(i.getStringExtra("name"));
@@ -353,7 +349,16 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                 NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
                                 noteEmployee.setDocumentId(documentSnapshot.getId());
                                 String documentId = noteEmployee.getDocumentId();
-                                tot_time = noteEmployee.getFinish() - noteEmployee.getStart();
+                                boolean lunch = noteEmployee.getIfLunch();
+
+                                if (lunch) {
+                                    tot_time = (noteEmployee.getFinish() - noteEmployee.getStart()) - getLunch();
+                                    if (tot_time < 0) {
+                                        tot_time += 24;
+                                    }
+                                } else {
+                                    tot_time = noteEmployee.getFinish() - noteEmployee.getStart();
+                                }
 
                                 String start = noteEmployee.getStart_s();
                                 String finish = noteEmployee.getFinish_s();
@@ -654,5 +659,13 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
 
     public void setInput_text(String input_text) {
         this.input_text = input_text;
+    }
+
+    public float getLunch() {
+        return lunch;
+    }
+
+    public void setLunch(float lunch) {
+        this.lunch = lunch;
     }
 }
