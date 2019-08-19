@@ -18,7 +18,7 @@
         android:textColor="#FFFF"
         app:layout_constraintBottom_toTopOf="@+id/tvOr"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.846" />
@@ -31,9 +31,9 @@
         android:background="#9C27B0"
         android:text="@string/individual"
         android:textColor="#FFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btBackEdit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvOr"
         app:layout_constraintVertical_bias="0.14" />
@@ -63,9 +63,10 @@
         android:text="@string/or"
         android:textColor="@android:color/black"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btEmployee"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btCompany"
         app:layout_constraintVertical_bias="0.454" />
 </androidx.constraintlayout.widget.ConstraintLayout>

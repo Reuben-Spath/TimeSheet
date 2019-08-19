@@ -9,17 +9,17 @@
 
     <EditText
         android:id="@+id/etEmpCreateName"
-        android:layout_width="230dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="@string/email_hint"
         android:inputType="textPersonName"
         android:textColor="@color/Blue_text"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/etPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:layout_constraintVertical_bias="0.184"
@@ -27,19 +27,19 @@
 
     <EditText
         android:id="@+id/etPassword"
-        android:layout_width="230dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:ems="10"
         android:hint="@string/password_hint"
         android:inputType="textPassword"
         android:textColor="@color/Blue_text"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tvCreate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etEmpCreateName"
-        app:layout_constraintVertical_bias="0.110000014"
         tools:ignore="Autofill" />
 
     <Button
@@ -48,29 +48,32 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/enter_button"
         android:background="@color/purple"
+        android:text="@string/enter_button"
         android:textColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPasswordRetrieval"
         app:layout_constraintVertical_bias="0.109" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="274dp"
-        android:layout_height="126dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="108dp"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/logo"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/etEmpCreateName"
+        app:layout_constraintDimensionRatio="w,5:2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.188"
+        app:layout_constraintVertical_bias="0.100000024"
         tools:ignore="ContentDescription" />
 
 
@@ -82,11 +85,11 @@
         android:drawableStart="@drawable/addition"
         android:padding="10dp"
         android:textColor="#9C27B0"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tvPasswordRetrieval"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etPassword"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword"
         app:layout_constraintVertical_bias="0.154" />
 
     <TextView
@@ -96,10 +99,11 @@
         android:padding="5dp"
         android:text="@string/password_retrieve_button"
         android:textColor="@color/Blue_text"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btLogin"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvCreate"
+        app:layout_constraintTop_toBottomOf="@+id/tvCreate"
         app:layout_constraintVertical_bias="0.019"
         tools:layout_constraintBottom_toTopOf="@id/btLogin" />
 
