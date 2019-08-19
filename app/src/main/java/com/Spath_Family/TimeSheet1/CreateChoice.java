@@ -33,6 +33,7 @@ public class CreateChoice extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         if (view == company) {
             startActivity(new Intent(CreateChoice.this, CreateCompany.class));
+//            Toast.makeText(this, "Coming Soon 23/8/19", Toast.LENGTH_SHORT).show();
         }
         if (view == employee){
             startActivity(new Intent(CreateChoice.this, CreateEmployee.class));

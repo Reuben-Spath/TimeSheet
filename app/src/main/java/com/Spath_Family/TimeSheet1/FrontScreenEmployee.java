@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -139,6 +140,7 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
             @Override
             public void onClick(View v) {
                 Intent special_code_pass = new Intent(FrontScreenEmployee.this, Profile.class);
+                special_code_pass.putExtra("comp", false);
                 startActivity(special_code_pass);
             }
         });
@@ -246,6 +248,7 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
             mAuth.signOut();
+            Toast.makeText(this, "Signed Out", Toast.LENGTH_SHORT).show();
             finish();
             return true;
         }

@@ -14,6 +14,7 @@ public class NoteEmployee {
     private float finish;
     private String start_s;
     private String finish_s;
+    private String empCode;
 
     NoteEmployee() {
         //public no-arg constructor needed
@@ -77,7 +78,7 @@ public class NoteEmployee {
         this.ifLunch = lunch;
     }
 
-    public String getStart_s() {
+    String getStart_s() {
         return start_s;
     }
 
@@ -85,11 +86,19 @@ public class NoteEmployee {
         this.start_s = start_s;
     }
 
-    public String getFinish_s() {
+    String getFinish_s() {
         return finish_s;
     }
 
     public void setFinish_s(String finish_s) {
         this.finish_s = finish_s;
+    }
+
+    public String getEmpcode() {
+        return empCode;
+    }
+
+    public void setEmpcode(String empcode) {
+        this.empCode = empcode;
     }
 }

@@ -113,11 +113,6 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
         String password = txt_password_sign_up.getText().toString().trim();
         String confirm = txt_passwordConfirm.getText().toString().trim();
 
-        if(!indi(empCode)){
-            Toast.makeText(this, "This is already and Employer code", Toast.LENGTH_SHORT).show();
-            return;
-
-        }
         if (TextUtils.isEmpty(name)) { //email is empty
             Toast.makeText(this, "Please enter your company name", Toast.LENGTH_SHORT).show();
             //stop further execution
@@ -184,11 +179,11 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
         String email = txt_company_email_sign_up.getText().toString().trim();
 
         NoteCompany note = new NoteCompany(name,empCode,email,true);
+        FirebaseUser newUser = mAuth.getCurrentUser();
 
-        FirebaseUser user = mAuth.getCurrentUser();
+        if (newUser != null) {
+            String mUid = newUser.getUid();
 
-        if(user!= null) {
-            String mUid = user.getUid();
             db.collection("Company").document(mUid).set(note)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

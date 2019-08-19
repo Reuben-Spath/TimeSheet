@@ -21,6 +21,7 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Profile extends FrontScreenEmployee {
 
@@ -29,7 +30,8 @@ public class Profile extends FrontScreenEmployee {
     private Button logOut;
     private EditText employer_code_change;
 
-    public static final String EMP_CODE = "Employer Code";
+    public static final String EMP_CODE = "empCode";
+    private Boolean company;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -40,6 +42,7 @@ public class Profile extends FrontScreenEmployee {
         setContentView(R.layout.activity_profile);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        setCompany(Objects.requireNonNull(getIntent().getExtras()).getBoolean("comp"));
 
         back = findViewById(R.id.btBackEdit);
         change = findViewById(R.id.btChange);
@@ -70,6 +73,7 @@ public class Profile extends FrontScreenEmployee {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
+                Toast.makeText(Profile.this, "Signed Out", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -86,21 +90,39 @@ public class Profile extends FrontScreenEmployee {
         note.put(EMP_CODE, empCode);
 
         if (user != null) {
-            db.collection("Users").document(user.getUid()).set(note, SetOptions.merge())
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            finish();
-                            Toast.makeText(Profile.this, "Employer code saved!", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(Profile.this, "An Error Occurred", Toast.LENGTH_SHORT).show();
+            if (getCompany()) {
+                db.collection("Company").document(user.getUid()).set(note, SetOptions.merge())
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                finish();
+                                Toast.makeText(Profile.this, "Employer code saved!", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(Profile.this, "An Error Occurred", Toast.LENGTH_SHORT).show();
 //                            Log.d("Failure to add", e.toString());
-                        }
-                    });
+                            }
+                        });
+            } else {
+                db.collection("Users").document(user.getUid()).set(note, SetOptions.merge())
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                finish();
+                                Toast.makeText(Profile.this, "Employer code saved!", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(Profile.this, "An Error Occurred", Toast.LENGTH_SHORT).show();
+//                            Log.d("Failure to add", e.toString());
+                            }
+                        });
+            }
         } else {
             Toast.makeText(Profile.this, "Your user cannot be verified", Toast.LENGTH_SHORT).show();
         }
@@ -115,5 +137,13 @@ public class Profile extends FrontScreenEmployee {
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    public Boolean getCompany() {
+        return company;
+    }
+
+    public void setCompany(Boolean company) {
+        this.company = company;
     }
 }

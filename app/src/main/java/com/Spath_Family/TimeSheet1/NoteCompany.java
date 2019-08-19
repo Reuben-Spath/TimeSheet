@@ -15,7 +15,7 @@ public class NoteCompany {
         //public no-arg constructor needed
     }
 
-    public NoteCompany(String name, String code, String email , boolean company) {
+    NoteCompany(String name, String code, String email, boolean company) {
         this.name = name;
         this.empCode = code;
         this.email = email;
@@ -53,4 +53,5 @@ public class NoteCompany {
     public void setCompany(boolean company) {
         this.company = company;
     }
+
 }

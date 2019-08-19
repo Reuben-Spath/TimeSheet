@@ -25,7 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 
-import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -54,8 +53,6 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
 
     private String start_s;
     private String finish_s;
-    private float start;
-    private float finish;
 
     public static final int FLAG_START_TIME = 0;
     public static final int FLAG_END_TIME = 1;
@@ -94,11 +91,11 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
 
     private FrontScreenEmployee fse = new FrontScreenEmployee();
 
-    public static float round(float d, int decimalPlace) {
-        BigDecimal bd = new BigDecimal(Float.toString(d));
-        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
-        return bd.floatValue();
-    }
+//    public static float round(float d, int decimalPlace) {
+//        BigDecimal bd = new BigDecimal(Float.toString(d));
+//        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+//        return bd.floatValue();
+//    }
 
     public void setFlag(int i) {
         flag = i;
@@ -123,6 +120,8 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
 
             setStart_s(String.format(Locale.getDefault(), "%d:%02d %s", value, minute, amPm));
             signedIn.setText(getStart_s());
+            totalHours.setText(text_update());
+
 
         } else if (flag == FLAG_END_TIME) {
             float minutes = (float) minute / 60;
@@ -130,6 +129,8 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
 
             setFinish_s(String.format(Locale.getDefault(), "%d:%02d %s", value, minute, amPm));
             signedOut.setText(getFinish_s());
+            totalHours.setText(text_update());
+
         }
     }
 
@@ -185,8 +186,6 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                             if (e != null) {
                                 return;
                             }
-                            String total;
-                            float tot_time = 0;
                             if (Objects.requireNonNull(snapshot).toObject(NoteEmployee.class) != null) {
                                 NoteEmployee noteEmployee = snapshot.toObject(NoteEmployee.class);
 
@@ -195,19 +194,16 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                                     setFinish_s(noteEmployee.getFinish_s());
                                     setFinish_time(noteEmployee.getFinish());
                                     setStart_time(noteEmployee.getStart());
-                                    Toast.makeText(Edit.this, String.valueOf(getStart_time()), Toast.LENGTH_SHORT).show();
                                     setHadLunch(noteEmployee.getIfLunch());
                                     setHoliday(noteEmployee.isIfHoliday());
                                     setSick(noteEmployee.isIfSick());
 
                                     if (isHoliday()) {
                                         cbHoliday.setChecked(true);
-//                                        cbHoliday.setEnabled(true);
                                         cbSick.setEnabled(false);
                                     }
                                     if (isSick()) {
                                         cbSick.setChecked(true);
-//                                        cbSick.setEnabled(true);
                                         cbHoliday.setEnabled(false);
                                     }
                                     if (getHadLunch()) {
@@ -217,12 +213,13 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                                         lunch1.setEnabled(false);
                                     }
 
-                                    tot_time = noteEmployee.getFinish() - noteEmployee.getStart();
-
-                                    total = tot_time + " hours";
-                                    totalHours.setText(total);
-                                    signedIn.setText(getStart_s());
-                                    signedOut.setText(getFinish_s());
+                                    if (getStart_s() != null) {
+                                        signedIn.setText(getStart_s());
+                                    }
+                                    if (getFinish_s() != null) {
+                                        signedOut.setText(getFinish_s());
+                                    }
+                                    totalHours.setText(text_update());
                                 }
                             }
                         }
@@ -235,7 +232,6 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                 setFlag(FLAG_START_TIME);
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "time picker");
-//                totalHours.setText(text_update());
             }
         });
         signedOut.setOnClickListener(new View.OnClickListener() {
@@ -244,7 +240,6 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                 setFlag(FLAG_END_TIME);
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "time picker");
-//                totalHours.setText(text_update());
             }
 
         });
@@ -258,8 +253,6 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                timeworked(getHadLunch(), lunch, getStart_time(), getFinish_time());
                 fullTimeSave();
                 finish();
             }
@@ -333,27 +326,18 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
 
     public float timeworked(boolean lunch, float lunch_length, float start, float finish) {
         float total_time;
-
         total_time = finish - start;
+
         if (total_time < 0) {
             total_time = total_time + 24;
         }
-        float outcome = round(total_time, 2);
 
         if (lunch) {
             total_time = total_time - lunch_length;
-            if (total_time < 0) {
-                total_time = total_time + 24;
-            }
-            outcome = round(total_time, 2);
-            return outcome;
-        } else {
-            if (total_time < 0) {
-                total_time = total_time + 24;
-            }
-            outcome = round(total_time, 2);
-            return outcome;
+
         }
+
+        return total_time;
     }
 
 
@@ -371,7 +355,6 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
 
-            Toast.makeText(this, String.valueOf(getStart_time()), Toast.LENGTH_SHORT).show();
             NoteEmployee noteEmployee = new NoteEmployee(getStart_time(), getFinish_time(), getHadLunch(), getStart_s(), getFinish_s());
 
             noteEmployee.setIfSick(isSick());

@@ -387,6 +387,7 @@
         android:hint="@string/week_ending"
         android:textColor="@color/purple"
         android:textSize="30sp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

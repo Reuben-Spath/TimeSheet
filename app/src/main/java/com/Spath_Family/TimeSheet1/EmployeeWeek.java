@@ -182,7 +182,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
 
         weekEnding.setText(week_header);
 
-        setInput_text("Day of the week:, Start Time:, Finish Time:, Total Time: \n");
+        setInput_text("Day:, Start Time:, Finish Time:, Total Time:, Lunch: \n");
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,14 +194,12 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
             public void onClick(View v) {
                 fileName = getEmail_subject() + ".csv";
                 save(getInput_text());
-//                write_to_save(input_text);
                 share_text();
             }
         });
         history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                history();
                 openDialog();
             }
         });
@@ -257,6 +255,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             String mUid = user.getUid();
 
+            Toast.makeText(this, mUid, Toast.LENGTH_SHORT).show();
             db.collection("Users").document(mUid).collection("History")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -264,9 +263,8 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-//                                    Log.d(TAG, document.getId() + " => " + document.getData());
                                     if (document.getData().containsValue(input_text)) {
-                                        setInput_text("Day of the week:, Start Time:, Finish Time:, Total Time: \n");
+                                        setInput_text("Day:, Start Time:, Finish Time:, Total Time:, Lunch: \n");
                                         info(input_text);
 
                                         String pass = "Week Ending:\n" + input_text;
@@ -277,6 +275,8 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         Toast.makeText(EmployeeWeek.this, "Please enter the correct format (e.g 28-07-19)", Toast.LENGTH_SHORT).show();
                                     }
                                 }
+                            } else {
+                                Toast.makeText(EmployeeWeek.this, "Error", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -294,31 +294,13 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                 public void onEvent(@Nullable DocumentSnapshot snapshot,
                                     @Nullable FirebaseFirestoreException e) {
                     if (e != null) {
-//                        Log.w(TAG, "Listen failed.", e);
                         return;
                     }
-
                     if (snapshot != null && snapshot.exists()) {
-//                        Log.d(TAG, "Current data: " + snapshot.getData());
-                        EmpCode.setText(snapshot.getString("Employer Code"));
+                        EmpCode.setText(snapshot.getString("empCode"));
                     }
                 }
             });
-        }
-    }
-
-    public String info_pass(float number) {
-        String amPm;
-        if (number > 12) {
-            amPm = "PM";
-            number = number - 12;
-            return number + " " + amPm;
-        } else if (number == 12) {
-            amPm = "PM";
-            return number + " " + amPm;
-        } else {
-            amPm = "AM";
-            return number + " " + amPm;
         }
     }
 
@@ -351,13 +333,19 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                 String documentId = noteEmployee.getDocumentId();
                                 boolean lunch = noteEmployee.getIfLunch();
 
+                                String y_or_n;
                                 if (lunch) {
+                                    y_or_n = "Y";
                                     tot_time = (noteEmployee.getFinish() - noteEmployee.getStart()) - getLunch();
                                     if (tot_time < 0) {
                                         tot_time += 24;
                                     }
                                 } else {
+                                    y_or_n = "N";
                                     tot_time = noteEmployee.getFinish() - noteEmployee.getStart();
+                                    if (tot_time < 0) {
+                                        tot_time += 24;
+                                    }
                                 }
 
                                 String start = noteEmployee.getStart_s();
@@ -376,11 +364,14 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                 } else hours = "";
 
                                 if (start == null) {
+                                    y_or_n = "";
                                     start = "";
                                 }
                                 if (finish == null) {
+                                    y_or_n = "";
                                     finish = "";
                                 }
+
 
                                 if (documentId.equals("Monday")) {
                                     if (holiday) {
@@ -401,7 +392,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         monst.setText(start);
                                         monfn.setText(finish);
                                         montot.setText(hours);
-                                        setInput_text(getInput_text() + "Monday:," + start + "," + finish + "," + hours + "\n");
+                                        setInput_text(getInput_text() + "Monday:," + start + "," + finish + "," + hours + "," + y_or_n + "\n");
                                     }
                                 }
                                 if (documentId.equals("Tuesday")) {
@@ -423,7 +414,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         tuesst.setText(start);
                                         tuesfn.setText(finish);
                                         tuestot.setText(hours);
-                                        setInput_text(getInput_text() + "Tuesday:," + start + "," + finish + "," + hours + "\n");
+                                        setInput_text(getInput_text() + "Tuesday:," + start + "," + finish + "," + hours + "," + y_or_n + "\n");
 
                                     }
                                 }
@@ -446,7 +437,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         wedst.setText(start);
                                         wedfn.setText(finish);
                                         wedtot.setText(hours);
-                                        setInput_text(getInput_text() + "Wednesday:," + start + "," + finish + "," + hours + "\n");
+                                        setInput_text(getInput_text() + "Wednesday:," + start + "," + finish + "," + hours + "," + y_or_n + "\n");
 
                                     }
                                 }
@@ -469,7 +460,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         thursst.setText(start);
                                         thursfn.setText(finish);
                                         thurstot.setText(hours);
-                                        setInput_text(getInput_text() + "Thursday:," + start + "," + finish + "," + hours + "\n");
+                                        setInput_text(getInput_text() + "Thursday:," + start + "," + finish + "," + hours + "," + y_or_n + "\n");
 
                                     }
                                 }
@@ -492,7 +483,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         frist.setText(start);
                                         frifn.setText(finish);
                                         fritot.setText(hours);
-                                        setInput_text(getInput_text() + "Friday:," + start + "," + finish + "," + hours + "\n");
+                                        setInput_text(getInput_text() + "Friday:," + start + "," + finish + "," + hours + "," + y_or_n + "\n");
 
                                     }
                                 }
@@ -515,7 +506,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         satst.setText(start);
                                         satfn.setText(finish);
                                         sattot.setText(hours);
-                                        setInput_text(getInput_text() + "Saturday:," + start + "," + finish + "," + hours + "\n");
+                                        setInput_text(getInput_text() + "Saturday:," + start + "," + finish + "," + hours + "," + y_or_n + "\n");
                                     }
                                 }
                                 if (documentId.equals("Sunday")) {
@@ -537,7 +528,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                         sunst.setText(start);
                                         sunfn.setText(finish);
                                         suntot.setText(hours);
-                                        setInput_text(getInput_text() + "Sunday:," + start + "," + finish + "," + hours + "\n");
+                                        setInput_text(getInput_text() + "Sunday:," + start + "," + finish + "," + hours + "," + y_or_n + "\n");
                                     }
                                 }
                             }

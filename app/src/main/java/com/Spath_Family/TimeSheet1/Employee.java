@@ -85,6 +85,8 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
     private String input_text = "";
     private String fileName = "config.csv";
 
+    private float lunch = (float) 0.5;
+
 
     public String getUserId() {
         return userId;
@@ -104,8 +106,10 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
 
     private View.OnClickListener editing = new View.OnClickListener() {
         public void onClick(View v) {
+
             Intent i = new Intent(Employee.this, Edit.class);
             String id;
+
             switch (v.getId() /*to get clicked view id**/) {
                 case R.id.Monday:
 
@@ -229,14 +233,21 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
         fritot = findViewById(R.id.fritot);
         sattot = findViewById(R.id.sattot);
         suntot = findViewById(R.id.suntot);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        info_pt_2(weekEnding());
+        final FrontScreenEmployee frontScreenEmployee = new FrontScreenEmployee();
+        info_pt_2(frontScreenEmployee.history_maker());
         setEmail_subject(weekEnding() + " " + getUserId());
+
+        setInput_text("Day:, Start Time:, Finish Time:, Total Time:, Lunch: \n");
+
+        String pass = "Week Ending:\n" + frontScreenEmployee.history_maker();
+
+        employee.setText(pass);
 
         Back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -256,6 +267,7 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
             @Override
             public void onClick(View v) {
                 openDialog();
+
             }
         });
     }
@@ -282,12 +294,11 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-//                                    Log.d(TAG, document.getId() + " => " + document.getData());
                                     if (document.getData().containsValue(input_text)) {
-                                        setInput_text("Day of the week:, Start Time:, Finish Time:, Total Time: \n");
+                                        setInput_text("Day:, Start Time:, Finish Time:, Total Time:, Lunch: \n");
                                         info_pt_2(input_text);
 
-                                        String pass = getUserId() + "\nWeek Ending:\n" + input_text;
+                                        String pass = "Week Ending:\n" + input_text;
                                         employee.setText(pass);
                                         setEmail_subject(input_text + " " + getUserId());
                                         Toast.makeText(Employee.this, "Successfully Loaded", Toast.LENGTH_SHORT).show();
@@ -296,7 +307,7 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                     }
                                 }
                             } else {
-//                                Log.d(TAG, "Error getting documents: ", task.getException());
+                                Toast.makeText(Employee.this, "Error", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -327,7 +338,7 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
 
     public void share_text() {
         File file = new File(getFilesDir() + "/" + fileName);
-        Uri path = FileProvider.getUriForFile(this, "com.example.timesheet", file);
+        Uri path = FileProvider.getUriForFile(this, "com.Spath_Family.TimeSheet1", file);
         Intent i = new Intent(Intent.ACTION_SEND);
         i.putExtra(Intent.EXTRA_SUBJECT, getEmail_subject());
         String text_message = getTotal();
@@ -338,12 +349,13 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
         startActivity(i);
     }
 
-    public void info_pt_2(String week_ending_pass) {
+    public void info_pt_2(final String week_ending_pass) {
         Intent i = getIntent();
         String userName = i.getStringExtra("id");
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         if (currentUser != null) {
 
             db.collection("Users").document(userName).collection(week_ending_pass)
@@ -355,19 +367,36 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                 return;
                             }
 
+
                             float tot_count = 0;
                             float tot_time;
-                            String data = "";
+                            String data;
                             String hours;
-
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
 
+                                NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
                                 noteEmployee.setDocumentId(documentSnapshot.getId());
                                 String documentId = noteEmployee.getDocumentId();
-                                String start = String.valueOf(noteEmployee.getStart());
-                                String finish = String.valueOf(noteEmployee.getFinish());
-                                tot_time = noteEmployee.getFinish() - noteEmployee.getStart();
+                                boolean lunch = noteEmployee.getIfLunch();
+
+                                String y_or_n;
+                                if (lunch) {
+                                    y_or_n = "Y";
+                                    tot_time = (noteEmployee.getFinish() - noteEmployee.getStart()) - getLunch();
+                                    if (tot_time < 0) {
+                                        tot_time += 24;
+                                    }
+                                } else {
+                                    y_or_n = "N";
+                                    tot_time = noteEmployee.getFinish() - noteEmployee.getStart();
+                                    if (tot_time < 0) {
+                                        tot_time += 24;
+                                    }
+                                }
+
+                                String start = noteEmployee.getStart_s();
+                                String finish = noteEmployee.getFinish_s();
+
                                 boolean holiday = noteEmployee.isIfHoliday();
                                 boolean sick = noteEmployee.isIfSick();
 
@@ -381,13 +410,13 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                 } else hours = "";
 
                                 if (start == null) {
+                                    y_or_n = "";
                                     start = "";
                                 }
                                 if (finish == null) {
+                                    y_or_n = "";
                                     finish = "";
                                 }
-
-//                                Log.d(TAG, "onEvent: " + data);
 
 
                                 if (documentId.equals("Monday")) {
@@ -409,7 +438,7 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                         monst.setText(start);
                                         monfn.setText(finish);
                                         montot.setText(hours);
-                                        setInput_text(getInput_text() + "Monday:," + start + "," + finish + "," + hours + "\n");
+                                        setInput_text(getInput_text() + "Monday:," + start + "," + finish + "," + hours + "," + y_or_n + "\n");
                                     }
                                 }
                                 if (documentId.equals("Tuesday")) {
@@ -418,7 +447,7 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                         tuesfn.setText("");
                                         data = "Holiday";
                                         tuestot.setText(data);
-                                        setInput_text(getInput_text() + "Tuesday:,,,Holida\n");
+                                        setInput_text(getInput_text() + "Tuesday:,,,Holiday\n");
 
                                     } else if (sick) {
                                         tuesst.setText("");
@@ -431,7 +460,7 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                         tuesst.setText(start);
                                         tuesfn.setText(finish);
                                         tuestot.setText(hours);
-                                        setInput_text(getInput_text() + "Tuesday:," + start + "," + finish + "," + hours + "\n");
+                                        setInput_text(getInput_text() + "Tuesday:," + start + "," + finish + "," + hours + "," + y_or_n + "\n");
 
                                     }
                                 }
@@ -454,7 +483,7 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                         wedst.setText(start);
                                         wedfn.setText(finish);
                                         wedtot.setText(hours);
-                                        setInput_text(getInput_text() + "Wednesday:," + start + "," + finish + "," + hours + "\n");
+                                        setInput_text(getInput_text() + "Wednesday:," + start + "," + finish + "," + hours + "," + y_or_n + "\n");
 
                                     }
                                 }
@@ -477,7 +506,7 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                         thursst.setText(start);
                                         thursfn.setText(finish);
                                         thurstot.setText(hours);
-                                        setInput_text(getInput_text() + "Thursday:," + start + "," + finish + "," + hours + "\n");
+                                        setInput_text(getInput_text() + "Thursday:," + start + "," + finish + "," + hours + "," + y_or_n + "\n");
 
                                     }
                                 }
@@ -500,7 +529,7 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                         frist.setText(start);
                                         frifn.setText(finish);
                                         fritot.setText(hours);
-                                        setInput_text(getInput_text() + "Friday:," + start + "," + finish + "," + hours + "\n");
+                                        setInput_text(getInput_text() + "Friday:," + start + "," + finish + "," + hours + "," + y_or_n + "\n");
 
                                     }
                                 }
@@ -523,8 +552,7 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                         satst.setText(start);
                                         satfn.setText(finish);
                                         sattot.setText(hours);
-                                        setInput_text(getInput_text() + "Saturday:," + start + "," + finish + "," + hours + "\n");
-
+                                        setInput_text(getInput_text() + "Saturday:," + start + "," + finish + "," + hours + "," + y_or_n + "\n");
                                     }
                                 }
                                 if (documentId.equals("Sunday")) {
@@ -546,15 +574,13 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                         sunst.setText(start);
                                         sunfn.setText(finish);
                                         suntot.setText(hours);
-                                        setInput_text(getInput_text() + "Sunday:," + start + "," + finish + "," + hours + "\n");
-
+                                        setInput_text(getInput_text() + "Sunday:," + start + "," + finish + "," + hours + "," + y_or_n + "\n");
                                     }
-
                                 }
                             }
                             String finalTime = String.format(Locale.getDefault(), "Total Hours:\n%.2f hours", tot_count);
-                            setInput_text(getInput_text() + ",,Total Hours:," + tot_count + "\n");
 
+                            setInput_text(getInput_text() + ",,Total Hours:," + tot_count + "\n");
                             setTotal(finalTime);
                             totalHours.setText(finalTime);
                         }
@@ -607,5 +633,13 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
 
     public void setInput_text(String input_text) {
         this.input_text = input_text;
+    }
+
+    public float getLunch() {
+        return lunch;
+    }
+
+    public void setLunch(float lunch) {
+        this.lunch = lunch;
     }
 }

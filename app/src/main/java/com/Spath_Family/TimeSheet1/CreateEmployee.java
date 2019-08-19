@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class CreateEmployee extends AppCompatActivity implements View.OnClickListener {
@@ -125,7 +126,7 @@ public class CreateEmployee extends AppCompatActivity implements View.OnClickLis
                     if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                         Toast.makeText(CreateEmployee.this, "This account is already registered", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(CreateEmployee.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreateEmployee.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -143,7 +144,7 @@ public class CreateEmployee extends AppCompatActivity implements View.OnClickLis
             Map<String, Object> user = new HashMap<>();
             user.put("email", email);
             user.put("name", name);
-            user.put("Employer Code", empCode);
+            user.put("empCode", empCode);
 
             String mUid = newUser.getUid();
 
