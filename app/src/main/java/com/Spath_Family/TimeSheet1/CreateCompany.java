@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,7 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
 
     private Button btn_sign_up;
 
+    private ImageView imageView;
     private EditText txt_company_name;
     private EditText txt_emp_code;
     private EditText txt_company_email_sign_up;
@@ -64,6 +66,8 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
         progressDialog = new ProgressDialog(this);
         btn_sign_up = findViewById(R.id.uyeSignUp);
 
+        imageView = findViewById(R.id.info_ic_mng);
+
         txt_company_name = findViewById(R.id.uyeCompanyName);
         txt_emp_code = findViewById(R.id.uyeEmpCode);
         txt_company_email_sign_up = findViewById(R.id.uyeEmail);
@@ -75,6 +79,8 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
 
         //set the listener for the click event
         btn_sign_up.setOnClickListener(this);
+        imageView.setOnClickListener(this);
+
     }
 
     private boolean indi(final String empCode) {
@@ -204,6 +210,9 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         if (view == btn_sign_up) {
             registerUser();
+        }
+        if (view == imageView) {
+            Toast.makeText(this, "Give this code to your employers so you can see their TimeSheet", Toast.LENGTH_SHORT).show();
         }
     }
 }

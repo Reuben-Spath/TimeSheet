@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ public class CreateEmployee extends AppCompatActivity implements View.OnClickLis
 
     private static final String TAG = "CreateEmployee";
 
+    private ImageView imageView;
     private Button btn_signup;
     private EditText txt_email_signup;
     private EditText txt_password_signup;
@@ -58,11 +60,14 @@ public class CreateEmployee extends AppCompatActivity implements View.OnClickLis
         txt_employer_name = findViewById(R.id.etEmpCreateName);
         txt_emp_code = findViewById(R.id.etEmpCodeCreate);
 
+        imageView = findViewById(R.id.info_ic_emp);
+
         //assign database instances
         mAuth = FirebaseAuth.getInstance();
 
         //set the listener for the click event
         btn_signup.setOnClickListener(this);
+        imageView.setOnClickListener(this);
     }
 
     private void registerUser() {
@@ -168,6 +173,9 @@ public class CreateEmployee extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         if (view == btn_signup) {
             registerUser();
+        }
+        if (view == imageView) {
+            Toast.makeText(this, "This code lets your employer see your TimeSheet", Toast.LENGTH_SHORT).show();
         }
     }
 }
