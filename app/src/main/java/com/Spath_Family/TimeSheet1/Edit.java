@@ -194,7 +194,7 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                                     setFinish_s(noteEmployee.getFinish_s());
                                     setFinish_time(noteEmployee.getFinish());
                                     setStart_time(noteEmployee.getStart());
-                                    setHadLunch(noteEmployee.getIfLunch());
+                                    setHadLunch(noteEmployee.isIfLunch());
                                     setHoliday(noteEmployee.isIfHoliday());
                                     setSick(noteEmployee.isIfSick());
 
@@ -269,7 +269,6 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                                 finish();
                             }
                         });
-
             }
         });
         lunch1.setOnClickListener(new View.OnClickListener() {

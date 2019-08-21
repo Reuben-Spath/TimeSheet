@@ -331,24 +331,25 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                 NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
                                 noteEmployee.setDocumentId(documentSnapshot.getId());
                                 String documentId = noteEmployee.getDocumentId();
-                                boolean lunch = noteEmployee.getIfLunch();
+                                boolean lunch_bool = noteEmployee.isIfLunch();
 
                                 String y_or_n;
-                                if (lunch) {
-                                    y_or_n = "Y";
+                                if (lunch_bool) {
                                     tot_time = (noteEmployee.getFinish() - noteEmployee.getStart()) - getLunch();
                                     if (tot_time < 0) {
                                         tot_time += 24;
                                     }
+                                    y_or_n = "Y";
                                 } else {
-                                    y_or_n = "N";
                                     tot_time = noteEmployee.getFinish() - noteEmployee.getStart();
                                     if (tot_time < 0) {
                                         tot_time += 24;
                                     }
+                                    y_or_n = "N";
                                 }
 
                                 String start = noteEmployee.getStart_s();
+
                                 String finish = noteEmployee.getFinish_s();
 
                                 boolean holiday = noteEmployee.isIfHoliday();
@@ -364,12 +365,13 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                 } else hours = "";
 
                                 if (start == null) {
-                                    y_or_n = "";
                                     start = "";
                                 }
                                 if (finish == null) {
-                                    y_or_n = "";
                                     finish = "";
+                                }
+                                if (start.equalsIgnoreCase("") && finish.equalsIgnoreCase("")) {
+                                    y_or_n = "";
                                 }
 
 

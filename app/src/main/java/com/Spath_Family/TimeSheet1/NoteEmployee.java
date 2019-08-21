@@ -70,7 +70,7 @@ public class NoteEmployee {
         this.finish = finish;
     }
 
-    boolean getIfLunch() {
+    boolean isIfLunch() {
         return ifLunch;
     }
 

@@ -55,9 +55,8 @@ public class FrontScreenManager extends FragmentActivity {
     private ImageView logoM;
 
     private String letter;
-    ArrayList<String> names = new ArrayList<>();
+    //    ArrayList<String> names = new ArrayList<>();
     ArrayList<String> username = new ArrayList<>();
-    //    private String onetwothree;
     private Planet[] planets;
     private ArrayAdapter<Planet> listAdapter;
 
@@ -67,14 +66,11 @@ public class FrontScreenManager extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_front_screen_manager);
 
-
         mAuth = FirebaseAuth.getInstance();
 
         logoM = findViewById(R.id.logoM);
         week_ending = findViewById(R.id.tvWeekEnding);
         mng_code = findViewById(R.id.tvmgCode);
-
-
 
         String week_end = "Week Ending: " + weekEnding();
         week_ending.setText(week_end);
@@ -179,6 +175,7 @@ public class FrontScreenManager extends FragmentActivity {
                                                         Planet planet = listAdapter.getItem(position);
                                                         Objects.requireNonNull(planet).toggleChecked();
                                                         PlanetViewHolder viewHolder = (PlanetViewHolder) item.getTag();
+
 
                                                         Intent i = new Intent(FrontScreenManager.this, Employee.class);
 
@@ -336,13 +333,13 @@ public class FrontScreenManager extends FragmentActivity {
                 convertView.setTag(new PlanetViewHolder(textView, checkBox));
 
                 // If CheckBox is toggled, update the planet it is tagged with.
-//                checkBox.setOnClickListener(new View.OnClickListener() {
-//                    public void onClick(View v) {
-//                        CheckBox cb = (CheckBox) v;
-//                        Planet planet = (Planet) cb.getTag();
-//                        planet.setChecked(cb.isChecked());
-//                    }
-//                });
+                checkBox.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        CheckBox cb = (CheckBox) v;
+                        Planet planet = (Planet) cb.getTag();
+                        planet.setChecked(cb.isChecked());
+                    }
+                });
             }
             // Reuse existing row view
             else {

@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,7 +34,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
-public class Employee extends AppCompatActivity implements exampleDialog.ExampleDialogistener {
+public class Employee extends FrontScreenManager implements exampleDialog.ExampleDialogistener {
 
     Calendar calendar = Calendar.getInstance();
 
@@ -377,21 +376,23 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                 NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
                                 noteEmployee.setDocumentId(documentSnapshot.getId());
                                 String documentId = noteEmployee.getDocumentId();
-                                boolean lunch = noteEmployee.getIfLunch();
+                                boolean lunch = noteEmployee.isIfLunch();
 
                                 String y_or_n;
                                 if (lunch) {
-                                    y_or_n = "Y";
+
                                     tot_time = (noteEmployee.getFinish() - noteEmployee.getStart()) - getLunch();
                                     if (tot_time < 0) {
                                         tot_time += 24;
                                     }
+                                    y_or_n = "Y";
                                 } else {
-                                    y_or_n = "N";
+
                                     tot_time = noteEmployee.getFinish() - noteEmployee.getStart();
                                     if (tot_time < 0) {
                                         tot_time += 24;
                                     }
+                                    y_or_n = "N";
                                 }
 
                                 String start = noteEmployee.getStart_s();
@@ -410,12 +411,13 @@ public class Employee extends AppCompatActivity implements exampleDialog.Example
                                 } else hours = "";
 
                                 if (start == null) {
-                                    y_or_n = "";
                                     start = "";
                                 }
                                 if (finish == null) {
-                                    y_or_n = "";
                                     finish = "";
+                                }
+                                if (start.equalsIgnoreCase("") && finish.equalsIgnoreCase("")) {
+                                    y_or_n = "";
                                 }
 
 
