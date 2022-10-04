@@ -376,10 +376,19 @@ public class FrontScreenEmployee extends AppCompatActivity implements TimePicker
 
             String mUid = mAuth.getCurrentUser().getUid();
 
-            NoteEmployee noteEmployee = new NoteEmployee(getStart_time(), getFinish_time(), isLunch_eaten(), getStart_s(), getFinish_s());
+            Map<String, Object> confirm = new HashMap<>();
+            confirm.put("bool_l", isLunch_eaten());
+            confirm.put("String_s", getStart_s());
+            confirm.put("String_f", getFinish_s());
+
+
+            NoteEmployee noteEmployee = new NoteEmployee(getStart_time(), getFinish_time());
+
 
             db.collection("Users").document(mUid).collection(history_maker()).document(asWeek())
                     .set(noteEmployee, SetOptions.merge());
+            db.collection("Users").document(mUid).collection(history_maker()).document(asWeek())
+                    .set(confirm, SetOptions.merge());
         }
     }
 

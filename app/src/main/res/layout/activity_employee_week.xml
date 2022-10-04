@@ -9,9 +9,106 @@
     android:screenOrientation="portrait"
     tools:context="com.Spath_Family.TimeSheet1.EmployeeWeek">
 
+    <Button
+        android:id="@+id/btBackEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/purple"
+        android:text="@string/back"
+        android:textColor="#FFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout"
+        app:layout_constraintVertical_bias="0.735" />
+
+    <Button
+        android:id="@+id/btSaveEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/purple"
+        android:text="@string/send"
+        android:textColor="#FFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout"
+        app:layout_constraintVertical_bias="0.735" />
+
+    <ImageView
+        android:id="@+id/draw_history"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_history"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.525"
+        app:layout_constraintStart_toEndOf="@+id/tvWeekEnding"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.07"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tvEmpCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/purple"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvWeekEnding"
+        app:layout_constraintVertical_bias="0.024"
+        tools:text="@string/EmpCode" />
+
+    <TextView
+        android:id="@+id/tvWeekEnding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:hint="@string/week_ending"
+        android:textColor="@color/purple"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tvTotalHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="@string/total_hours"
+        android:textColor="@color/purple"
+        app:layout_constraintBottom_toTopOf="@+id/btBackEdit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
+
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/gridLayout"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -19,9 +116,10 @@
         app:columnCount="4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvEmpCode"
-        app:layout_constraintVertical_bias="0.187"
+        app:layout_constraintVertical_bias="0.214"
         tools:rowCount="8">
 
 
@@ -39,7 +137,7 @@
         <TextView
             android:id="@+id/total_time"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:text="@string/total_time"
             app:layout_column="3"
@@ -65,7 +163,7 @@
 
         <TextView
             android:id="@+id/Monday"
-            android:layout_width="79dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="@string/mon"
@@ -382,137 +480,5 @@
             app:layout_row="7" />
     </androidx.gridlayout.widget.GridLayout>
 
-    <ImageView
-        android:id="@+id/draw_history"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_history"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.525"
-        app:layout_constraintStart_toEndOf="@+id/tvWeekEnding"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07"
-        tools:ignore="ContentDescription" />
-
-    <TextView
-        android:id="@+id/tvEmpCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:textColor="@color/purple"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvWeekEnding"
-        app:layout_constraintVertical_bias="0.024"
-        tools:text="@string/EmpCode" />
-
-    <TextView
-        android:id="@+id/tvWeekEnding"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="8dp"
-        android:hint="@string/week_ending"
-        android:textColor="@color/purple"
-        android:textSize="30sp"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/btBackEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/purple"
-        android:text="@string/back"
-        android:textColor="#FFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayout"
-        app:layout_constraintVertical_bias="0.735" />
-
-    <Button
-        android:id="@+id/btSaveEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/purple"
-        android:text="@string/send"
-        android:textColor="#FFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.75"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayout"
-        app:layout_constraintVertical_bias="0.735" />
-
-    <TextView
-        android:id="@+id/tvTotalHours"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:hint="@string/total_hours"
-        android:textColor="@color/purple"
-        app:layout_constraintBottom_toTopOf="@+id/btBackEdit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--<Button-->
-    <!--android:id="@+id/btSave"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="#9C27B0"-->
-    <!--android:text="Save"-->
-    <!--android:textColor="#FFFF"-->
-    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintHorizontal_bias="0.75"-->
-    <!--app:layout_constraintRight_toLeftOf="@id/btBackEdit"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@id/tvTotalHours" />-->
-
-    <!--<ScrollView--><!--android:id="@+id/ScrollView"--><!--android:layout_width="357dp"--><!--android:layout_height="370dp"--><!--android:layout_marginStart="24dp"--><!--android:layout_marginTop="8dp"--><!--android:layout_marginEnd="24dp"--><!--android:layout_marginBottom="8dp"--><!--android:background="@color/White"--><!--android:scrollbars="horizontal"--><!--app:layout_constraintBottom_toTopOf="@id/tvTotalHours"--><!--app:layout_constraintEnd_toEndOf="parent"--><!--app:layout_constraintStart_toStartOf="parent"--><!--app:layout_constraintTop_toBottomOf="@+id/tvEmpCode">-->
-
-    <!--<LinearLayout--><!--android:id="@+id/linearLayout1"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:orientation="vertical">-->
-
-    <!--<TextView--><!--android:id="@+id/Monday"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:hint="@string/mon"--><!--android:padding="10dp"--><!--android:text=""--><!--android:textColor="@color/Blue_text" />-->
-
-    <!--<TextView--><!--android:id="@+id/Tuesday"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:hint="@string/tues"--><!--android:padding="10dp"--><!--android:text=""--><!--android:textColor="@color/Blue_text" />-->
-
-    <!--<TextView--><!--android:id="@+id/Wednesday"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:hint="@string/wed"--><!--android:padding="10dp"--><!--android:text=""--><!--android:textColor="@color/Blue_text" />-->
-
-    <!--<TextView--><!--android:id="@+id/Thursday"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:hint="@string/thur"--><!--android:padding="10dp"--><!--android:text=""--><!--android:textColor="@color/Blue_text" />-->
-
-    <!--<TextView--><!--android:id="@+id/Friday"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:hint="@string/fri"--><!--android:padding="10dp"--><!--android:text=""--><!--android:textColor="@color/Blue_text" />-->
-
-    <!--<TextView--><!--android:id="@+id/Saturday"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:hint="@string/sat"--><!--android:padding="10dp"--><!--android:text=""--><!--android:textColor="@color/Blue_text" />-->
-
-    <!--<TextView--><!--android:id="@+id/Sunday"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:hint="@string/sun"--><!--android:padding="10dp"--><!--android:text=""--><!--android:textColor="@color/Blue_text" />-->
-
-
-    <!--</LinearLayout>--><!--</ScrollView>-->

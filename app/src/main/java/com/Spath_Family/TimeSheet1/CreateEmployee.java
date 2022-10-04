@@ -54,13 +54,13 @@ public class CreateEmployee extends AppCompatActivity implements View.OnClickLis
 
         progressDialog = new ProgressDialog(this);
         btn_signup = findViewById(R.id.uyeSignUp);
-        txt_email_signup = findViewById(R.id.uyeEmail);
-        txt_password_signup = findViewById(R.id.uyePassword);
-        txt_passwordConfirm = findViewById(R.id.uyePasswordConfirm);
-        txt_employer_name = findViewById(R.id.etEmpCreateName);
-        txt_emp_code = findViewById(R.id.etEmpCodeCreate);
+        txt_email_signup = findViewById(R.id.CreateEmail);
+        txt_password_signup = findViewById(R.id.CreatePassowrd);
+        txt_passwordConfirm = findViewById(R.id.CreatePassword);
+        txt_employer_name = findViewById(R.id.CreateName);
+        txt_emp_code = findViewById(R.id.CreateEmpCode);
 
-        imageView = findViewById(R.id.info_ic_emp);
+        imageView = findViewById(R.id.infoCreate);
 
         //assign database instances
         mAuth = FirebaseAuth.getInstance();

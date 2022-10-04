@@ -3,6 +3,7 @@ package com.Spath_Family.TimeSheet1;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -12,11 +13,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
@@ -25,6 +30,7 @@ import java.util.Objects;
 
 public class Profile extends FrontScreenEmployee {
 
+    private static final String TAG = "Profile";
     private Button back;
     private Button change;
     private Button logOut;
@@ -61,6 +67,8 @@ public class Profile extends FrontScreenEmployee {
             public void onClick(View v) {
                 employer_code_change.onEditorAction(EditorInfo.IME_ACTION_DONE);
                 saveNote();
+//                String empCode = employer_code_change.getText().toString();
+//                empCode(empCode);
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +89,33 @@ public class Profile extends FrontScreenEmployee {
         });
     }
 
+    public void empCode(final String code){
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        FirebaseFirestore db1 = FirebaseFirestore.getInstance();
+        if(user!=null) {
+            db1.collection("Users")
+                    .whereEqualTo("empCode", code)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                    String temp = document.getString("empCode");
+                                    if (code.equalsIgnoreCase(temp)) {
+                                        Toast.makeText(Profile.this, "This code is already in use", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+        }
+
+    }
     public void saveNote() {
         String empCode = employer_code_change.getText().toString();
 

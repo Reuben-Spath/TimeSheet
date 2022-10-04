@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,13 +23,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.Objects;
-
-//import android.util.Log;
-//import com.Spath_Family.TimeSheet1.R;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateCompany extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,7 +44,7 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
 
-    boolean indi_code = true;
+    boolean indi_code = false;
 
     public boolean isIndi_code() {
         return indi_code;
@@ -58,6 +56,7 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//      What happens when a company begins, when they update to the first payment teir the company set limit needs to be increased
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_company);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -70,9 +69,9 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
 
         txt_company_name = findViewById(R.id.uyeCompanyName);
         txt_emp_code = findViewById(R.id.uyeEmpCode);
-        txt_company_email_sign_up = findViewById(R.id.uyeEmail);
-        txt_password_sign_up = findViewById(R.id.uyePassword);
-        txt_passwordConfirm = findViewById(R.id.uyePasswordConfirm);
+        txt_company_email_sign_up = findViewById(R.id.CreateEmail);
+        txt_password_sign_up = findViewById(R.id.CreatePassowrd);
+        txt_passwordConfirm = findViewById(R.id.CreatePassword);
 
         //assign database instances
         mAuth = FirebaseAuth.getInstance();
@@ -83,32 +82,26 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private boolean indi(final String empCode) {
-        isIndi_code();
+    private boolean empNameIndi(String empCode) {
         final FirebaseFirestore db1 = FirebaseFirestore.getInstance();
         db1.collection("Company")
                 .whereEqualTo("empCode", empCode)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-//                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                String temp_code = document.getString("empCode");
-                                if(empCode.equalsIgnoreCase(temp_code)){
-                                    setIndi_code(false);
-                                    break;
-                                }
-                            }
-                        } else {
-                            setIndi_code(false);
-//                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        Log.d(TAG, "onSuccess: " + queryDocumentSnapshots.getDocuments());
+                        setIndi_code(false);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("test", "fail");
+                        setIndi_code(true);
                     }
                 });
         return isIndi_code();
-
     }
 
     private void registerUser() {
@@ -119,23 +112,21 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
         String password = txt_password_sign_up.getText().toString().trim();
         String confirm = txt_passwordConfirm.getText().toString().trim();
 
+
         if (TextUtils.isEmpty(name)) { //email is empty
             Toast.makeText(this, "Please enter your company name", Toast.LENGTH_SHORT).show();
             //stop further execution
             return;
-
         }
         if (TextUtils.isEmpty(empCode)) { //email is empty
             Toast.makeText(this, "Please enter an employer code", Toast.LENGTH_SHORT).show();
             //stop further execution
             return;
-
         }
         if (TextUtils.isEmpty(email)) { //email is empty
             Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
             //stop further execution
             return;
-
         }
         if (TextUtils.isEmpty(password)) { //password is empty
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
@@ -158,6 +149,7 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
         progressDialog.setMessage("Creating account...");
         progressDialog.show();
 
+
         //register user in firebase database
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(CreateCompany.this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -176,6 +168,8 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
                 }
             }
         });
+
+
     }
 
     public void newUser() {
@@ -184,11 +178,15 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
         String empCode = txt_emp_code.getText().toString().trim();
         String email = txt_company_email_sign_up.getText().toString().trim();
 
-        NoteCompany note = new NoteCompany(name,empCode,email,true);
         FirebaseUser newUser = mAuth.getCurrentUser();
 
         if (newUser != null) {
             String mUid = newUser.getUid();
+            Map<String, Object> note = new HashMap<>();
+            note.put("Status", 3);
+            note.put("email", email);
+            note.put("name", name);
+            note.put("empCode", empCode);
 
             db.collection("Company").document(mUid).set(note)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -203,6 +201,7 @@ public class CreateCompany extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(CreateCompany.this, "Failure", Toast.LENGTH_LONG).show();
                         }
                     });
+
         }
     }
 

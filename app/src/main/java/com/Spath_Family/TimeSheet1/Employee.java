@@ -25,9 +25,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -281,6 +281,12 @@ public class Employee extends FrontScreenManager implements exampleDialog.Exampl
         exampleDialog.show(getSupportFragmentManager(), "example dialog");
     }
 
+    public static float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
+    }
+
     public void history(final String input_text) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -320,8 +326,6 @@ public class Employee extends FrontScreenManager implements exampleDialog.Exampl
             fos = openFileOutput(fileName, MODE_PRIVATE);
             fos.write(text.getBytes());
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -376,10 +380,31 @@ public class Employee extends FrontScreenManager implements exampleDialog.Exampl
                                 NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
                                 noteEmployee.setDocumentId(documentSnapshot.getId());
                                 String documentId = noteEmployee.getDocumentId();
-                                boolean lunch = noteEmployee.isIfLunch();
+                                String start = "";
+                                String finish = "";
+
+                                boolean lunch_b = false;
+                                boolean holiday = false;
+                                boolean sick = false;
+
+                                if (documentSnapshot.get("String_s") != null) {
+                                    start = documentSnapshot.getString("String_s");
+                                }
+                                if (documentSnapshot.get("String_f") != null) {
+                                    finish = documentSnapshot.getString("String_f");
+                                }
+                                if (documentSnapshot.get("bool_s") != null) {
+                                    sick = documentSnapshot.getBoolean("bool_s");
+                                }
+                                if (documentSnapshot.get("bool_h") != null) {
+                                    holiday = documentSnapshot.getBoolean("bool_h");
+                                }
+                                if (documentSnapshot.get("bool_l") != null) {
+                                    lunch_b = documentSnapshot.getBoolean("bool_l");
+                                }
 
                                 String y_or_n;
-                                if (lunch) {
+                                if (lunch_b) {
 
                                     tot_time = (noteEmployee.getFinish() - noteEmployee.getStart()) - getLunch();
                                     if (tot_time < 0) {
@@ -395,11 +420,7 @@ public class Employee extends FrontScreenManager implements exampleDialog.Exampl
                                     y_or_n = "N";
                                 }
 
-                                String start = noteEmployee.getStart_s();
-                                String finish = noteEmployee.getFinish_s();
-
-                                boolean holiday = noteEmployee.isIfHoliday();
-                                boolean sick = noteEmployee.isIfSick();
+                                tot_time= round(tot_time,2);
 
                                 tot_count += tot_time;
 

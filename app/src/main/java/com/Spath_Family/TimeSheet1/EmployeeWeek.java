@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -304,6 +305,12 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
         }
     }
 
+    public static float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
+    }
+
     public void info(final String week_ending) {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -331,7 +338,29 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                 NoteEmployee noteEmployee = documentSnapshot.toObject(NoteEmployee.class);
                                 noteEmployee.setDocumentId(documentSnapshot.getId());
                                 String documentId = noteEmployee.getDocumentId();
-                                boolean lunch_bool = noteEmployee.isIfLunch();
+
+                                String start = "";
+                                String finish = "";
+
+                                boolean lunch_bool = false;
+                                boolean holiday = false;
+                                boolean sick = false;
+
+                                if (documentSnapshot.get("String_s") != null) {
+                                    start = documentSnapshot.getString("String_s");
+                                }
+                                if (documentSnapshot.get("String_f") != null) {
+                                    finish = documentSnapshot.getString("String_f");
+                                }
+                                if (documentSnapshot.get("bool_s") != null) {
+                                    sick = documentSnapshot.getBoolean("bool_s");
+                                }
+                                if (documentSnapshot.get("bool_h") != null) {
+                                    holiday = documentSnapshot.getBoolean("bool_h");
+                                }
+                                if (documentSnapshot.get("bool_l") != null) {
+                                    lunch_bool = documentSnapshot.getBoolean("bool_l");
+                                }
 
                                 String y_or_n;
                                 if (lunch_bool) {
@@ -348,13 +377,7 @@ public class EmployeeWeek extends AppCompatActivity implements exampleDialog.Exa
                                     y_or_n = "N";
                                 }
 
-                                String start = noteEmployee.getStart_s();
-
-                                String finish = noteEmployee.getFinish_s();
-
-                                boolean holiday = noteEmployee.isIfHoliday();
-                                boolean sick = noteEmployee.isIfSick();
-
+                                tot_time = round(tot_time,2);
                                 tot_count += tot_time;
 
                                 if (holiday || sick) {

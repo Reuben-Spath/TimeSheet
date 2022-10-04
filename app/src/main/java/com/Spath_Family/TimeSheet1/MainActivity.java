@@ -15,6 +15,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -40,7 +42,7 @@ public class MainActivity extends BaseActivity implements
 
         setContentView(R.layout.activity_main);
 
-        mEmailField = findViewById(R.id.etEmpCreateName);
+        mEmailField = findViewById(R.id.CreateName);
         mPasswordField = findViewById(R.id.etPassword);
 
         findViewById(R.id.btLogin).setOnClickListener(this);
@@ -103,7 +105,21 @@ public class MainActivity extends BaseActivity implements
                                 tester();
                             }
                         } else {
-                            Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                Toast.makeText(MainActivity.this, "Your email and password don't match up.", Toast.LENGTH_SHORT).show();
+                            } else if (task.getException() instanceof FirebaseAuthInvalidUserException) {
+
+                                String errorCode =
+                                        ((FirebaseAuthInvalidUserException) task.getException()).getErrorCode();
+
+                                if (errorCode.equals("ERROR_USER_NOT_FOUND")) {
+                                    Toast.makeText(MainActivity.this, "No matching account found", Toast.LENGTH_SHORT).show();
+                                } else if (errorCode.equals("ERROR_USER_DISABLED")) {
+                                    Toast.makeText(MainActivity.this, "User account has been disabled", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(MainActivity.this, task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
                         }
                         hideProgressDialog();
                     }
@@ -167,7 +183,7 @@ public class MainActivity extends BaseActivity implements
             mEmailField.onEditorAction(EditorInfo.IME_ACTION_DONE);
             mPasswordField.onEditorAction(EditorInfo.IME_ACTION_DONE);
         } else if (i == R.id.tvCreate) {
-            Intent create_pass = new Intent(MainActivity.this, CreateChoice.class);
+            Intent create_pass = new Intent(MainActivity.this, Create.class);
             startActivity(create_pass);
         } else if (i == R.id.tvPasswordRetrieval) {
             Intent retrieval = new Intent(MainActivity.this, PasswordRetrieval.class);

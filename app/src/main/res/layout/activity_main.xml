@@ -8,7 +8,7 @@
 
 
     <EditText
-        android:id="@+id/etEmpCreateName"
+        android:id="@+id/CreateName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -39,7 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEmpCreateName"
+        app:layout_constraintTop_toBottomOf="@+id/CreateName"
         tools:ignore="Autofill" />
 
     <Button
@@ -67,7 +67,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/logo"
-        app:layout_constraintBottom_toTopOf="@+id/etEmpCreateName"
+        app:layout_constraintBottom_toTopOf="@+id/CreateName"
         app:layout_constraintDimensionRatio="w,5:2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"

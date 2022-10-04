@@ -7,8 +7,8 @@ android {
         applicationId "com.Spath_Family.TimeSheet1"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 12
-        versionName "1.0.11"
+        versionCode 16
+        versionName "1.0.15"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -37,4 +37,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'androidx.navigation:navigation-runtime:2.2.0-alpha01'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
+
+    implementation 'com.android.billingclient:billing:2.0.3'
+
 }

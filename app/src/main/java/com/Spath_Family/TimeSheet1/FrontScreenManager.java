@@ -1,20 +1,13 @@
 package com.Spath_Family.TimeSheet1;
 
-
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,17 +23,21 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class FrontScreenManager extends FragmentActivity {
@@ -54,12 +51,11 @@ public class FrontScreenManager extends FragmentActivity {
     private Button send;
     private ImageView logoM;
 
+    private LinearLayout myLinearLayout;
+
     private String letter;
     //    ArrayList<String> names = new ArrayList<>();
     ArrayList<String> username = new ArrayList<>();
-    private Planet[] planets;
-    private ArrayAdapter<Planet> listAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +68,12 @@ public class FrontScreenManager extends FragmentActivity {
         week_ending = findViewById(R.id.tvWeekEnding);
         mng_code = findViewById(R.id.tvmgCode);
 
+        myLinearLayout = findViewById(R.id.dynamic);
+
         String week_end = "Week Ending: " + weekEnding();
         week_ending.setText(week_end);
         empListner();
+        employerCounter();
 
     }
 
@@ -89,7 +88,7 @@ public class FrontScreenManager extends FragmentActivity {
                 startActivity(special_code_pass);
             }
         });
-        employerCounter();
+//        list_employees();
     }
 
     public void empListner() {
@@ -132,7 +131,10 @@ public class FrontScreenManager extends FragmentActivity {
     public void employerCounter() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        final ArrayList<String> names = new ArrayList<>();
+//        final ArrayList<String> names = new ArrayList<>();
+
+//        final int N = 100; // total number of textviews to add
+
         if (currentUser != null) {
             String mUid = currentUser.getUid();
 
@@ -156,50 +158,34 @@ public class FrontScreenManager extends FragmentActivity {
                                             if (task.isSuccessful()) {
 
                                                 for (final DocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-//                                                    Log.d(TAG, document.getId() + " => " + document.getData());
-//                                                    Log.d(TAG, "onComplete: " + document.getString("name"));
 
-                                                    String name = document.getString("name");
-                                                    String id = document.getId();
+                                                    final String name = document.getString("name");
+                                                    final String id = document.getId();
 
-                                                    names.add(name);
+//                                                    names.add(name);
                                                     username.add(id);
+
+                                                    final TextView rowTextView = new TextView(getApplicationContext());
+                                                    rowTextView.setTextSize(24);
+                                                    rowTextView.setPadding(5, 10, 5, 10);
+                                                    rowTextView.setTextColor(getResources().getColor(R.color.purple));
+                                                    rowTextView.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            Intent i = new Intent(FrontScreenManager.this, Employee.class);
+//
+
+                                                            i.putExtra("name", name);
+                                                            i.putExtra("id", id);
+                                                            startActivity(i);
+                                                        }
+                                                    });
+                                                    String bullet = "\u2022" + name;
+                                                    rowTextView.setText(bullet);
+
+                                                    // add the textview to the linearlayout
+                                                    myLinearLayout.addView(rowTextView);
                                                 }
-                                                ListView mainListView = findViewById(R.id.mainListView);
-
-                                                // When item is tapped, toggle checked properties of CheckBox and Planet.
-                                                mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                    @Override
-                                                    public void onItemClick(AdapterView<?> parent, View item,
-                                                                            int position, long id) {
-                                                        Planet planet = listAdapter.getItem(position);
-                                                        Objects.requireNonNull(planet).toggleChecked();
-                                                        PlanetViewHolder viewHolder = (PlanetViewHolder) item.getTag();
-
-
-                                                        Intent i = new Intent(FrontScreenManager.this, Employee.class);
-
-                                                        String foundername = username.get(position);
-
-                                                        i.putExtra("name", planet.getName());
-                                                        i.putExtra("id", foundername);
-                                                        startActivity(i);
-                                                    }
-                                                });
-
-                                                planets = (Planet[]) getLastCustomNonConfigurationInstance();
-
-                                                Planet[] planets = new Planet[names.size()];
-                                                for (int i = 0; i < names.size(); i++) {
-                                                    planets[i] = new Planet(names.get(i));
-                                                }
-
-                                                ArrayList<Planet> planetList = new ArrayList<>(Arrays.asList(planets));
-
-                                                // Set our custom array adapter as the ListView's adapter.
-                                                listAdapter = new PlanetArrayAdapter(getApplicationContext(), planetList);
-                                                mainListView.setAdapter(listAdapter);
-
                                             }
                                         }
                                     });
@@ -208,162 +194,112 @@ public class FrontScreenManager extends FragmentActivity {
         }
     }
 
+    //add takes in user input
+    //searches for user in firestore
+    //adds to week current data
+//  User logs in
+/*
+Employer logs into site
+Employer has limited employee options,
+to add employee to system, employee clicks add button
+pop up screen that takes input of the users unique code
+search through fire base where unique code is equal to that is input
+once accepted add to employers document and increase their counter number
+name and counter increase
+possible array of names
+check if current status is breahed, if so return error
+if() array size is <= status then add, else reply with error (Possible request update with link to wix)
+once added recall creation and update UI with new employee list.
+
+add people through their email address / name /
+
+
+// Atomically remove a region from the "regions" array field.
+ CompanyEmployeesRef.update("regions", FieldValue.arrayRemove(name));
+
+ */
+
+    public void add(String code) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth.getInstance().getCurrentUser();
+        final String mUid = mAuth.getCurrentUser().getUid();
+
+        final DocumentReference CompanyEmployeesRef = db.collection("cities").document("DC");
+
+//        db.collection("Users").document(mUid)
+//                .get()
+//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                        documentSnapshot.getString("Status");
+//                        if ()
+//                    }
+//                });
+//        db.collection("Users")
+//                .whereEqualTo("empCode", code)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d(TAG, document.getId() + " => " + document.getData());
+//                                FirebaseFirestore db1 = FirebaseFirestore.getInstance();
+//                                Map<String, Object> note = new HashMap<>();
+//
+//                                document.getString("empCode");
+//                               String name =document.getString("name");
+//// Atomically add a new region to the "regions" array field.
+//                                CompanyEmployeesRef.update("Current Employees", FieldValue.arrayUnion(name));
+//
+//                                db1.collection("Users").document(mUid).collection(week_ending).document("Employees")
+//                                        .set(note, SetOptions.merge());
+//
+//                            }
+//                        } else {
+//                            Log.d(TAG, "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
+//
+//    }
+
+}
+
+//    public void list_employees() {
+//        final int N = 100; // total number of textviews to add
+//
+//        final TextView[] myTextViews = new TextView[N]; // create an empty array;
+//
+//        for (int i = 0; i < N; i++) {
+//            // create a new textview
+//            final TextView rowTextView = new TextView(this);
+//            rowTextView.setTextSize(16);
+//            rowTextView.setPadding(5, 10, 5, 10);
+//            final String info_string = "This is " + i + "th TextView";
+//            rowTextView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Toast.makeText(FrontScreenManager.this, info_string, Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//            // set some properties of rowTextView or something
+//            rowTextView.setText("This is row #" + i);
+//
+//            // add the textview to the linearlayout
+//            myLinearLayout.addView(rowTextView);
+//
+//            // save a reference to the textview for later
+//            myTextViews[i] = rowTextView;
+//        }
+//    }
+
     public String getLetter() {
         return letter;
     }
 
     public void setLetter(String letter) {
         this.letter = letter;
-    }
-
-    public Object onRetainCustomNonConfigurationInstance() {
-        return planets;
-    }
-
-    /**
-     * Holds planet data.
-     */
-    private static class Planet {
-        private String name = "";
-        private String id = "";
-        private boolean checked = false;
-
-        public Planet() {
-        }
-
-        Planet(String name) {
-            this.name = name;
-        }
-
-        public Planet(String name, boolean checked) {
-            this.name = name;
-            this.checked = checked;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        boolean isChecked() {
-            return checked;
-        }
-
-        void setChecked(boolean checked) {
-            this.checked = checked;
-        }
-
-        public String toString() {
-            return name;
-        }
-
-        void toggleChecked() {
-            checked = !checked;
-        }
-    }
-
-    /**
-     * Holds child views for one row.
-     */
-    private static class PlanetViewHolder {
-        private CheckBox checkBox;
-        private TextView textView;
-
-        public PlanetViewHolder() {
-        }
-
-        PlanetViewHolder(TextView textView, CheckBox checkBox) {
-            this.checkBox = checkBox;
-            this.textView = textView;
-        }
-
-        CheckBox getCheckBox() {
-            return checkBox;
-        }
-
-        public void setCheckBox(CheckBox checkBox) {
-            this.checkBox = checkBox;
-        }
-
-        TextView getTextView() {
-            return textView;
-        }
-
-        public void setTextView(TextView textView) {
-            this.textView = textView;
-        }
-    }
-
-    /**
-     * Custom adapter for displaying an array of Planet objects.
-     */
-    private static class PlanetArrayAdapter extends ArrayAdapter<Planet> {
-
-        private LayoutInflater inflater;
-
-        PlanetArrayAdapter(Context context, List<Planet> planetList) {
-            super(context, R.layout.simplerow, R.id.rowTextView, planetList);
-            // Cache the LayoutInflate to avoid asking for a new one each time.
-            inflater = LayoutInflater.from(context);
-        }
-
-        @SuppressLint("InflateParams")
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // Planet to display
-            Planet planet = this.getItem(position);
-
-            // The child views in each row.
-            CheckBox checkBox;
-            TextView textView;
-
-            // Create a new row view
-            if (convertView == null) {
-                convertView = inflater.inflate(R.layout.simplerow, null);
-
-                // Find the child views.
-                textView = convertView.findViewById(R.id.rowTextView);
-                checkBox = convertView.findViewById(R.id.CheckBox01);
-
-                // Optimization: Tag the row with it's child views, so we don't have to
-                // call findViewById() later when we reuse the row.
-                convertView.setTag(new PlanetViewHolder(textView, checkBox));
-
-                // If CheckBox is toggled, update the planet it is tagged with.
-                checkBox.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        CheckBox cb = (CheckBox) v;
-                        Planet planet = (Planet) cb.getTag();
-                        planet.setChecked(cb.isChecked());
-                    }
-                });
-            }
-            // Reuse existing row view
-            else {
-                // Because we use a ViewHolder, we avoid having to call findViewById().
-                PlanetViewHolder viewHolder = (PlanetViewHolder) convertView.getTag();
-                checkBox = viewHolder.getCheckBox();
-                textView = viewHolder.getTextView();
-            }
-
-            // Tag the CheckBox with the Planet it is displaying, so that we can
-            // access the planet in onClick() when the CheckBox is toggled.
-            checkBox.setTag(planet);
-
-            // Display planet data
-            if (planet != null) {
-                checkBox.setChecked(planet.isChecked());
-            }
-            if (planet != null) {
-                textView.setText(planet.getName());
-            }
-
-            return convertView;
-        }
-
     }
 
     @Override

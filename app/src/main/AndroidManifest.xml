@@ -3,12 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.Spath_Family.TimeSheet1">
 
-
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <application
         android:allowBackup="false"
         android:icon="@mipmap/time_sheet_logo"
@@ -17,7 +11,49 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".Create"></activity>
+        <activity
+            android:name=".Edit"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Employee"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CreateCompany"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CreateChoice"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BaseActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".EmployeeWeek" />
+        <activity
+            android:name=".Profile"
+            android:screenOrientation="portrait" />
+        <activity android:name=".FrontScreenManager" />
+        <activity
+            android:name=".CreateEmployee"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PasswordRetrieval"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FrontScreenEmployee"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -29,51 +65,18 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-
-        <activity
-            android:name="com.Spath_Family.TimeSheet1.Edit"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.Spath_Family.TimeSheet1.Employee"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.Spath_Family.TimeSheet1.CreateCompany"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.Spath_Family.TimeSheet1.CreateChoice"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.Spath_Family.TimeSheet1.BaseActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.Spath_Family.TimeSheet1.EmployeeWeek"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.Spath_Family.TimeSheet1.Profile"
-            android:screenOrientation="portrait" />
-        <activity android:name="com.Spath_Family.TimeSheet1.FrontScreenManager" />
-        <activity
-            android:name="com.Spath_Family.TimeSheet1.CreateEmployee"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.Spath_Family.TimeSheet1.PasswordRetrieval"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.Spath_Family.TimeSheet1.FrontScreenEmployee"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.Spath_Family.TimeSheet1.MainActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
+    <supports-screens
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

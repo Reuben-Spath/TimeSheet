@@ -25,7 +25,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
@@ -91,11 +94,11 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
 
     private FrontScreenEmployee fse = new FrontScreenEmployee();
 
-//    public static float round(float d, int decimalPlace) {
-//        BigDecimal bd = new BigDecimal(Float.toString(d));
-//        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
-//        return bd.floatValue();
-//    }
+    public static float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
+    }
 
     public void setFlag(int i) {
         flag = i;
@@ -190,14 +193,24 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
                                 NoteEmployee noteEmployee = snapshot.toObject(NoteEmployee.class);
 
                                 if (noteEmployee != null) {
-                                    setStart_s(noteEmployee.getStart_s());
-                                    setFinish_s(noteEmployee.getFinish_s());
                                     setFinish_time(noteEmployee.getFinish());
                                     setStart_time(noteEmployee.getStart());
-                                    setHadLunch(noteEmployee.isIfLunch());
-                                    setHoliday(noteEmployee.isIfHoliday());
-                                    setSick(noteEmployee.isIfSick());
 
+                                    if (snapshot.get("String_s") != null) {
+                                        setStart_s(snapshot.getString("String_s"));
+                                    }
+                                    if (snapshot.get("String_f") != null) {
+                                        setFinish_s(snapshot.getString("String_f"));
+                                    }
+                                    if (snapshot.get("bool_s") != null) {
+                                        setSick(snapshot.getBoolean("bool_s"));
+                                    }
+                                    if (snapshot.get("bool_h") != null) {
+                                        setHoliday(snapshot.getBoolean("bool_h"));
+                                    }
+                                    if (snapshot.get("bool_l") != null) {
+                                        setHadLunch(snapshot.getBoolean("bool_l"));
+                                    }
                                     if (isHoliday()) {
                                         cbHoliday.setChecked(true);
                                         cbSick.setEnabled(false);
@@ -325,18 +338,24 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
 
     public float timeworked(boolean lunch, float lunch_length, float start, float finish) {
         float total_time;
+        float end_result;
+
         total_time = finish - start;
+        end_result = round(total_time,2);
 
         if (total_time < 0) {
             total_time = total_time + 24;
+            end_result = round(total_time,2);
         }
 
         if (lunch) {
+
             total_time = total_time - lunch_length;
+            end_result = round(total_time,2);
 
         }
 
-        return total_time;
+        return end_result;
     }
 
 
@@ -354,17 +373,29 @@ public class Edit extends AppCompatActivity implements TimePickerDialog.OnTimeSe
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
 
-            NoteEmployee noteEmployee = new NoteEmployee(getStart_time(), getFinish_time(), getHadLunch(), getStart_s(), getFinish_s());
+            Map<String, Object> city = new HashMap<>();
+            city.put("bool_s", isSick());
+            city.put("bool_h", isHoliday());
+            city.put("bool_l", getHadLunch());
+            city.put("String_s", getStart_s());
+            city.put("String_f", getFinish_s());
 
-            noteEmployee.setIfSick(isSick());
-            noteEmployee.setIfHoliday(isHoliday());
+
+            NoteEmployee noteEmployee = new NoteEmployee(getStart_time(), getFinish_time());
+
 
             db.collection("Users").document(getUser()).collection(getEnd()).document(getDay())
                     .set(noteEmployee, SetOptions.merge())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(Edit.this, "Saved!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            db.collection("Users").document(getUser()).collection(getEnd()).document(getDay())
+                    .set(city, SetOptions.merge())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
                         }
                     });
         }
